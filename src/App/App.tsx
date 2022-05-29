@@ -1,5 +1,12 @@
-import React from "react";
+import { StoreProvider } from "../shared/contexts/StoreProvider";
+import AppRouter from "../shared/routes/AppRouter";
 
 export const App = () => {
-  return <div>App</div>;
+  return (
+    <StoreProvider>
+      <div className="app">
+        <AppRouter />
+      </div>
+    </StoreProvider>
+  );
 };
