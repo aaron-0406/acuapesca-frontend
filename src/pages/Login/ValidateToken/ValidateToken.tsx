@@ -9,7 +9,7 @@ import paths from "../../../shared/routes/paths";
 import { setAuthentication } from "../../../shared/utils/storage/auth";
 import { ActionTypes } from "../actions";
 
-export const ValidateToken: React.FC = () => {
+export const ValidateToken = () => {
   const { search } = useLocation();
   const token = queryString.parse(search)?.t?.toString() || "";
   const navigate = useNavigate();
