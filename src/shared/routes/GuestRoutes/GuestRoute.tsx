@@ -1,4 +1,4 @@
-import { Outlet, Route, RouteProps, Routes } from "react-router";
+import { Outlet, RouteProps } from "react-router";
 import { LoginProvider } from "../../contexts/LoginProvider";
 import { useGeneralContext } from "../../contexts/StoreProvider";
 import paths from "../paths";

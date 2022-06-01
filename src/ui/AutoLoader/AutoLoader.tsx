@@ -18,7 +18,7 @@ export const AutoLoader = () => {
     if (navigation) {
       return navigation.listen(() => setStatus("IDLE"));
     }
-  }, [navigation]);
+  }, [navigation, setStatus]);
 
   if (status === "LOADING") {
     return (
