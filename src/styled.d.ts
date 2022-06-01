@@ -5,7 +5,10 @@ import "styled-components";
 declare module "styled-components" {
   export interface IBaseTheme {
     colors: IBaseThemeColors;
+    shadows: IBaseShadows;
+    spacing: IBaseThemeSpacing;
     text: IBaseThemeText;
+    sizing: IBaseThemeSizing;
   }
 
   export interface ILayoutTheme extends IBaseTheme {
@@ -30,6 +33,10 @@ declare module "styled-components" {
     "$color-calendar": string;
     "$color-letter": string;
     "$color-button-content": string;
+  }
+
+  export interface IBaseThemeSpacing {
+    cornerRadiusSmall: string;
   }
 
   export interface IBaseThemeFontProps {
@@ -88,5 +95,21 @@ declare module "styled-components" {
       secondary: string;
       disabled: string;
     };
+  }
+
+  export interface IBaseThemeSizing {
+    button: {
+      large: string;
+    };
+    input: {
+      large: string;
+    };
+    sidebar: string;
+  }
+
+  export interface IBaseShadows {
+    elevationLow: string;
+    elevationMedium: string;
+    elevationHigh: string;
   }
 }

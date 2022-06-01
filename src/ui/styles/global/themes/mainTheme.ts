@@ -63,9 +63,32 @@ export const text = {
   },
 };
 
+const sizing = {
+  button: {
+    large: "360px",
+  },
+  input: {
+    large: "360px",
+  },
+  sidebar: "208px",
+};
+
+export const spacing = {
+  cornerRadiusSmall: "4px",
+};
+
+export const shadows = {
+  elevationLow: "0px 1px 0px rgba(240,240,240,1)",
+  elevationMedium: "0px 3px 8px rgba(0, 0, 0, 0.12)",
+  elevationHigh: "0px 7px 16px rgba(0, 0, 0, 0.12)",
+};
+
 const mainTheme = {
   colors,
   text,
+  sizing,
+  spacing,
+  shadows,
 };
 
 export default mainTheme;
