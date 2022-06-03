@@ -5,7 +5,10 @@ import InputLabel from "../../InputLabel";
 import InputHelper from "../InputHelper";
 import Wrapper from "../../Field/Wrapper";
 import Text from "../../Typography/Text";
-import { InputProps as SimpleInputProps, SimpleInput } from "../SimpleInput/SimpleInput";
+import {
+  InputProps as SimpleInputProps,
+  SimpleInput,
+} from "../SimpleInput/SimpleInput";
 
 export type InputProps = SimpleInputProps & {
   className?: string;

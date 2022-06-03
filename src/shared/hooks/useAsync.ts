@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import { useCallback, useState } from "react";
 
 export enum requestState {
@@ -6,7 +7,7 @@ export enum requestState {
   FULFILLED = "FULFILLED",
 }
 
-export const useAsync = (request: () => Promise<Response>) => {
+export const useAsync = (request: () => Promise<AxiosResponse<any, any>>) => {
   const [status, setStatus] = useState(requestState.IDLE);
   const [value, setValue] = useState<unknown>();
   const [error, setError] = useState(false);
@@ -19,7 +20,7 @@ export const useAsync = (request: () => Promise<Response>) => {
         const validRequestStatuses = [200, 201, 202, 100, 101, 102];
         if (data.status === 204) return;
         if (validRequestStatuses.includes(data.status)) {
-          const result = data.json ? data.json() : data;
+          const result = data.data.json() ? data.data.json() : data;
           setValue(result);
           return result;
         }

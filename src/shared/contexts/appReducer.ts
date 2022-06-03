@@ -30,7 +30,16 @@ const defaultState: AppState = {
   auth: {
     isAuthenticated: false,
     admin: {
-      uuid: "",
+      id: 0,
+      name: "",
+      lastname: "",
+      email: "",
+      status: false,
+      id_rango: 0,
+      rango: "",
+      dni: "",
+      address: "",
+      photo: "",
     },
   },
 };

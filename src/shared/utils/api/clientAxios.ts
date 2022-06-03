@@ -6,7 +6,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 const token = getAuthToken();
 
 export const axiosClient = (useToken: boolean) => {
-  const customHeaders: AxiosRequestHeaders = useToken
+  const customHeaders: AxiosRequestHeaders = !useToken
     ? { "Content-type": "application/json" }
     : {
         "Content-type": "application/json",

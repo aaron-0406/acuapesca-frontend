@@ -1,7 +1,7 @@
 import React, { RefObject } from "react";
 import { TextProps as AntTextProps } from "antd/lib/typography/Text";
-import styled, { css, IBaseThemeColors } from "styled-components";
 import { Typography } from "antd";
+import styled, { css, IBaseThemeColors } from "styled-components";
 import { BaseType } from "antd/lib/typography/Base";
 import { TextAlignType, TextWeightType } from "../../styles/global/types";
 
@@ -148,22 +148,22 @@ const getTextTypes = (type?: BaseType) => {
   switch (type) {
     case "success":
       return css`
-        color: ${({ theme }) => theme.colors["$color-success"]};
+        color: ${({ theme }) => theme.colors["$color-success-5"]};
       `;
 
     case "danger":
       return css`
-        color: ${({ theme }) => theme.colors["$color-error"]};
+        color: ${({ theme }) => theme.colors["$color-danger-5"]};
       `;
 
     case "warning":
       return css`
-        color: ${({ theme }) => theme.colors["$color-warning"]};
+        color: ${({ theme }) => theme.colors["$color-warning-5"]};
       `;
 
     case "secondary":
       return css`
-        color: ${({ theme }) => theme.colors["$color-primary-2"]};
+        color: ${({ theme }) => theme.colors.blackAlpha45};
       `;
 
     default:

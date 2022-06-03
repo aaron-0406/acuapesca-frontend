@@ -1,5 +1,4 @@
-import React from "react";
-import { useImperativeHandle } from "react";
+import React, { useImperativeHandle } from "react";
 import styled, { css } from "styled-components";
 import {
   InputProps as AntdInputProps,
@@ -215,7 +214,7 @@ const FancySimpleInput = (
           indicator={
             <Icon
               remixiconClass="ri-loader-5-line"
-              color="$color-primary-2"
+              color="$color-secondary-5"
               spinning
             />
           }
@@ -271,24 +270,24 @@ export const getInputTextSizes = (size?: SizeType) => {
 export const getInputType = (category?: CategoryInputType) => {
   if (category === "secondary") {
     return css`
-      ${({ theme }) => theme.colors["$color-transparent-1"]};
+      ${({ theme }) => theme.colors["$color-neutral-6"]};
     `;
   }
 
   if (category === "warning") {
     return css`
-      ${({ theme }) => theme.colors["$color-warning"]};
+      ${({ theme }) => theme.colors["$color-warning-5"]};
     `;
   }
 
   if (category === "danger") {
     return css`
-      ${({ theme }) => theme.colors["$color-error"]};
+      ${({ theme }) => theme.colors["$color-danger-5"]};
     `;
   }
 
   return css`
-    ${({ theme }) => theme.colors["$color-transparent-3"]};
+    ${({ theme }) => theme.colors["$color-neutral-9"]};
   `;
 };
 
@@ -315,19 +314,20 @@ const StyledInputInnerWrapper = styled.div<StyledInputInnerWrapperProps>`
       flex-flow: row nowrap;
       justify-content: left;
       align-items: center;
-      background-color: ${theme.colors["$color-transparent-1"]};
-      border: 1px solid ${theme.colors["$color-transparent-2"]};
+      background-color: ${theme.colors["$color-neutral-1"]};
+      border: 1px solid ${theme.colors["$color-neutral-4"]};
 
       &:hover,
       &:focus {
         border: 1px solid ${theme.colors["$color-primary-1"]};
+        box-shadow: ${theme.shadows.elevationMedium};
       }
     `}
 
   ${({ $ghost, theme }) =>
     $ghost &&
     css`
-      border: 1px solid ${theme.colors["$color-transparent-3"]};
+      border: 1px solid ${theme.colors["$color-neutral-3"]};
 
       &:hover {
         border: 1px solid ${theme.colors["$color-primary-1"]};
@@ -338,12 +338,12 @@ const StyledInputInnerWrapper = styled.div<StyledInputInnerWrapperProps>`
   ${({ $hasError, theme }) =>
     $hasError &&
     css`
-      border: 1px solid ${theme.colors["$color-error"]};
+      border: 1px solid ${theme.colors["$color-danger-5"]};
 
       &:hover,
       &:active,
       &:focus {
-        border-color: ${theme.colors["$color-error"]};
+        border-color: ${theme.colors["$color-danger-5"]};
         box-shadow: none;
       }
     `}
@@ -351,14 +351,14 @@ const StyledInputInnerWrapper = styled.div<StyledInputInnerWrapperProps>`
   ${({ $disabled, theme }) =>
     $disabled &&
     css`
-      background-color: ${theme.colors["$color-transparent-4"]};
-      border-color: ${theme.colors["$color-transparent-1"]};
-      color: ${theme.colors["$color-transparent-3"]};
+      background-color: ${theme.colors["$color-transparent-light-95"]};
+      border-color: ${theme.colors["$color-neutral-5"]};
+      color: ${theme.colors["$color-transparent-dark-25"]};
 
       &:hover,
       &:active,
       &:focus {
-        border-color: ${theme.colors["$color-transparent-1"]};
+        border-color: ${theme.colors["$color-transparent-dark-25"]};
         box-shadow: none;
       }
     `}
@@ -369,9 +369,9 @@ const StyledInputInnerWrapper = styled.div<StyledInputInnerWrapperProps>`
       & .search__icon {
         padding-left: 8px;
         color: ${$disabled
-          ? theme.colors["$color-transparent-2"]
+          ? theme.colors["$color-neutral-5"]
           : $hasError
-          ? theme.colors["$color-error"]
+          ? theme.colors["$color-danger-5"]
           : theme.colors["$color-primary-1"]};
       }
     `}
@@ -380,13 +380,13 @@ const StyledInputInnerWrapper = styled.div<StyledInputInnerWrapperProps>`
     $clearIcon &&
     css`
       & .close__icon {
-        color: ${theme.colors["$color-transparent-2"]};
+        color: ${theme.colors["$color-neutral-1"]};
         border-radius: 10px;
         margin-right: 8px;
         background-color: ${$disabled
-          ? theme.colors["$color-transparent-3"]
+          ? theme.colors["$color-neutral-5"]
           : $hasError
-          ? theme.colors["$color-error"]
+          ? theme.colors["$color-danger-5"]
           : theme.colors["$color-primary-1"]};
 
         &:hover {
@@ -424,9 +424,9 @@ const StyledInput = styled(AntdInput)<StyledInputProps>`
       &.ant-input-affix-wrapper-focused {
         border: none;
         box-shadow: none;
-        background-color: ${theme.colors["$color-transparent-1"]};
+        background-color: ${theme.colors.transparent};
         .ant-input {
-          background-color: ${theme.colors["$color-transparent-1"]};
+          background-color: ${theme.colors.transparent};
           text-transform: ${textTransform ? `${textTransform}` : ""};
         }
       }
@@ -443,12 +443,12 @@ const StyledInput = styled(AntdInput)<StyledInputProps>`
         text-transform: ${textTransform ? `${textTransform}` : ""};
         padding: ${type === "number" ? "8px" : "8px 12px "};
         color: ${disabled
-          ? theme.colors["$color-transparent-2"]
+          ? theme.colors["$color-neutral-9"]
           : getInputType(category)};
         opacity: ${disabled
           ? theme.text.opacity.disabled
           : theme.text.opacity.primary};
-        background-color: ${theme.colors["$color-transparent-1"]};
+        background-color: ${theme.colors.transparent};
         height: 100%;
         border: none;
         outline: 0;
@@ -461,7 +461,7 @@ const StyledInput = styled(AntdInput)<StyledInputProps>`
         }
 
         &::placeholder {
-          color: ${theme.colors["$color-transparent-3"]};
+          color: ${theme.colors["$color-neutral-6"]};
           text-overflow: initial;
         }
       }

@@ -10,16 +10,17 @@ import {
 
 type Dispatch = (action: ReducerActions) => void;
 
-export const GeneralContext = React.createContext<{
-  state: AppState;
-  dispatch: Dispatch;
-} | null>(null);
+export const GeneralContext =
+  React.createContext<{
+    state: AppState;
+    dispatch: Dispatch;
+  } | null>(null);
 
 export const StoreProvider = ({ children }: { children: JSX.Element }) => {
   const [state, dispatch] = useReducer(appReducer, initialAppState);
 
   useEffect(() => {
-    if (state.auth.admin.uuid) {
+    if (state.auth.admin.id) {
       storage.set(appStateKey, state);
     }
   }, [state]);

@@ -98,7 +98,7 @@ export const StyledButton = styled(ButtonDesign)<IStyledButton>`
 
       &[ant-click-animating-without-extra-node="true"]::after,
       &.ant-click-animating-node {
-        box-shadow: 0px 0px 3px 5px ${theme.colors["$color-transparent-2"]} !important;
+        box-shadow: 0px 0px 3px 5px ${theme.colors["$color-primary-1"]} !important;
       }
 
       & span {
@@ -114,22 +114,22 @@ export const StyledButton = styled(ButtonDesign)<IStyledButton>`
       }
 
       &.ant-btn-dangerous.ant-btn-primary {
-        background: ${theme.colors["$color-error"]};
-        color: ${theme.colors["$color-transparent-3"]};
+        background: ${theme.colors["$color-danger-4"]};
+        color: ${theme.colors["$color-neutral-1"]};
       }
 
       &.ant-btn-dangerous.ant-btn-primary:hover {
-        background: ${theme.colors["$color-error"]};
-        color: ${theme.colors["$color-transparent-3"]};
+        background: ${theme.colors["$color-danger-3"]};
+        color: ${theme.colors["$color-neutral-1"]};
       }
 
       &.ant-btn-dangerous.ant-btn-primary[disabled] {
-        background: ${theme.colors["$color-transparent-3"]};
-        color: ${theme.colors["$color-transparent-4"]};
+        background: ${theme.colors["$color-neutral-3"]};
+        color: ${theme.colors["$color-neutral-5"]};
       }
 
       &.ant-btn-dangerous[disabled] {
-        color: ${theme.colors["$color-transparent-4"]};
+        color: ${theme.colors["$color-neutral-5"]};
       }
     `}
   ${({ theme, type = "primary", danger }) =>
@@ -137,53 +137,53 @@ export const StyledButton = styled(ButtonDesign)<IStyledButton>`
       ? css`
           background: ${theme.colors["$color-primary-1"]};
           border: none;
-          color: ${theme.colors["$color-transparent-1"]};
+          color: ${theme.colors["$color-neutral-1"]};
 
           &:hover,
           &:active:hover,
           &:focus:hover {
             background: ${theme.colors["$color-primary-1"]};
-            color: ${theme.colors["$color-transparent-1"]};
+            color: ${theme.colors["$color-neutral-1"]};
             border: none;
           }
 
           &:focus,
           &:active {
             background: ${theme.colors["$color-primary-1"]};
-            color: ${theme.colors["$color-transparent-1"]};
+            color: ${theme.colors["$color-neutral-1"]};
             border: none;
           }
 
           &.ant-btn-primary[disabled] {
-            background: ${theme.colors["$color-transparent-2"]};
-            color: ${theme.colors["$color-transparent-1"]};
+            background: ${theme.colors["$color-neutral-3"]};
+            color: ${theme.colors["$color-neutral-5"]};
             border: none;
           }
         `
       : type === "primary" && danger
       ? css`
-          background: ${theme.colors["$color-error"]};
+          background: ${theme.colors["$color-danger-4"]};
           border: none;
-          color: ${theme.colors["$color-transparent-1"]};
+          color: ${theme.colors["$color-neutral-1"]};
 
           &:hover,
           &:active:hover,
           &:focus:hover {
-            background: ${theme.colors["$color-error"]};
-            color: ${theme.colors["$color-transparent-1"]};
+            background: ${theme.colors["$color-danger-3"]};
+            color: ${theme.colors["$color-neutral-1"]};
             border: none;
           }
 
           &:focus,
           &:active {
-            background: ${theme.colors["$color-transparent-2"]};
-            color: ${theme.colors["$color-transparent-1"]};
+            background: ${theme.colors["$color-danger-3"]};
+            color: ${theme.colors["$color-neutral-1"]};
             border: none;
           }
 
           &.ant-btn-primary[disabled] {
-            background: ${theme.colors["$color-transparent-2"]};
-            color: ${theme.colors["$color-transparent-1"]};
+            background: ${theme.colors["$color-neutral-3"]};
+            color: ${theme.colors["$color-neutral-5"]};
             border: none;
           }
         `
@@ -210,8 +210,8 @@ export const StyledButton = styled(ButtonDesign)<IStyledButton>`
 
           &.ant-btn[disabled] {
             background: none;
-            color: ${theme.colors["$color-transparent-1"]};
-            border-color: ${theme.colors["$color-transparent-1"]};
+            color: ${theme.colors["$color-neutral-5"]};
+            border-color: ${theme.colors["$color-neutral-5"]};
           }
         `
       : type === "secondary" && danger
@@ -224,7 +224,7 @@ export const StyledButton = styled(ButtonDesign)<IStyledButton>`
       ? css`
           &.ant-btn-dangerous[disabled]:hover {
             background: none;
-            color: ${theme.colors["$color-transparent-1"]};
+            color: ${theme.colors["$color-neutral-5"]};
           }
         `
       : type === "link" &&
@@ -243,7 +243,7 @@ export const StyledButton = styled(ButtonDesign)<IStyledButton>`
           }
 
           &.ant-btn-link[disabled] {
-            color: ${theme.colors["$color-primary-2"]};
+            color: ${theme.colors["$color-neutral-5"]};
           }
         `}
   ${({ shape }) =>
