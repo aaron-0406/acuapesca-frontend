@@ -4,7 +4,7 @@ type RedirecRouteProps = {
   pathname: string;
 };
 
-export const RedirectRoute: React.FC<RedirecRouteProps> = ({ pathname }) => {
+export const RedirectRoute = ({ pathname }: RedirecRouteProps) => {
   const currentLocation = useLocation();
   return <Navigate to={pathname} state={{ from: currentLocation }} replace />;
 };

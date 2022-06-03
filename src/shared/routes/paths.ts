@@ -26,7 +26,8 @@ export default {
     roadmap: "/account/roadmap-changelog",
     community: "/account/join-slack-community",
   },
-  documents: {
-    root: "/documents",
+  documentary: {
+    root: "/documentaria",
+    users: "/documentaria/usuarios",
   },
 };

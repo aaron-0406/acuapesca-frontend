@@ -13,10 +13,11 @@ const loginInitialState = (): LoginState => ({
 
 type Dispatch = (action: ReducerActions) => void;
 
-const LoginContext = React.createContext<{
-  state: LoginState;
-  dispatch: Dispatch;
-} | null>(null);
+const LoginContext =
+  React.createContext<{
+    state: LoginState;
+    dispatch: Dispatch;
+  } | null>(null);
 
 export const loginReducer = (
   state: LoginState = loginInitialState(),

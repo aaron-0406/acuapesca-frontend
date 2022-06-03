@@ -1,19 +1,24 @@
 import { Route } from "react-router-dom";
+import DocumentManagement from "../../../pages/DocumentManagement";
 import ErrorPage from "../../../pages/ErrorPage";
 import Login from "../../../pages/Login";
 import NotFound from "../../../pages/NotFound";
 import AppSwitch from "../AppSwitch";
 import { GuestRoute } from "../GuestRoutes/GuestRoute";
 import paths from "../paths";
+import ProtectedRoutes from "../ProtectedRoutes";
 
 const AppRouter = () => {
   return (
     <AppSwitch>
       <Route path={paths.error} element={<ErrorPage />} />
       <Route path={paths.general.notFound} element={<NotFound />} />
-      <Route path={paths.guest.login} element={<GuestRoute />}>
+      <Route element={<GuestRoute />}>
         <Route path={paths.guest.login} element={<Login />} />
-        <Route path={paths.guest.loginConfirmation} element={<div>Hola</div>} />
+      </Route>
+      <Route element={<ProtectedRoutes />}>
+        <Route path={paths.documentary.root} element={<DocumentManagement/>} />
+        <Route path={paths.documentary.users} element={<div>Users</div>} />
       </Route>
     </AppSwitch>
   );
