@@ -55,7 +55,7 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
 
   return (
     <Container display="flex" justifyContent="space-between" width="100%">
-      <StyledAsideContainer width="250px">
+      <StyledAsideContainer width="280px">
         <StyledContainerLogo
           display="flex"
           alignItems="center"
