@@ -1,5 +1,5 @@
 import { createGlobalStyle, css } from "styled-components";
-import "antd/dist/antd.css";
+import "antd/dist/antd.min.css";
 import "./fonts/Maven_Pro/stylesheet.css";
 import "./fonts/raleway/stylesheet.css";
 import "remixicon/fonts/remixicon.css";
