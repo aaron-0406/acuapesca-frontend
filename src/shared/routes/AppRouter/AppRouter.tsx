@@ -17,8 +17,9 @@ const AppRouter = () => {
         <Route path={paths.guest.login} element={<Login />} />
       </Route>
       <Route element={<ProtectedRoutes />}>
-        <Route path={paths.documentary.root} element={<DocumentManagement/>} />
+        <Route path={paths.documentary.roles} element={<div>Roles</div>} />
         <Route path={paths.documentary.users} element={<div>Users</div>} />
+        <Route path={paths.documentary.root} element={<DocumentManagement />} />
       </Route>
     </AppSwitch>
   );

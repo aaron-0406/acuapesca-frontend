@@ -29,5 +29,6 @@ export default {
   documentary: {
     root: "/documentaria",
     users: "/documentaria/usuarios",
+    roles: "/documentaria/roles",
   },
 };

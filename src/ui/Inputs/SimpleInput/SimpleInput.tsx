@@ -1,4 +1,4 @@
-import React, { useImperativeHandle } from "react";
+import React, { useImperativeHandle, useState } from "react";
 import styled, { css } from "styled-components";
 import {
   InputProps as AntdInputProps,
@@ -35,6 +35,7 @@ type InputInnerWrapperProps = {
   disabled?: boolean;
   searchIcon?: boolean;
   clearIcon?: boolean;
+  editIcon?: boolean;
   minWidth?: string;
   maxWidth?: string;
   width?: string;
@@ -76,6 +77,7 @@ const FancySimpleInput = (
     "disabled",
     "searchIcon",
     "clearIcon",
+    "editIcon",
     "minWidth",
     "maxWidth",
     "width",
@@ -119,6 +121,13 @@ const FancySimpleInput = (
 
   const onClearIconClick = () => {
     inputRef.current?.select();
+  };
+
+  const [read, setRead] = useState(true);
+
+  const onEditIconClick = () => {
+    setRead(!read);
+    inputRef.current?.focus();
   };
 
   function capitalizeFirstLetterInput(
@@ -174,6 +183,7 @@ const FancySimpleInput = (
       .replace(multipleSpacesToOneSpace, " ");
     onBlur && onBlur(event);
     onChange && onChange(event);
+    setRead(true);
   };
 
   return (
@@ -183,6 +193,7 @@ const FancySimpleInput = (
       $disabled={innerWrapperProps.disabled}
       $searchIcon={innerWrapperProps.searchIcon}
       $clearIcon={innerWrapperProps.clearIcon}
+      $editIcon={innerWrapperProps.editIcon}
       $minWidth={innerWrapperProps.minWidth}
       $maxWidth={innerWrapperProps.maxWidth}
       $ghost={innerWrapperProps.ghost}
@@ -207,6 +218,7 @@ const FancySimpleInput = (
         onKeyDown={onInputNumberKeyDown}
         onChange={onChangeInput}
         onBlur={onBlurInput}
+        readOnly={read}
       />
 
       {loading && (
@@ -227,6 +239,15 @@ const FancySimpleInput = (
           classes="close__icon"
           remixiconClass="ri-close-line"
           onClick={onClearIconClick}
+        />
+      )}
+
+      {innerWrapperProps.editIcon && (
+        <Icon
+          size={18}
+          classes="edit__icon"
+          remixiconClass="ri-pencil-line"
+          onClick={onEditIconClick}
         />
       )}
     </StyledInputInnerWrapper>
@@ -296,6 +317,7 @@ type StyledInputInnerWrapperProps = {
   $disabled?: boolean;
   $searchIcon?: boolean;
   $clearIcon?: boolean;
+  $editIcon?: boolean;
   $minWidth?: string;
   $maxWidth?: string;
   $ghost?: boolean;
@@ -388,6 +410,24 @@ const StyledInputInnerWrapper = styled.div<StyledInputInnerWrapperProps>`
           : $hasError
           ? theme.colors["$color-danger-5"]
           : theme.colors["$color-primary-1"]};
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    `}
+
+    ${({ $editIcon, $disabled, $hasError, theme }) =>
+    $editIcon &&
+    css`
+      & .edit__icon {
+        color: ${theme.colors["$color-primary-1"]};
+        margin-right: 8px;
+        background-color: ${$disabled
+          ? theme.colors["$color-neutral-5"]
+          : $hasError
+          ? theme.colors["$color-danger-5"]
+          : theme.colors["white"]};
 
         &:hover {
           cursor: pointer;
