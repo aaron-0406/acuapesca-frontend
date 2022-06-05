@@ -1,5 +1,6 @@
 import { Route } from "react-router-dom";
 import Processes from "../../../pages/DocumentManagement/Documentary/Processes";
+import Rols from "../../../pages/DocumentManagement/Rols";
 import ErrorPage from "../../../pages/ErrorPage";
 import Login from "../../../pages/Login";
 import NotFound from "../../../pages/NotFound";
@@ -17,7 +18,7 @@ const AppRouter = () => {
         <Route path={paths.guest.login} element={<Login />} />
       </Route>
       <Route element={<ProtectedRoutes />}>
-        <Route path={paths.documentary.roles} element={<div>Roles</div>} />
+        <Route path={paths.documentary.roles} element={<Rols />} />
         <Route path={paths.documentary.users} element={<div>Users</div>} />
         <Route path={paths.documentary.root} element={<Processes />} />
       </Route>

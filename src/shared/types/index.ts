@@ -6,6 +6,8 @@ export interface IAdmin {
   dni: string;
   rango: string;
   id_rango: number;
+  tag: string;
+  id_tag: number;
   address: string;
   status: boolean;
   photo: string;

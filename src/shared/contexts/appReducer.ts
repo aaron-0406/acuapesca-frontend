@@ -1,19 +1,9 @@
-import {
-  ActionTypes as LoginActionTypes,
-  ClearMagicLinkAction,
-  LoginAction,
-  LogoutAction,
-  MagicLinkAction,
-} from "../../pages/Login/actions";
+import { ActionTypes as LoginActionTypes, ClearMagicLinkAction, LoginAction, LogoutAction, MagicLinkAction } from "../../pages/Login/actions";
 import { IAdmin } from "../types";
 import storage from "../utils/storage";
 import { getAuthToken } from "../utils/storage/auth";
 
-export type ReducerActions =
-  | LoginAction
-  | MagicLinkAction
-  | ClearMagicLinkAction
-  | LogoutAction;
+export type ReducerActions = LoginAction | MagicLinkAction | ClearMagicLinkAction | LogoutAction;
 
 export interface IAuth {
   isAuthenticated: boolean;
@@ -37,6 +27,8 @@ const defaultState: AppState = {
       status: false,
       id_rango: 0,
       rango: "",
+      id_tag: 0,
+      tag: "",
       dni: "",
       address: "",
       photo: "",
@@ -58,10 +50,7 @@ export const loadInitialState = (): AppState => {
 
 export const initialAppState: AppState = loadInitialState();
 
-export const appReducer = (
-  state: AppState = initialAppState,
-  action: ReducerActions
-): AppState => {
+export const appReducer = (state: AppState = initialAppState, action: ReducerActions): AppState => {
   switch (action.type) {
     case LoginActionTypes.Login: {
       const admin = action?.payload?.admin;

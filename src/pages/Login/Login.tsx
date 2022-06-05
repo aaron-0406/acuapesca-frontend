@@ -11,7 +11,7 @@ import { setAuthentication } from "../../shared/utils/storage/auth";
 import { useGeneralContext } from "../../shared/contexts/StoreProvider";
 import { ActionTypes } from "./actions";
 import { logIn, TokenResponseType } from "./api";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { useAutoLoaderContext } from "../../ui/AutoLoader/AutoLoaderProvider";
 import { notification } from "antd";
 
@@ -78,36 +78,20 @@ export const Login = () => {
     <Container display="flex" alignItems="center" justifyContent="center">
       <StyledForm onSubmit={handleSubmit(onSubmit)}>
         <StyledContainerLogo display="flex" justifyContent="flex-end">
-          <img src={logo} width="110px" />
+          <img src={logo} alt="Acuapesca Logo" width="110px" />
         </StyledContainerLogo>
 
         <Spacer size={37} />
 
-        <Container
-          maxHeight="100%"
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <img src={programadorLogo} width="190px" />
+        <Container maxHeight="100%" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+          <img src={programadorLogo} alt="Img Programador" width="190px" />
 
           <Spacer size={37} />
 
           <Controller
             name="email"
             control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                placeholder="Usuario"
-                size="large"
-                hasError={!!errors.email}
-                helperText={errors.email?.message}
-                width="282px"
-                maxWidth="400px"
-              />
-            )}
+            render={({ field }) => <Input {...field} placeholder="Usuario" size="large" hasError={!!errors.email} helperText={errors.email?.message} width="282px" maxWidth="400px" />}
           />
 
           <Spacer size={27} />
@@ -116,29 +100,13 @@ export const Login = () => {
             name="password"
             control={control}
             render={({ field }) => (
-              <Input
-                {...field}
-                placeholder="Contraseña"
-                size="large"
-                hasError={!!errors.password}
-                helperText={errors.password?.message}
-                width="282px"
-                maxWidth="400px"
-                type="password"
-              />
+              <Input {...field} placeholder="Contraseña" size="large" hasError={!!errors.password} helperText={errors.password?.message} width="282px" maxWidth="400px" type="password" />
             )}
           />
 
           <Spacer size={57} />
 
-          <Button
-            size="large"
-            shape="round"
-            type="primary"
-            title="Iniciar Sesión"
-            disabled={!isValid}
-            htmlType="submit"
-          />
+          <Button size="large" shape="round" type="primary" title="Iniciar Sesión" disabled={!isValid} htmlType="submit" />
 
           <Spacer size={97} />
         </Container>
