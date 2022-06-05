@@ -2,10 +2,7 @@ import { Modal, notification } from "antd";
 import { AxiosResponse } from "axios";
 import { Controller, useForm } from "react-hook-form";
 import styled, { css } from "styled-components";
-import {
-  createProcess,
-  getProcesses,
-} from "../../../../../shared/utils/services/processesServices";
+import { createProcess } from "../../../../../shared/utils/services/processesServices";
 import Button from "../../../../../ui/Button";
 import Container from "../../../../../ui/Container";
 import Input from "../../../../../ui/Inputs/Input";

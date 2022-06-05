@@ -1,4 +1,5 @@
 import Table, { ColumnsType } from "antd/lib/table";
+import { useEffect } from "react";
 import styled, { css } from "styled-components";
 import Button from "../../../../../ui/Button";
 import Container from "../../../../../ui/Container";
@@ -17,7 +18,7 @@ export const ProcessesTable = () => {
   const columns: ColumnsType<DataType> = [
     {
       title: (
-        <Text textAlign="center" level={4} weight="bold">
+        <Text textAlign="center" level={3} weight="bold">
           ID
         </Text>
       ),
@@ -25,10 +26,15 @@ export const ProcessesTable = () => {
       key: "id",
       width: "70px",
       align: "center",
+      render: (text) => (
+        <Text textAlign="center" level={3} weight="bold">
+          {text}
+        </Text>
+      ),
     },
     {
       title: (
-        <Text textAlign="center" level={4} weight="bold">
+        <Text textAlign="center" level={3} weight="bold">
           CÓDIGO
         </Text>
       ),
@@ -36,19 +42,25 @@ export const ProcessesTable = () => {
       key: "code",
       width: "200px",
       align: "center",
+      render: (text) => (
+        <Text textAlign="center" level={3}>
+          {text}
+        </Text>
+      ),
     },
     {
       title: (
-        <Text level={4} weight="bold">
+        <Text level={3} weight="bold">
           PROCESO
         </Text>
       ),
       dataIndex: "name",
       key: "name",
+      render: (text) => <Text level={3}>{text}</Text>,
     },
     {
       title: (
-        <Text textAlign="center" level={4} weight="bold">
+        <Text textAlign="center" level={3} weight="bold">
           ACCIÓN
         </Text>
       ),
@@ -69,76 +81,6 @@ export const ProcessesTable = () => {
       key: "1",
       id: 1,
       code: "P01",
-      name: "GESTIÓN DE LA DIRECCIÓN",
-      status: true,
-    },
-    {
-      key: "2",
-      id: 2,
-      code: "P02",
-      name: "Aaron Brown",
-      status: true,
-    },
-    {
-      key: "1",
-      id: 1,
-      code: "P01",
-      name: "John Brown",
-      status: true,
-    },
-    {
-      key: "2",
-      id: 2,
-      code: "P02",
-      name: "Aaron Brown",
-      status: true,
-    },
-    {
-      key: "1",
-      id: 1,
-      code: "P01",
-      name: "John Brown",
-      status: true,
-    },
-    {
-      key: "2",
-      id: 2,
-      code: "P02",
-      name: "Aaron Brown",
-      status: true,
-    },
-    {
-      key: "1",
-      id: 1,
-      code: "P01",
-      name: "John Brown",
-      status: true,
-    },
-    {
-      key: "2",
-      id: 2,
-      code: "P02",
-      name: "Aaron Brown",
-      status: true,
-    },
-    {
-      key: "1",
-      id: 1,
-      code: "P01",
-      name: "John Brown",
-      status: true,
-    },
-    {
-      key: "2",
-      id: 2,
-      code: "P02",
-      name: "Aaron Brown",
-      status: true,
-    },
-    {
-      key: "1",
-      id: 1,
-      code: "P01",
       name: "John Brown",
       status: true,
     },
@@ -154,8 +96,10 @@ export const ProcessesTable = () => {
   return (
     <StyledContainer width="100%">
       <Table
+        className="table-processes"
+        bordered
         pagination={false}
-        columns={columns as ColumnsType<DataType> | undefined}
+        columns={columns}
         dataSource={data}
         size="large"
       />
@@ -164,9 +108,37 @@ export const ProcessesTable = () => {
 };
 
 const StyledContainer = styled(Container)`
-  padding: 20px;
+  padding: 20px 40px;
   height: calc(100vh - 90px);
   overflow-y: auto;
+
+  ${({ theme }) => css`
+    .table-processes {
+      .ant-table-thead {
+        tr {
+          .ant-table-cell {
+            background-color: ${theme.colors["$color-transparent-1"]};
+          }
+        }
+      }
+
+      .ant-table-tbody {
+        tr {
+          .ant-table-cell {
+            background-color: ${theme.colors["$color-transparent-4"]};
+          }
+          td {
+            border: 1px solid ${theme.colors["$color-neutral-1"]};
+          }
+        }
+        tr:hover {
+          .ant-table-cell {
+            background-color: ${theme.colors["$color-transparent-3"]};
+          }
+        }
+      }
+    }
+  `}
 `;
 
 const StyledButtonEye = styled(Button)`

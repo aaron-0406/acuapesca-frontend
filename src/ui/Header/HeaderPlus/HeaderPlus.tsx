@@ -40,7 +40,7 @@ export const HeaderPlus = ({ title }: IHeaderPlusProps) => {
 };
 
 const StyledContainer = styled(Container)`
-  padding: 8px 20px;
+  padding: 8px 40px;
 
   ${({ theme }) => css`
     border-bottom: 1px solid ${theme.colors["$color-transparent-dark-95"]};
