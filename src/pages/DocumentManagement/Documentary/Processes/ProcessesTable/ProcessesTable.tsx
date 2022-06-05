@@ -55,7 +55,7 @@ export const ProcessesTable = () => {
       width: "200px",
       align: "center",
       key: "action",
-      render: (_, record) => (
+      render: () => (
         <Container display="flex" justifyContent="space-around">
           <StyledButtonEye icon={<Icon remixiconClass="ri-eye-off-line" />} />
           <StyledButtonMore icon={<Icon remixiconClass="ri-more-line" />} />
