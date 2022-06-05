@@ -2,7 +2,9 @@ import { notification, Spin } from "antd";
 import Table, { ColumnsType } from "antd/lib/table";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
+import paths from "../../../../../shared/routes/paths";
 import { getProcesses } from "../../../../../shared/utils/services/processesServices";
 import Button from "../../../../../ui/Button";
 import Container from "../../../../../ui/Container";
@@ -18,24 +20,16 @@ interface DataType {
   status: boolean;
 }
 
-export const ProcessesTable = () => {
+interface IProcessesTableProps {
+  changeData: boolean;
+  setChangeData: (state: boolean) => void;
+}
+
+export const ProcessesTable = ({
+  changeData,
+  setChangeData,
+}: IProcessesTableProps) => {
   const columns: ColumnsType<DataType> = [
-    {
-      title: (
-        <Text textAlign="center" level={3} weight="bold">
-          ID
-        </Text>
-      ),
-      dataIndex: "id",
-      key: "id",
-      width: "70px",
-      align: "center",
-      render: (text) => (
-        <Text textAlign="center" level={3} weight="bold">
-          {text}
-        </Text>
-      ),
-    },
     {
       title: (
         <Text textAlign="center" level={3} weight="bold">
@@ -47,7 +41,7 @@ export const ProcessesTable = () => {
       width: "200px",
       align: "center",
       render: (text) => (
-        <Text textAlign="center" level={3}>
+        <Text textAlign="center" level={3} weight="bold">
           {text}
         </Text>
       ),
@@ -60,7 +54,11 @@ export const ProcessesTable = () => {
       ),
       dataIndex: "name",
       key: "name",
-      render: (text) => <Text level={3}>{text}</Text>,
+      render: (text) => (
+        <Link to={paths.documentary.procedimientos}>
+          <StyledTextLink level={3}>{text}</StyledTextLink>
+        </Link>
+      ),
     },
     {
       title: (
@@ -83,39 +81,42 @@ export const ProcessesTable = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [processes, setProcesses] = useState<DataType[]>([]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const result: AxiosResponse<any, any> = await getProcesses();
+  const loadTableData = async () => {
+    try {
+      setLoading(true);
+      const result: AxiosResponse<any, any> = await getProcesses();
 
-        if (result) {
-          const { data } = result;
-          const { error, procesos } = data;
+      if (result) {
+        const { data } = result;
+        const { error, procesos } = data;
 
-          if (procesos) {
-            const newProcesses = procesos.map((process: DataType) => {
-              return { ...process, key: process.id };
-            });
-            setProcesses(newProcesses);
-          }
-
-          if (error) {
-            notification["warn"]({
-              message: error,
-            });
-          }
+        if (procesos) {
+          const newProcesses = procesos.map((process: DataType) => {
+            return { ...process, key: process.id };
+          });
+          setProcesses(newProcesses);
+          setChangeData(false);
         }
 
-        setLoading(false);
-      } catch (error: any) {
-        setLoading(false);
-        notification["error"]({
-          message: error.message as string,
-        });
+        if (error) {
+          notification["warn"]({
+            message: error,
+          });
+        }
       }
-    })();
-  }, []);
+
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      notification["error"]({
+        message: error.message as string,
+      });
+    }
+  };
+
+  useEffect(() => {
+    loadTableData();
+  }, [changeData]);
 
   if (loading) {
     return (
@@ -203,4 +204,12 @@ const StyledButtonMore = styled(Button)`
 
 const StyledLoadingContainer = styled(Container)`
   height: calc(100% - 57px);
+`;
+
+const StyledTextLink = styled(Text)`
+  ${({ theme }) => css`
+    &:hover {
+      color: ${theme.colors["$color-primary-1"]};
+    }
+  `}
 `;

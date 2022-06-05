@@ -1,33 +1,30 @@
 import { Modal, notification } from "antd";
 import { AxiosResponse } from "axios";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import styled, { css } from "styled-components";
-import { createProcess } from "../../../../../shared/utils/services/processesServices";
-import Button from "../../../../../ui/Button";
-import Container from "../../../../../ui/Container";
-import Input from "../../../../../ui/Inputs/Input";
-import TextArea from "../../../../../ui/Inputs/TextArea";
-import Spacer from "../../../../../ui/Spacer";
-import Text from "../../../../../ui/Typography/Text";
-import { IProcessesForm } from "../../types/types";
-import { ProcessesModalResolver } from "./ProcessesModal.yup";
+import { createProcess } from "../../../../../../shared/utils/services/processesServices";
+import Button from "../../../../../../ui/Button";
+import Container from "../../../../../../ui/Container";
+import Text from "../../../../../../ui/Typography/Text";
+import { IProcessesForm } from "../../../types/types";
+import { ProcessesModalResolver } from "../ProcessesModal.yup";
+import ProcessesModalForm from "../ProcessesModalForm";
 
-interface IProcessesModal {
+interface IProcessesModalCreate {
   visible: boolean;
   setVisible: () => void;
+  updateData: () => void;
 }
 
-export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
+export const ProcessesModalCreate = ({
+  visible,
+  setVisible,
+  updateData,
+}: IProcessesModalCreate) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const {
-    control,
-    reset,
-    handleSubmit,
-    watch,
-    formState: { errors, isValid },
-  } = useForm<IProcessesForm>({
+  const methods = useForm<IProcessesForm>({
     mode: "all",
     resolver: ProcessesModalResolver,
     defaultValues: {
@@ -36,6 +33,13 @@ export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
       status: true,
     },
   });
+
+  const {
+    reset,
+    handleSubmit,
+    watch,
+    formState: { isValid },
+  } = methods;
 
   const onClose = () => {
     setVisible();
@@ -56,6 +60,7 @@ export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
             message: success,
           });
           onClose();
+          updateData();
         }
 
         if (error) {
@@ -97,37 +102,10 @@ export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
         <StyledTitleContainer>
           <Text level={5}>Crear proceso</Text>
         </StyledTitleContainer>
-        <StyledFormContainer>
-          <Controller
-            name="code"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                requirement="required"
-                placeholder="Ingrese código del proceso"
-                label="Código:"
-                hasError={!!errors.code}
-                helperText={errors.code?.message}
-              />
-            )}
-          />
-          <Spacer size={30} />
-          <Controller
-            name="name"
-            control={control}
-            render={({ field }) => (
-              <TextArea
-                {...field}
-                label="Título:"
-                requirement="required"
-                placeholder="Ingrese título del proceso"
-                hasError={!!errors.name}
-                helperText={errors.name?.message}
-              />
-            )}
-          />
-        </StyledFormContainer>
+
+        <FormProvider {...methods}>
+          <ProcessesModalForm />
+        </FormProvider>
       </Container>
     </StyledModal>
   );
@@ -148,8 +126,4 @@ const StyledTitleContainer = styled(Container)`
   ${({ theme }) => css`
     background-color: ${theme.colors["$color-transparent-1"]};
   `}
-`;
-
-const StyledFormContainer = styled(Container)`
-  padding: 24px 35px;
 `;

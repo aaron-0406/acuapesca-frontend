@@ -28,6 +28,7 @@ export default {
   },
   documentary: {
     root: "/documentaria",
+    procedimientos: "/documentaria/procedimientos",
     users: "/documentaria/usuarios",
     roles: "/documentaria/roles",
   },

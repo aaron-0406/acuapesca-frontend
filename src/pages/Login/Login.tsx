@@ -14,6 +14,8 @@ import { logIn, TokenResponseType } from "./api";
 import { AxiosResponse } from "axios";
 import { useAutoLoaderContext } from "../../ui/AutoLoader/AutoLoaderProvider";
 import { notification } from "antd";
+import { useNavigate } from "react-router-dom";
+import paths from "../../shared/routes/paths";
 
 interface ILoginFields {
   email: string;
@@ -30,6 +32,8 @@ export const Login = () => {
     mode: "all",
     resolver: LoginWithEmailResolver,
   });
+
+  let navigate = useNavigate();
 
   const { setStatus } = useAutoLoaderContext();
 
@@ -57,6 +61,7 @@ export const Login = () => {
           notification["success"]({
             message: success,
           });
+          navigate(paths.documentary.root);
         }
 
         if (error) {
