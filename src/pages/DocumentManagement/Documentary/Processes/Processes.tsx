@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import Container from "../../../../ui/Container";
 import HeaderPlus from "../../../../ui/Header/HeaderPlus";
-import ProcessesModal from "./ProcessesModal";
+import ProcessesModalCreate from "./ProcessesModal/ProcessesModalCreate";
 import ProcessesTable from "./ProcessesTable";
 
 export const Processes = () => {
@@ -21,7 +21,7 @@ export const Processes = () => {
     <StyledContainer width="100%">
       <HeaderPlus title="PROCESOS" setVisibleModal={onToggleModal} />
       <ProcessesTable changeData={changeData} setChangeData={setChangeData} />
-      <ProcessesModal
+      <ProcessesModalCreate
         updateData={onUpdateTable}
         visible={visibleModal}
         setVisible={onToggleModal}

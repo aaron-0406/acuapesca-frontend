@@ -2,7 +2,9 @@ import { notification, Spin } from "antd";
 import Table, { ColumnsType } from "antd/lib/table";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
+import paths from "../../../../../shared/routes/paths";
 import { getProcesses } from "../../../../../shared/utils/services/processesServices";
 import Button from "../../../../../ui/Button";
 import Container from "../../../../../ui/Container";
@@ -31,22 +33,6 @@ export const ProcessesTable = ({
     {
       title: (
         <Text textAlign="center" level={3} weight="bold">
-          ID
-        </Text>
-      ),
-      dataIndex: "id",
-      key: "id",
-      width: "70px",
-      align: "center",
-      render: (text) => (
-        <Text textAlign="center" level={3} weight="bold">
-          {text}
-        </Text>
-      ),
-    },
-    {
-      title: (
-        <Text textAlign="center" level={3} weight="bold">
           CÓDIGO
         </Text>
       ),
@@ -55,7 +41,7 @@ export const ProcessesTable = ({
       width: "200px",
       align: "center",
       render: (text) => (
-        <Text textAlign="center" level={3}>
+        <Text textAlign="center" level={3} weight="bold">
           {text}
         </Text>
       ),
@@ -68,7 +54,11 @@ export const ProcessesTable = ({
       ),
       dataIndex: "name",
       key: "name",
-      render: (text) => <Text level={3}>{text}</Text>,
+      render: (text) => (
+        <Link to={paths.documentary.procedimientos}>
+          <StyledTextLink level={3}>{text}</StyledTextLink>
+        </Link>
+      ),
     },
     {
       title: (
@@ -214,4 +204,12 @@ const StyledButtonMore = styled(Button)`
 
 const StyledLoadingContainer = styled(Container)`
   height: calc(100% - 57px);
+`;
+
+const StyledTextLink = styled(Text)`
+  ${({ theme }) => css`
+    &:hover {
+      color: ${theme.colors["$color-primary-1"]};
+    }
+  `}
 `;
