@@ -16,9 +16,14 @@ import { ProcessesModalResolver } from "./ProcessesModal.yup";
 interface IProcessesModal {
   visible: boolean;
   setVisible: () => void;
+  updateData: () => void;
 }
 
-export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
+export const ProcessesModal = ({
+  visible,
+  setVisible,
+  updateData,
+}: IProcessesModal) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const {
@@ -56,6 +61,7 @@ export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
             message: success,
           });
           onClose();
+          updateData();
         }
 
         if (error) {

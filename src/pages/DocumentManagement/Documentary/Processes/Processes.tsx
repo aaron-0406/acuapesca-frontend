@@ -7,16 +7,25 @@ import ProcessesTable from "./ProcessesTable";
 
 export const Processes = () => {
   const [visibleModal, setVisibleModal] = useState(false);
+  const [changeData, setChangeData] = useState(false);
 
   const onToggleModal = () => {
     setVisibleModal(!visibleModal);
   };
 
+  const onUpdateTable = () => {
+    setChangeData(true);
+  };
+
   return (
     <StyledContainer width="100%">
       <HeaderPlus title="PROCESOS" setVisibleModal={onToggleModal} />
-      <ProcessesTable />
-      <ProcessesModal visible={visibleModal} setVisible={onToggleModal} />
+      <ProcessesTable changeData={changeData} setChangeData={setChangeData} />
+      <ProcessesModal
+        updateData={onUpdateTable}
+        visible={visibleModal}
+        setVisible={onToggleModal}
+      />
     </StyledContainer>
   );
 };

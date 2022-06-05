@@ -18,7 +18,15 @@ interface DataType {
   status: boolean;
 }
 
-export const ProcessesTable = () => {
+interface IProcessesTableProps {
+  changeData: boolean;
+  setChangeData: (state: boolean) => void;
+}
+
+export const ProcessesTable = ({
+  changeData,
+  setChangeData,
+}: IProcessesTableProps) => {
   const columns: ColumnsType<DataType> = [
     {
       title: (
@@ -83,39 +91,42 @@ export const ProcessesTable = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [processes, setProcesses] = useState<DataType[]>([]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const result: AxiosResponse<any, any> = await getProcesses();
+  const loadTableData = async () => {
+    try {
+      setLoading(true);
+      const result: AxiosResponse<any, any> = await getProcesses();
 
-        if (result) {
-          const { data } = result;
-          const { error, procesos } = data;
+      if (result) {
+        const { data } = result;
+        const { error, procesos } = data;
 
-          if (procesos) {
-            const newProcesses = procesos.map((process: DataType) => {
-              return { ...process, key: process.id };
-            });
-            setProcesses(newProcesses);
-          }
-
-          if (error) {
-            notification["warn"]({
-              message: error,
-            });
-          }
+        if (procesos) {
+          const newProcesses = procesos.map((process: DataType) => {
+            return { ...process, key: process.id };
+          });
+          setProcesses(newProcesses);
+          setChangeData(false);
         }
 
-        setLoading(false);
-      } catch (error: any) {
-        setLoading(false);
-        notification["error"]({
-          message: error.message as string,
-        });
+        if (error) {
+          notification["warn"]({
+            message: error,
+          });
+        }
       }
-    })();
-  }, []);
+
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      notification["error"]({
+        message: error.message as string,
+      });
+    }
+  };
+
+  useEffect(() => {
+    loadTableData();
+  }, [changeData]);
 
   if (loading) {
     return (
