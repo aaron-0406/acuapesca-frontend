@@ -81,7 +81,6 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
             style={{ textAlign: "center" }}
             readOnly
             defaultValue="Pancho Rodriguez"
-            editIcon
           />
 
           <Spacer size={14} />
@@ -90,7 +89,6 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
             style={{ textAlign: "center" }}
             readOnly
             defaultValue="Administrador"
-            editIcon
           />
 
           <Spacer size={32} />

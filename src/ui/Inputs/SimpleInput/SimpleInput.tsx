@@ -123,13 +123,6 @@ const FancySimpleInput = (
     inputRef.current?.select();
   };
 
-  const [read, setRead] = useState(true);
-
-  const onEditIconClick = () => {
-    setRead(!read);
-    inputRef.current?.focus();
-  };
-
   function capitalizeFirstLetterInput(
     event: React.ChangeEvent<HTMLInputElement>
   ) {
@@ -183,7 +176,6 @@ const FancySimpleInput = (
       .replace(multipleSpacesToOneSpace, " ");
     onBlur && onBlur(event);
     onChange && onChange(event);
-    setRead(true);
   };
 
   return (
@@ -218,7 +210,6 @@ const FancySimpleInput = (
         onKeyDown={onInputNumberKeyDown}
         onChange={onChangeInput}
         onBlur={onBlurInput}
-        readOnly={read}
       />
 
       {loading && (
@@ -243,12 +234,7 @@ const FancySimpleInput = (
       )}
 
       {innerWrapperProps.editIcon && (
-        <Icon
-          size={18}
-          classes="edit__icon"
-          remixiconClass="ri-pencil-line"
-          onClick={onEditIconClick}
-        />
+        <Icon size={18} classes="edit__icon" remixiconClass="ri-pencil-line" />
       )}
     </StyledInputInnerWrapper>
   );

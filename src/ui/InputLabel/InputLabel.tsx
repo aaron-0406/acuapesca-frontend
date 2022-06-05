@@ -27,11 +27,7 @@ export const InputLabel = ({
       disabled={disabled}
     >
       {typeof label === "string" ? (
-        <Text
-          className={classnames("label", labelClassName)}
-          level={3}
-          weight="bold"
-        >
+        <Text className={classnames("label", labelClassName)} level={3}>
           {label}
         </Text>
       ) : (
@@ -67,7 +63,7 @@ const StyledInputLabelWrapper = styled.div<StyledInputLabelWrapperProps>`
     margin-bottom: 8px;
 
     & .ant-typography {
-      color: ${theme.colors["$color-transparent-1"]};
+      color: ${theme.colors["$color-black"]};
       opacity: 1;
     }
 

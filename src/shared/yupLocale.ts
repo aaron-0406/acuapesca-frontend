@@ -34,6 +34,8 @@ yup.setLocale({
     email: () => {
       return "formato de email inválido";
     },
+    min: ({ min }: { min: number }) => `el valor mínimo es ${min} caracteres`,
+    max: ({ max }: { max: number }) => `el valor máximo es ${max} caracteres`,
   },
   array: {
     min: ({ min, label }: { min: number; path: string; label: string }) => {
