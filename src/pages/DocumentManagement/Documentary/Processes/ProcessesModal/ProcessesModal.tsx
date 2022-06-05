@@ -1,6 +1,11 @@
-import { Modal } from "antd";
+import { Modal, notification } from "antd";
+import { AxiosResponse } from "axios";
 import { Controller, useForm } from "react-hook-form";
 import styled, { css } from "styled-components";
+import {
+  createProcess,
+  getProcesses,
+} from "../../../../../shared/utils/services/processesServices";
 import Button from "../../../../../ui/Button";
 import Container from "../../../../../ui/Container";
 import Input from "../../../../../ui/Inputs/Input";
@@ -19,6 +24,8 @@ export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
   const {
     control,
     reset,
+    handleSubmit,
+    watch,
     formState: { errors, isValid },
   } = useForm<IProcessesForm>({
     mode: "all",
@@ -35,6 +42,34 @@ export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
     reset();
   };
 
+  const onSave = async () => {
+    try {
+      const result: AxiosResponse<any, any> = await createProcess(watch());
+
+      if (result) {
+        const { data } = result;
+        const { success, error, process } = data;
+
+        if (process) {
+          notification["success"]({
+            message: success,
+          });
+          onClose();
+        }
+
+        if (error) {
+          notification["warn"]({
+            message: error,
+          });
+        }
+      }
+    } catch (error: any) {
+      notification["error"]({
+        message: error.message as string,
+      });
+    }
+  };
+
   return (
     <StyledModal
       closable={false}
@@ -44,7 +79,12 @@ export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
       footer={
         <Container display="flex" justifyContent="flex-end">
           <Button type="secondary" title="Cancelar" onClick={onClose} />
-          <Button type="primary" title="Guardar" disabled={!isValid} />
+          <Button
+            type="primary"
+            title="Guardar"
+            disabled={!isValid}
+            onClick={handleSubmit(onSave)}
+          />
         </Container>
       }
       destroyOnClose
@@ -73,7 +113,12 @@ export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
             name="name"
             control={control}
             render={({ field }) => (
-              <TextArea {...field} placeholder="Ingrese título del proceso" />
+              <TextArea
+                label="Título:"
+                requirement="required"
+                {...field}
+                placeholder="Ingrese título del proceso"
+              />
             )}
           />
         </StyledFormContainer>
