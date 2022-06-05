@@ -17,10 +17,10 @@ export const createProcess = async (process: IProcessesForm) => {
   return await axiosClient(true).post(urlApi, process);
 };
 
-export const updateProcess = async (process: IProcessesForm) => {
-  return await axiosClient(true).put(urlApi, process);
+export const updateProcess = async (id: string, process: IProcessesForm) => {
+  return await axiosClient(true).put(`${urlApi}/${id}`, process);
 };
 
-export const changeProcessStatus = async (status: boolean) => {
-  return await axiosClient(true).patch(urlApi, { status });
+export const changeProcessStatus = async (id: string, status: boolean) => {
+  return await axiosClient(true).patch(`${urlApi}/${id}`, { status });
 };

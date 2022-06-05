@@ -1,5 +1,6 @@
 import { Modal, notification } from "antd";
 import { AxiosResponse } from "axios";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled, { css } from "styled-components";
 import { createProcess } from "../../../../../shared/utils/services/processesServices";
@@ -18,6 +19,8 @@ interface IProcessesModal {
 }
 
 export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const {
     control,
     reset,
@@ -41,6 +44,7 @@ export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
 
   const onSave = async () => {
     try {
+      setLoading(true);
       const result: AxiosResponse<any, any> = await createProcess(watch());
 
       if (result) {
@@ -60,7 +64,9 @@ export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
           });
         }
       }
+      setLoading(false);
     } catch (error: any) {
+      setLoading(false);
       notification["error"]({
         message: error.message as string,
       });
@@ -81,6 +87,7 @@ export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
             title="Guardar"
             disabled={!isValid}
             onClick={handleSubmit(onSave)}
+            loading={loading}
           />
         </Container>
       }
@@ -111,10 +118,12 @@ export const ProcessesModal = ({ visible, setVisible }: IProcessesModal) => {
             control={control}
             render={({ field }) => (
               <TextArea
+                {...field}
                 label="Título:"
                 requirement="required"
-                {...field}
                 placeholder="Ingrese título del proceso"
+                hasError={!!errors.name}
+                helperText={errors.name?.message}
               />
             )}
           />

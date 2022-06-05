@@ -1,8 +1,12 @@
+import { notification, Spin } from "antd";
 import Table, { ColumnsType } from "antd/lib/table";
-import { useEffect } from "react";
+import { AxiosResponse } from "axios";
+import { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
+import { getProcesses } from "../../../../../shared/utils/services/processesServices";
 import Button from "../../../../../ui/Button";
 import Container from "../../../../../ui/Container";
+import EmptyState from "../../../../../ui/EmptyState";
 import Icon from "../../../../../ui/Icon";
 import Text from "../../../../../ui/Typography/Text";
 
@@ -76,22 +80,66 @@ export const ProcessesTable = () => {
     },
   ];
 
-  const data: DataType[] = [
-    {
-      key: "1",
-      id: 1,
-      code: "P01",
-      name: "John Brown",
-      status: true,
-    },
-    {
-      key: "2",
-      id: 2,
-      code: "P02",
-      name: "Aaron Brown",
-      status: true,
-    },
-  ];
+  const [loading, setLoading] = useState<boolean>(false);
+  const [processes, setProcesses] = useState<DataType[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const result: AxiosResponse<any, any> = await getProcesses();
+
+        if (result) {
+          const { data } = result;
+          const { error, procesos } = data;
+
+          if (procesos) {
+            const newProcesses = procesos.map((process: DataType) => {
+              return { ...process, key: process.id };
+            });
+            setProcesses(newProcesses);
+          }
+
+          if (error) {
+            notification["warn"]({
+              message: error,
+            });
+          }
+        }
+
+        setLoading(false);
+      } catch (error: any) {
+        setLoading(false);
+        notification["error"]({
+          message: error.message as string,
+        });
+      }
+    })();
+  }, []);
+
+  if (loading) {
+    return (
+      <StyledLoadingContainer
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Spin size="large" />
+      </StyledLoadingContainer>
+    );
+  }
+
+  if (!processes.length) {
+    return (
+      <Container>
+        <EmptyState
+          fullScreen
+          title="No existen procesos"
+          description="Para agregar un proceso, presiona el botón + que esta arriba"
+        />
+      </Container>
+    );
+  }
 
   return (
     <StyledContainer width="100%">
@@ -100,7 +148,7 @@ export const ProcessesTable = () => {
         bordered
         pagination={false}
         columns={columns}
-        dataSource={data}
+        dataSource={processes}
         size="large"
       />
     </StyledContainer>
@@ -151,4 +199,8 @@ const StyledButtonMore = styled(Button)`
   ${({ theme }) => css`
     background-color: ${theme.colors["$color-details"]};
   `}
+`;
+
+const StyledLoadingContainer = styled(Container)`
+  height: calc(100% - 57px);
 `;
