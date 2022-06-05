@@ -8,15 +8,10 @@ import Text from "../../Typography/Text";
 
 interface IHeaderPlusProps {
   title: string;
+  setVisibleModal: () => void;
 }
 
-export const HeaderPlus = ({ title }: IHeaderPlusProps) => {
-  const [visibleModal, setVisibleModal] = useState(false);
-
-  const onClickModal = () => {
-    setVisibleModal(!visibleModal);
-  };
-
+export const HeaderPlus = ({ title, setVisibleModal }: IHeaderPlusProps) => {
   return (
     <>
       <StyledContainer
@@ -31,10 +26,9 @@ export const HeaderPlus = ({ title }: IHeaderPlusProps) => {
         <Button
           size="large"
           icon={<Icon size={28} remixiconClass="ri-add-line" />}
-          onClick={onClickModal}
+          onClick={setVisibleModal}
         />
       </StyledContainer>
-      <ProcessesModal visible={visibleModal} setVisible={onClickModal} />
     </>
   );
 };
