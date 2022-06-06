@@ -9,15 +9,16 @@ export const getRols = async () => {
   return await axiosClient(true).get(urlApi);
 };
 
-export const getRolByID = async (id: string) => {
+export const getRolByID = async (id: number) => {
   return await axiosClient(true).get(`${urlApi}/${id}`);
 };
 
 export const createRol = async (rol: IRolsForm) => {
-  return await axiosClient(true).post(urlApi, process);
+  console.log(rol);
+  return await axiosClient(true).post(urlApi, rol);
 };
 
-export const updateRol = async (id: string, Rol: IRolsForm) => {
-  return await axiosClient(true).put(`${urlApi}/${id}`, process);
+export const updateRol = async (id: number, rol: IRolsForm) => {
+  console.log(rol);
+  return await axiosClient(true).put(`${urlApi}/${id}`, rol);
 };
-

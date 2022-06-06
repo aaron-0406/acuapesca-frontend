@@ -5,10 +5,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 import paths from "../../../../../shared/routes/paths";
-import {
-  changeProcessStatus,
-  getProcesses,
-} from "../../../../../shared/utils/services/processesServices";
+import { changeProcessStatus, getProcesses } from "../../../../../shared/utils/services/processesServices";
 import Button from "../../../../../ui/Button";
 import Container from "../../../../../ui/Container";
 import EmptyState from "../../../../../ui/EmptyState";
@@ -30,11 +27,7 @@ interface IProcessesTableProps {
   updateData: () => void;
 }
 
-export const ProcessesTable = ({
-  changeData,
-  setChangeData,
-  updateData,
-}: IProcessesTableProps) => {
+export const ProcessesTable = ({ changeData, setChangeData, updateData }: IProcessesTableProps) => {
   const columns: ColumnsType<DataType> = [
     {
       title: (
@@ -77,21 +70,12 @@ export const ProcessesTable = ({
       render: (data) => (
         <Container display="flex" justifyContent="space-around">
           {data.status ? (
-            <StyledButtonEyeTrue
-              onClick={() => onChangeProcessStatus(data.id, data.status)}
-              icon={<Icon remixiconClass="ri-eye-off-fill" />}
-            />
+            <StyledButtonEyeTrue onClick={() => onChangeProcessStatus(data.id, data.status)} icon={<Icon remixiconClass="ri-eye-off-fill" />} />
           ) : (
-            <StyledButtonEyeFalse
-              onClick={() => onChangeProcessStatus(data.id, data.status)}
-              icon={<Icon remixiconClass="ri-eye-fill" />}
-            />
+            <StyledButtonEyeFalse onClick={() => onChangeProcessStatus(data.id, data.status)} icon={<Icon remixiconClass="ri-eye-fill" />} />
           )}
 
-          <StyledButtonMore
-            onClick={() => onVisibleModalWithID(data.id)}
-            icon={<Icon remixiconClass="ri-more-line" />}
-          />
+          <StyledButtonMore onClick={() => onVisibleModalWithID(data.id)} icon={<Icon remixiconClass="ri-more-line" />} />
         </Container>
       ),
     },
@@ -114,10 +98,7 @@ export const ProcessesTable = ({
   const onChangeProcessStatus = async (id: number, status: boolean) => {
     try {
       setLoading(true);
-      const result: AxiosResponse<any, any> = await changeProcessStatus(
-        id,
-        !status
-      );
+      const result: AxiosResponse<any, any> = await changeProcessStatus(id, !status);
 
       if (result) {
         const { data } = result;
@@ -126,10 +107,7 @@ export const ProcessesTable = ({
         if (success) {
           setProcesses(
             processes.map((process) => {
-              if (process.id === id) {
-                return { ...process, status: !status };
-              }
-
+              if (process.id === id) return { ...process, status: !status };
               return process;
             })
           );
@@ -193,11 +171,7 @@ export const ProcessesTable = ({
 
   if (loading) {
     return (
-      <StyledLoadingContainer
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <StyledLoadingContainer display="flex" justifyContent="center" alignItems="center">
         <Spin size="large" />
       </StyledLoadingContainer>
     );
@@ -206,31 +180,15 @@ export const ProcessesTable = ({
   if (!processes.length) {
     return (
       <Container>
-        <EmptyState
-          fullScreen
-          title="No existen procesos"
-          description="Para agregar un proceso, presiona el botón + que esta arriba"
-        />
+        <EmptyState fullScreen title="No existen procesos" description="Para agregar un proceso, presiona el botón + que esta arriba" />
       </Container>
     );
   }
 
   return (
     <StyledContainer width="100%">
-      <Table
-        className="table-processes"
-        bordered
-        pagination={false}
-        columns={columns}
-        dataSource={processes}
-        size="large"
-      />
-      <ProcessesModalUpdate
-        visible={visibleModal}
-        setVisible={onToggleModal}
-        updateData={updateData}
-        idProcess={idProcessSelected}
-      />
+      <Table className="table-processes" bordered pagination={false} columns={columns} dataSource={processes} size="large" />
+      <ProcessesModalUpdate visible={visibleModal} setVisible={onToggleModal} updateData={updateData} idProcess={idProcessSelected} />
     </StyledContainer>
   );
 };

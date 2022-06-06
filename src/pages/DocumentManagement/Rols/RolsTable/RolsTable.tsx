@@ -1,15 +1,16 @@
-import { DataSourceItemType } from "antd/lib/auto-complete";
 import Table, { ColumnsType } from "antd/lib/table";
 import styled, { css } from "styled-components";
 import Container from "../../../../ui/Container";
 import Icon from "../../../../ui/Icon";
 import Text from "../../../../ui/Typography/Text";
 import Button from "../../../../ui/Button";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AxiosResponse } from "axios";
 import { getRols } from "../../../../shared/utils/services/rolsServices";
 import { notification, Spin } from "antd";
 import EmptyState from "../../../../ui/EmptyState";
+import RolsModalUpdate from "../RolsModal/RolsModalUpdate";
+import { RolCxt } from "../RolsContext";
 
 interface DataType {
   key: string;
@@ -19,8 +20,13 @@ interface DataType {
   tag: string;
   tag_id: number;
 }
+interface IProcessesTableProps {
+  changeData: boolean;
+  setChangeData: (state: boolean) => void;
+  updateData: () => void;
+}
 
-export const RolsTable = () => {
+export const RolsTable = ({ changeData, setChangeData, updateData }: IProcessesTableProps) => {
   const columns: ColumnsType<DataType> = [
     {
       title: (
@@ -83,50 +89,59 @@ export const RolsTable = () => {
       width: "200px",
       align: "center",
       key: "action",
-      render: () => (
+      render: (data) => (
         <Container display="flex" justifyContent="space-around">
-          <StyledButtonEye icon={<Icon remixiconClass="ri-eye-off-line" />} />
-          <StyledButtonMore icon={<Icon remixiconClass="ri-more-line" />} />
+          <StyledButtonMore onClick={() => onVisibleModalWithID(data.id)} icon={<Icon remixiconClass="ri-more-line" />} />
         </Container>
       ),
     },
   ];
-  const [loading, setLoading] = useState<boolean>(false);
-  const [rols, setRols] = useState<DataType[]>([]);
+  const { loading, setLoading,rols, setRols } = useContext(RolCxt);
+  const [visibleModal, setVisibleModal] = useState<boolean>(false);
+  const [idRolSelected, setIdRolSelected] = useState<number>(0);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const result: AxiosResponse<any, any> = await getRols();
-        console.log(result);
-        if (result) {
-          const { data } = result;
-          const { error, rols } = data;
+  const onVisibleModalWithID = (id: number) => {
+    setIdRolSelected(id);
+    onToggleModal();
+  };
 
-          if (rols) {
-            const newRols = rols.map((rol: DataType) => {
-              return { ...rol, key: rol.id };
-            });
-            setRols(newRols);
-          }
+  const onToggleModal = () => {
+    setVisibleModal(!visibleModal);
+  };
 
-          if (error) {
-            notification["warn"]({
-              message: error,
-            });
-          }
-        }
-
-        setLoading(false);
-      } catch (error: any) {
-        setLoading(false);
-        notification["error"]({
-          message: error.message as string,
+  const loadTableData = async () => {
+    try {
+      setLoading(true);
+      const result: AxiosResponse<any, any> = await getRols();
+      const { data } = result;
+      const { error, rols } = data;
+      if (error) {
+        notification["warn"]({
+          message: error,
         });
       }
-    })();
-  }, []);
+
+      if (rols) {
+        const newRols = rols.map((rol: DataType) => {
+          return { ...rol, key: rol.id };
+        });
+        setRols(newRols);
+        setChangeData(false);
+      }
+
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      notification["error"]({
+        message: error.message as string,
+      });
+    }
+  };
+
+  useEffect(() => {
+    loadTableData();
+  }, [changeData]);
+
   if (loading) {
     return (
       <StyledLoadingContainer display="flex" justifyContent="center" alignItems="center">
@@ -134,6 +149,7 @@ export const RolsTable = () => {
       </StyledLoadingContainer>
     );
   }
+
   if (!rols.length) {
     return (
       <Container>
@@ -141,9 +157,11 @@ export const RolsTable = () => {
       </Container>
     );
   }
+
   return (
     <StyledContainer width="100%">
       <Table className="table-processes" bordered pagination={false} columns={columns} dataSource={rols} size="large" />
+      <RolsModalUpdate visible={visibleModal} setVisible={onToggleModal} updateData={updateData} idRol={idRolSelected} />
     </StyledContainer>
   );
 };
@@ -179,12 +197,6 @@ const StyledContainer = styled(Container)`
         }
       }
     }
-  `}
-`;
-
-const StyledButtonEye = styled(Button)`
-  ${({ theme }) => css`
-    background-color: ${theme.colors["$color-danger-5"]};
   `}
 `;
 
