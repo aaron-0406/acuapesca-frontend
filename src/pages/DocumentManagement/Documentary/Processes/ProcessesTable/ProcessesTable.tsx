@@ -5,7 +5,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 import paths from "../../../../../shared/routes/paths";
-import { getProcesses } from "../../../../../shared/utils/services/processesServices";
+import {
+  changeProcessStatus,
+  getProcesses,
+} from "../../../../../shared/utils/services/processesServices";
 import Button from "../../../../../ui/Button";
 import Container from "../../../../../ui/Container";
 import EmptyState from "../../../../../ui/EmptyState";
@@ -74,7 +77,18 @@ export const ProcessesTable = ({
       key: "action",
       render: (data) => (
         <Container display="flex" justifyContent="space-around">
-          <StyledButtonEye icon={<Icon remixiconClass="ri-eye-off-line" />} />
+          {data.status ? (
+            <StyledButtonEyeTrue
+              onClick={() => onChangeProcessStatus(data.id, data.status)}
+              icon={<Icon remixiconClass="ri-eye-off-fill" />}
+            />
+          ) : (
+            <StyledButtonEyeFalse
+              onClick={() => onChangeProcessStatus(data.id, data.status)}
+              icon={<Icon remixiconClass="ri-eye-fill" />}
+            />
+          )}
+
           <StyledButtonMore
             onClick={() => onVisibleModalWithID(data.id)}
             icon={<Icon remixiconClass="ri-more-line" />}
@@ -96,6 +110,49 @@ export const ProcessesTable = ({
 
   const onToggleModal = () => {
     setVisibleModal(!visibleModal);
+  };
+
+  const onChangeProcessStatus = async (id: number, status: boolean) => {
+    try {
+      setLoading(true);
+      const result: AxiosResponse<any, any> = await changeProcessStatus(
+        id,
+        !status
+      );
+
+      if (result) {
+        const { data } = result;
+        const { success, error } = data;
+
+        if (success) {
+          setProcesses(
+            processes.map((process) => {
+              if (process.id === id) {
+                return { ...process, status: !status };
+              }
+
+              return process;
+            })
+          );
+          notification["success"]({
+            message: success,
+          });
+        }
+
+        if (error) {
+          notification["warn"]({
+            message: error,
+          });
+        }
+      }
+
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      notification["error"]({
+        message: error.message as string,
+      });
+    }
   };
 
   const loadTableData = async () => {
@@ -213,9 +270,15 @@ const StyledContainer = styled(Container)`
   `}
 `;
 
-const StyledButtonEye = styled(Button)`
+const StyledButtonEyeTrue = styled(Button)`
   ${({ theme }) => css`
     background-color: ${theme.colors["$color-danger-5"]};
+  `}
+`;
+
+const StyledButtonEyeFalse = styled(Button)`
+  ${({ theme }) => css`
+    background-color: ${theme.colors["$color-success-5"]};
   `}
 `;
 
