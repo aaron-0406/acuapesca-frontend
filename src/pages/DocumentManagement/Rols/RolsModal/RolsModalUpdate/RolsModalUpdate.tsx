@@ -109,6 +109,7 @@ export const RolsModalUpdate = ({ visible, setVisible, updateData, idRol }: IPro
   };
   useEffect(() => {
     if (visible) onGetRolById();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible !== false]);
 
   return (

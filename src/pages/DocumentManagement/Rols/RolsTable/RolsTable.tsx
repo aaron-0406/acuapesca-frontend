@@ -146,6 +146,7 @@ export const RolsTable = ({ changeData, setChangeData, updateData }: IProcessesT
 
   useEffect(() => {
     loadTableData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changeData]);
 
   if (loading) {
