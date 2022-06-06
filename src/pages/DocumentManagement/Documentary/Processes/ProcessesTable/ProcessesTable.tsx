@@ -5,12 +5,16 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 import paths from "../../../../../shared/routes/paths";
-import { getProcesses } from "../../../../../shared/utils/services/processesServices";
+import {
+  changeProcessStatus,
+  getProcesses,
+} from "../../../../../shared/utils/services/processesServices";
 import Button from "../../../../../ui/Button";
 import Container from "../../../../../ui/Container";
 import EmptyState from "../../../../../ui/EmptyState";
 import Icon from "../../../../../ui/Icon";
 import Text from "../../../../../ui/Typography/Text";
+import ProcessesModalUpdate from "../ProcessesModal/ProcessesModalUpdate";
 
 interface DataType {
   key: string;
@@ -23,11 +27,13 @@ interface DataType {
 interface IProcessesTableProps {
   changeData: boolean;
   setChangeData: (state: boolean) => void;
+  updateData: () => void;
 }
 
 export const ProcessesTable = ({
   changeData,
   setChangeData,
+  updateData,
 }: IProcessesTableProps) => {
   const columns: ColumnsType<DataType> = [
     {
@@ -52,11 +58,10 @@ export const ProcessesTable = ({
           PROCESO
         </Text>
       ),
-      dataIndex: "name",
       key: "name",
-      render: (text) => (
-        <Link to={paths.documentary.procedimientos}>
-          <StyledTextLink level={3}>{text}</StyledTextLink>
+      render: (data) => (
+        <Link to={paths.documentary.verProcedimientos(data.id)}>
+          <StyledTextLink level={3}>{data.name}</StyledTextLink>
         </Link>
       ),
     },
@@ -69,10 +74,24 @@ export const ProcessesTable = ({
       width: "200px",
       align: "center",
       key: "action",
-      render: () => (
+      render: (data) => (
         <Container display="flex" justifyContent="space-around">
-          <StyledButtonEye icon={<Icon remixiconClass="ri-eye-off-line" />} />
-          <StyledButtonMore icon={<Icon remixiconClass="ri-more-line" />} />
+          {data.status ? (
+            <StyledButtonEyeTrue
+              onClick={() => onChangeProcessStatus(data.id, data.status)}
+              icon={<Icon remixiconClass="ri-eye-off-fill" />}
+            />
+          ) : (
+            <StyledButtonEyeFalse
+              onClick={() => onChangeProcessStatus(data.id, data.status)}
+              icon={<Icon remixiconClass="ri-eye-fill" />}
+            />
+          )}
+
+          <StyledButtonMore
+            onClick={() => onVisibleModalWithID(data.id)}
+            icon={<Icon remixiconClass="ri-more-line" />}
+          />
         </Container>
       ),
     },
@@ -80,6 +99,60 @@ export const ProcessesTable = ({
 
   const [loading, setLoading] = useState<boolean>(false);
   const [processes, setProcesses] = useState<DataType[]>([]);
+  const [visibleModal, setVisibleModal] = useState<boolean>(false);
+  const [idProcessSelected, setIdProcessSelected] = useState<number>(0);
+
+  const onVisibleModalWithID = (id: number) => {
+    setIdProcessSelected(id);
+    onToggleModal();
+  };
+
+  const onToggleModal = () => {
+    setVisibleModal(!visibleModal);
+  };
+
+  const onChangeProcessStatus = async (id: number, status: boolean) => {
+    try {
+      setLoading(true);
+      const result: AxiosResponse<any, any> = await changeProcessStatus(
+        id,
+        !status
+      );
+
+      if (result) {
+        const { data } = result;
+        const { success, error } = data;
+
+        if (success) {
+          setProcesses(
+            processes.map((process) => {
+              if (process.id === id) {
+                return { ...process, status: !status };
+              }
+
+              return process;
+            })
+          );
+          notification["success"]({
+            message: success,
+          });
+        }
+
+        if (error) {
+          notification["warn"]({
+            message: error,
+          });
+        }
+      }
+
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      notification["error"]({
+        message: error.message as string,
+      });
+    }
+  };
 
   const loadTableData = async () => {
     try {
@@ -152,6 +225,12 @@ export const ProcessesTable = ({
         dataSource={processes}
         size="large"
       />
+      <ProcessesModalUpdate
+        visible={visibleModal}
+        setVisible={onToggleModal}
+        updateData={updateData}
+        idProcess={idProcessSelected}
+      />
     </StyledContainer>
   );
 };
@@ -190,9 +269,15 @@ const StyledContainer = styled(Container)`
   `}
 `;
 
-const StyledButtonEye = styled(Button)`
+const StyledButtonEyeTrue = styled(Button)`
   ${({ theme }) => css`
     background-color: ${theme.colors["$color-danger-5"]};
+  `}
+`;
+
+const StyledButtonEyeFalse = styled(Button)`
+  ${({ theme }) => css`
+    background-color: ${theme.colors["$color-success-5"]};
   `}
 `;
 
