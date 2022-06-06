@@ -58,11 +58,10 @@ export const ProcessesTable = ({
           PROCESO
         </Text>
       ),
-      dataIndex: "name",
       key: "name",
-      render: (text) => (
-        <Link to={paths.documentary.procedimientos}>
-          <StyledTextLink level={3}>{text}</StyledTextLink>
+      render: (data) => (
+        <Link to={paths.documentary.verProcedimientos(data.id)}>
+          <StyledTextLink level={3}>{data.name}</StyledTextLink>
         </Link>
       ),
     },

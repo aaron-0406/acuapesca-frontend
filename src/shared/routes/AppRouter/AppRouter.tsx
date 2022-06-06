@@ -22,7 +22,7 @@ const AppRouter = () => {
         <Route path={paths.documentary.users} element={<div>Users</div>} />
         <Route path={paths.documentary.root} element={<Processes />} />
         <Route
-          path={paths.documentary.procedimientos}
+          path={paths.documentary.verProcedimientos()}
           element={<Procedures />}
         />
       </Route>

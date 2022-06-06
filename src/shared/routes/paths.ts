@@ -28,7 +28,7 @@ export default {
   },
   documentary: {
     root: "/documentaria",
-    procedimientos: "/documentaria/procedimientos",
+    verProcedimientos: (id = ":id") => `/documentaria/procedimientos/${id}`,
     users: "/documentaria/usuarios",
     roles: "/documentaria/roles",
   },
