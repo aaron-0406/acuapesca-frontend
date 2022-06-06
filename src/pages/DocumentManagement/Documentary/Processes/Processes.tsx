@@ -14,7 +14,7 @@ export const Processes = () => {
   };
 
   const onUpdateTable = () => {
-    setChangeData(true);
+    setChangeData(!changeData);
   };
 
   return (
@@ -23,7 +23,6 @@ export const Processes = () => {
       <ProcessesTable
         updateData={onUpdateTable}
         changeData={changeData}
-        setChangeData={setChangeData}
       />
       <ProcessesModalCreate
         updateData={onUpdateTable}

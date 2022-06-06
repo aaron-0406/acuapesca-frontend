@@ -1,12 +1,26 @@
+import { useState } from "react";
 import styled, { css } from "styled-components";
 import Button from "../../../../ui/Button";
 import Container from "../../../../ui/Container";
 import HeaderPlus from "../../../../ui/Header/HeaderPlus";
 import Icon from "../../../../ui/Icon";
-import ProceduresProcessTitle from "./ProceduresProcessTitle";
+import { IProceduresForm } from "../types/types";
+import ProceduresProcessTable from "./SectionProcedures/ProceduresProcessTable";
+import ProceduresProcessTitle from "./SectionProcedures/ProceduresProcessTitle";
 
 export const Procedures = () => {
-  const onSetVisibleModal = () => {};
+  const [procedureSelected, setProcedureSelected] =
+    useState<IProceduresForm | null>(null);
+  const [changeData, setChangeData] = useState(false);
+  const [visibleModal, setVisibleModal] = useState(false);
+
+  const onToggleModal = () => {
+    setVisibleModal(!visibleModal);
+  };
+
+  const onUpdateTable = () => {
+    setChangeData(!changeData);
+  };
 
   return (
     <StyledProcessContainer display="flex" width="100%">
@@ -18,7 +32,11 @@ export const Procedures = () => {
         alignItems="center"
       >
         <ProceduresProcessTitle />
-
+        <ProceduresProcessTable
+          changeData={changeData}
+          updateData={onUpdateTable}
+          setProcedureSelected={setProcedureSelected}
+        />
         <StyledButtonAdd
           icon={<Icon size={25} remixiconClass="ri-add-line" />}
           $width="70%"
@@ -28,8 +46,8 @@ export const Procedures = () => {
       </StyledProceduresContainer>
       <Container>
         <HeaderPlus
-          title="PROCEDIMIENTO 1"
-          setVisibleModal={onSetVisibleModal}
+          title={procedureSelected?.title ? procedureSelected?.title : "--"}
+          setVisibleModal={onToggleModal}
         />
       </Container>
     </StyledProcessContainer>

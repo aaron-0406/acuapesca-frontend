@@ -26,13 +26,11 @@ interface DataType {
 
 interface IProcessesTableProps {
   changeData: boolean;
-  setChangeData: (state: boolean) => void;
   updateData: () => void;
 }
 
 export const ProcessesTable = ({
   changeData,
-  setChangeData,
   updateData,
 }: IProcessesTableProps) => {
   const columns: ColumnsType<DataType> = [
@@ -168,7 +166,7 @@ export const ProcessesTable = ({
             return { ...process, key: process.id };
           });
           setProcesses(newProcesses);
-          setChangeData(false);
+          updateData();
         }
 
         if (error) {
@@ -185,7 +183,7 @@ export const ProcessesTable = ({
         message: error.message as string,
       });
     }
-  }, [setChangeData]);
+  }, []);
 
   useEffect(() => {
     loadTableData();

@@ -4,3 +4,11 @@ export interface IProcessesForm {
   code: string;
   status: boolean;
 }
+
+export interface IProceduresForm {
+  id?: number;
+  title: string;
+  status: boolean;
+  code: string;
+  process_id: number;
+}

@@ -3,12 +3,12 @@ import { AxiosResponse } from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled, { css } from "styled-components";
-import paths from "../../../../../shared/routes/paths";
-import { getProcessByID } from "../../../../../shared/utils/services/processesServices";
-import Button from "../../../../../ui/Button";
-import Container from "../../../../../ui/Container";
-import Icon from "../../../../../ui/Icon";
-import Text from "../../../../../ui/Typography/Text";
+import paths from "../../../../../../shared/routes/paths";
+import { getProcessByID } from "../../../../../../shared/utils/services/processesServices";
+import Button from "../../../../../../ui/Button";
+import Container from "../../../../../../ui/Container";
+import Icon from "../../../../../../ui/Icon";
+import Text from "../../../../../../ui/Typography/Text";
 
 export const ProceduresProcessTitle = () => {
   const { id } = useParams();
