@@ -14,22 +14,25 @@ export const Processes = () => {
   };
 
   const onUpdateTable = () => {
-    setChangeData(true);
+    setChangeData(!changeData);
   };
 
   return (
-    <Container width="100%">
+    <StyledProcessesContainer width="100%">
       <HeaderPlus title="PROCESOS" setVisibleModal={onToggleModal} />
       <ProcessesTable
         updateData={onUpdateTable}
         changeData={changeData}
-        setChangeData={setChangeData}
       />
       <ProcessesModalCreate
         updateData={onUpdateTable}
         visible={visibleModal}
         setVisible={onToggleModal}
       />
-    </Container>
+    </StyledProcessesContainer>
   );
 };
+
+const StyledProcessesContainer = styled(Container)`
+  height: 100vh;
+`;

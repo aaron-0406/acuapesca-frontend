@@ -1,13 +1,12 @@
 import { Modal, notification } from "antd";
 import { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled, { css } from "styled-components";
 import {
   getProcessByID,
   updateProcess,
 } from "../../../../../../shared/utils/services/processesServices";
-import { useAutoLoaderContext } from "../../../../../../ui/AutoLoader/AutoLoaderProvider";
 import Button from "../../../../../../ui/Button";
 import Container from "../../../../../../ui/Container";
 import Text from "../../../../../../ui/Typography/Text";
@@ -88,7 +87,7 @@ export const ProcessesModalUpdate = ({
     }
   };
 
-  const onGetProcessById = async () => {
+  const onGetProcessById = useCallback(async () => {
     try {
       setLoading(true);
       const result: AxiosResponse<any, any> = await getProcessByID(idProcess);
@@ -115,11 +114,11 @@ export const ProcessesModalUpdate = ({
         message: error.message as string,
       });
     }
-  };
+  }, [idProcess, setValue]);
 
   useEffect(() => {
     if (visible) onGetProcessById();
-  }, [visible !== false]);
+  }, [visible !== false, onGetProcessById]);
 
   return (
     <StyledModal

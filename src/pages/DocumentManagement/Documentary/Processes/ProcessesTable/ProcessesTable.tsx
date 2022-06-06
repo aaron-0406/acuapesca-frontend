@@ -1,7 +1,7 @@
 import { notification, Spin } from "antd";
 import Table, { ColumnsType } from "antd/lib/table";
 import { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 import paths from "../../../../../shared/routes/paths";
@@ -23,11 +23,10 @@ interface DataType {
 
 interface IProcessesTableProps {
   changeData: boolean;
-  setChangeData: (state: boolean) => void;
   updateData: () => void;
 }
 
-export const ProcessesTable = ({ changeData, setChangeData, updateData }: IProcessesTableProps) => {
+export const ProcessesTable = ({ changeData, updateData }: IProcessesTableProps) => {
   const columns: ColumnsType<DataType> = [
     {
       title: (
@@ -132,7 +131,7 @@ export const ProcessesTable = ({ changeData, setChangeData, updateData }: IProce
     }
   };
 
-  const loadTableData = async () => {
+  const loadTableData = useCallback(async () => {
     try {
       setLoading(true);
       const result: AxiosResponse<any, any> = await getProcesses();
@@ -146,7 +145,7 @@ export const ProcessesTable = ({ changeData, setChangeData, updateData }: IProce
             return { ...process, key: process.id };
           });
           setProcesses(newProcesses);
-          setChangeData(false);
+          updateData();
         }
 
         if (error) {
@@ -163,11 +162,11 @@ export const ProcessesTable = ({ changeData, setChangeData, updateData }: IProce
         message: error.message as string,
       });
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadTableData();
-  }, [changeData]);
+  }, [changeData, loadTableData]);
 
   if (loading) {
     return (
