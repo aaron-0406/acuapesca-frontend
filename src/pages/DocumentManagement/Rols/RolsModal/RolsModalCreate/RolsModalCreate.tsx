@@ -50,6 +50,7 @@ export const RolsModalCreate = ({ visible, setVisible, updateData }: IRolsModalC
         const { success, error, rol } = data;
 
         if (rol) {
+          rol.key = rol.id;
           setRols([...rols, rol]);
           notification["success"]({
             message: success,

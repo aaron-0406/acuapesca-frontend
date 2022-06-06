@@ -14,11 +14,9 @@ export const getRolByID = async (id: number) => {
 };
 
 export const createRol = async (rol: IRolsForm) => {
-  console.log(rol);
   return await axiosClient(true).post(urlApi, rol);
 };
 
 export const updateRol = async (id: number, rol: IRolsForm) => {
-  console.log(rol);
   return await axiosClient(true).put(`${urlApi}/${id}`, rol);
 };

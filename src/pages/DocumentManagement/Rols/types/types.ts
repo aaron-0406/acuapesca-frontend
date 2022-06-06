@@ -14,10 +14,6 @@ export interface DataTypeRol {
 }
 
 export interface RolContext {
-  loadingData: boolean;
-  setLoadingData: Function;
-  rol: IRolsForm;
-  setRol: Function;
   rols: DataTypeRol[];
   setRols: Function;
   loading: boolean;

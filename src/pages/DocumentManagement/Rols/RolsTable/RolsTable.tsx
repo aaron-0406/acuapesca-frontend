@@ -72,13 +72,19 @@ export const RolsTable = ({ changeData, setChangeData, updateData }: IProcessesT
     },
     {
       title: (
-        <Text level={3} weight="bold">
+        <Text level={3} textAlign="center" weight="bold">
           TAG
         </Text>
       ),
       dataIndex: "tag",
       key: "tag",
-      render: (text) => <Text level={3}>{text}</Text>,
+      align: "center",
+      render: (text) => (
+        <Container display="flex" justifyContent="center">
+          {text === "Lector" && <StyledTextTagGreen level={3}>{text}</StyledTextTagGreen>}
+          {text === "Editor" && <StyledTextTagBlue level={3}>{text}</StyledTextTagBlue>}
+        </Container>
+      ),
     },
     {
       title: (
@@ -96,7 +102,7 @@ export const RolsTable = ({ changeData, setChangeData, updateData }: IProcessesT
       ),
     },
   ];
-  const { loading, setLoading,rols, setRols } = useContext(RolCxt);
+  const { loading, setLoading, rols, setRols } = useContext(RolCxt);
   const [visibleModal, setVisibleModal] = useState<boolean>(false);
   const [idRolSelected, setIdRolSelected] = useState<number>(0);
 
@@ -208,4 +214,25 @@ const StyledButtonMore = styled(Button)`
 
 const StyledLoadingContainer = styled(Container)`
   height: calc(100% - 57px);
+`;
+
+const StyledTextTagGreen = styled(Text)`
+  color: #389e0d;
+  background: #e2fcce;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100%-20px);
+  width: 100px;
+  border: 1px solid #389e0d;
+`;
+const StyledTextTagBlue = styled(Text)`
+  color: #1d39c4;
+  background: #d6e2ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100%-20px);
+  width: 100px;
+  border: 1px solid #1d39c4;
 `;

@@ -30,5 +30,5 @@ export const Rols = () => {
 };
 
 const StyledContainer = styled(Container)`
-  width: 100% !important;
+  height: 100vh;
 `;

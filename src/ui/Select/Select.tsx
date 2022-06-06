@@ -29,11 +29,13 @@ export type ISelectProps = SelectProps & {
   requirement?: "required" | "optional";
   tooltipTitle?: string;
   options: data[];
+  onChange?: () => void;
 };
 
 export const FancySelect = (props: ISelectProps, ref: ((instance: unknown) => void) | React.RefObject<RefSelectProps> | ForwardedRef<RefSelectProps> | null | undefined) => {
   const {
     className,
+    onChange,
     defaultValue,
     hasError,
     helperText,
@@ -60,7 +62,7 @@ export const FancySelect = (props: ISelectProps, ref: ((instance: unknown) => vo
         </div>
       )}
       <StyledFieldWrapper className={classnames("input-wrapper", className)}>
-        <StyledSelect value={value} defaultValue={defaultValue ? defaultValue : ""} size={size} ref={ref}>
+        <StyledSelect onChange={onChange} value={value} defaultValue={defaultValue ? defaultValue : ""} size={size} ref={ref}>
           {options.map((option) => {
             return (
               <Option value={option.value} key={option.value}>
@@ -82,33 +84,33 @@ export const FancySelect = (props: ISelectProps, ref: ((instance: unknown) => vo
 export const Select = React.forwardRef(FancySelect);
 
 const StyledSelect = styled(SelectAntd)`
-${({ disabled, theme }) =>
-css`
-  border-radius: 4px;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: left;
-  align-items: center;
-  background-color: ${theme.colors["$color-neutral-1"]};
-  border: 1px solid ${theme.colors["$color-neutral-4"]};
+  ${({ disabled, theme }) =>
+    css`
+      border-radius: 4px;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: left;
+      align-items: center;
+      background-color: ${theme.colors["$color-neutral-1"]};
+      border: 1px solid ${theme.colors["$color-neutral-4"]};
 
-  ${disabled &&
-  css`
-    background-color: ${theme.colors["$color-transparent-light-95"]};
-    border: 1px solid ${theme.colors["$color-neutral-5"]};
-    color: ${theme.colors["$color-transparent-dark-25"]};
-  `}
+      ${disabled &&
+      css`
+        background-color: ${theme.colors["$color-transparent-light-95"]};
+        border: 1px solid ${theme.colors["$color-neutral-5"]};
+        color: ${theme.colors["$color-transparent-dark-25"]};
+      `}
 
-  &::placeholder {
-    color: ${theme.colors["$color-neutral-6"]};
-  }
+      &::placeholder {
+        color: ${theme.colors["$color-neutral-6"]};
+      }
 
-  &:hover,
-  &:focus {
-    border: 1px solid ${theme.colors["$color-primary-1"]} !important;
-    box-shadow: ${theme.shadows.elevationMedium} !important;
-  }
-`}
+      &:hover,
+      &:focus {
+        border: 1px solid ${theme.colors["$color-primary-1"]} !important;
+        box-shadow: ${theme.shadows.elevationMedium} !important;
+      }
+    `}
 `;
 interface IStyledInputWrapper {
   hasDescription?: boolean;
