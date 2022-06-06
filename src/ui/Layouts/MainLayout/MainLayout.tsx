@@ -61,7 +61,7 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
           alignItems="center"
           justifyContent="center"
         >
-          <img width="140px" src={logo} />
+          <img width="140px" alt="logo" src={logo} />
         </StyledContainerLogo>
 
         <Spacer size={40} />
@@ -96,7 +96,7 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
           <Menu onClick={() => {}} width={218} mode="inline" items={items} />
         </Container>
       </StyledAsideContainer>
-      {children}
+      <StyledMainContainer width="100%">{children}</StyledMainContainer>
     </Container>
   );
 };
@@ -114,4 +114,11 @@ const StyledContainerLogo = styled(Container)`
     css`
       background-color: ${theme.colors["$color-primary-2"]};
     `}
+`;
+
+const StyledMainContainer = styled(Container)`
+  ${({ theme }) => css`
+    height: 100vh;
+    border-left: 4px solid ${theme.colors["white"]};
+  `}
 `;

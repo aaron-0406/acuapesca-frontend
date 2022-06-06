@@ -1,7 +1,7 @@
 import { notification, Spin } from "antd";
 import Table, { ColumnsType } from "antd/lib/table";
 import { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 import paths from "../../../../../shared/routes/paths";
@@ -154,7 +154,7 @@ export const ProcessesTable = ({
     }
   };
 
-  const loadTableData = async () => {
+  const loadTableData = useCallback(async () => {
     try {
       setLoading(true);
       const result: AxiosResponse<any, any> = await getProcesses();
@@ -185,11 +185,11 @@ export const ProcessesTable = ({
         message: error.message as string,
       });
     }
-  };
+  }, [setChangeData]);
 
   useEffect(() => {
     loadTableData();
-  }, [changeData]);
+  }, [changeData, loadTableData]);
 
   if (loading) {
     return (

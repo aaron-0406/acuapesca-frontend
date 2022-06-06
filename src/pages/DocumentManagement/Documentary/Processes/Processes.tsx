@@ -18,7 +18,7 @@ export const Processes = () => {
   };
 
   return (
-    <Container width="100%">
+    <StyledProcessesContainer width="100%">
       <HeaderPlus title="PROCESOS" setVisibleModal={onToggleModal} />
       <ProcessesTable
         updateData={onUpdateTable}
@@ -30,6 +30,10 @@ export const Processes = () => {
         visible={visibleModal}
         setVisible={onToggleModal}
       />
-    </Container>
+    </StyledProcessesContainer>
   );
 };
+
+const StyledProcessesContainer = styled(Container)`
+  height: 100vh;
+`;
