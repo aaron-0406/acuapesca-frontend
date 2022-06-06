@@ -11,6 +11,7 @@ import Container from "../../../../../ui/Container";
 import EmptyState from "../../../../../ui/EmptyState";
 import Icon from "../../../../../ui/Icon";
 import Text from "../../../../../ui/Typography/Text";
+import ProcessesModalUpdate from "../ProcessesModal/ProcessesModalUpdate";
 
 interface DataType {
   key: string;
@@ -23,11 +24,13 @@ interface DataType {
 interface IProcessesTableProps {
   changeData: boolean;
   setChangeData: (state: boolean) => void;
+  updateData: () => void;
 }
 
 export const ProcessesTable = ({
   changeData,
   setChangeData,
+  updateData,
 }: IProcessesTableProps) => {
   const columns: ColumnsType<DataType> = [
     {
@@ -69,10 +72,13 @@ export const ProcessesTable = ({
       width: "200px",
       align: "center",
       key: "action",
-      render: () => (
+      render: (data) => (
         <Container display="flex" justifyContent="space-around">
           <StyledButtonEye icon={<Icon remixiconClass="ri-eye-off-line" />} />
-          <StyledButtonMore icon={<Icon remixiconClass="ri-more-line" />} />
+          <StyledButtonMore
+            onClick={() => onVisibleModalWithID(data.id)}
+            icon={<Icon remixiconClass="ri-more-line" />}
+          />
         </Container>
       ),
     },
@@ -80,6 +86,17 @@ export const ProcessesTable = ({
 
   const [loading, setLoading] = useState<boolean>(false);
   const [processes, setProcesses] = useState<DataType[]>([]);
+  const [visibleModal, setVisibleModal] = useState<boolean>(false);
+  const [idProcessSelected, setIdProcessSelected] = useState<number>(0);
+
+  const onVisibleModalWithID = (id: number) => {
+    setIdProcessSelected(id);
+    onToggleModal();
+  };
+
+  const onToggleModal = () => {
+    setVisibleModal(!visibleModal);
+  };
 
   const loadTableData = async () => {
     try {
@@ -151,6 +168,12 @@ export const ProcessesTable = ({
         columns={columns}
         dataSource={processes}
         size="large"
+      />
+      <ProcessesModalUpdate
+        visible={visibleModal}
+        setVisible={onToggleModal}
+        updateData={updateData}
+        idProcess={idProcessSelected}
       />
     </StyledContainer>
   );
