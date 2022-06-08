@@ -48,7 +48,7 @@ const FancyTextArea = (
     loading,
     width,
     wrapHelperText,
-    size = "middle",
+    // size = "middle",
     inputWrapperClassName,
     ...rest
   } = props;

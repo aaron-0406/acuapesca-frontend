@@ -61,7 +61,7 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
           alignItems="center"
           justifyContent="center"
         >
-          <img width="140px" alt="logo" src={logo} />
+          <img width="140px" alt="Logo" src={logo} />
         </StyledContainerLogo>
 
         <Spacer size={40} />

@@ -2,6 +2,7 @@ import { Route } from "react-router-dom";
 import Procedures from "../../../pages/DocumentManagement/Documentary/Procedures";
 import Processes from "../../../pages/DocumentManagement/Documentary/Processes";
 import Rols from "../../../pages/DocumentManagement/Rols";
+import Users from "../../../pages/DocumentManagement/Users";
 import ErrorPage from "../../../pages/ErrorPage";
 import Login from "../../../pages/Login";
 import NotFound from "../../../pages/NotFound";
@@ -20,12 +21,9 @@ const AppRouter = () => {
       </Route>
       <Route element={<ProtectedRoutes />}>
         <Route path={paths.documentary.roles} element={<Rols />} />
-        <Route path={paths.documentary.users} element={<div>Users</div>} />
+        <Route path={paths.documentary.users} element={<Users />} />
         <Route path={paths.documentary.root} element={<Processes />} />
-        <Route
-          path={paths.documentary.verProcedimientos()}
-          element={<Procedures />}
-        />
+        <Route path={paths.documentary.verProcedimientos()} element={<Procedures />} />
       </Route>
     </AppSwitch>
   );

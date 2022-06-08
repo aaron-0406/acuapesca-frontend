@@ -2,6 +2,7 @@
  * Paths configuration for routing
  */
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   root: "/",
   error: "/error",

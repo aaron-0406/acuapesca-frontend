@@ -4,6 +4,7 @@ export interface IRolsForm {
   code: string;
   tag_id: number;
 }
+
 export interface DataTypeRol {
   key: string;
   id: number;

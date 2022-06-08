@@ -1,5 +1,5 @@
 import { IAdmin } from "../../shared/types";
-import { axiosClient } from "../../shared/utils/api/clientAxios";
+import axiosClient from "../../shared/utils/api/clientAxios";
 import { endpoints } from "../../shared/utils/api/endpoints";
 
 export type TokenResponseType = {
@@ -14,10 +14,10 @@ interface ILogInRequest {
   password: string;
 }
 
-const api = axiosClient(false).getUri();
+const api = axiosClient.getUri();
 
 const urlApi = `${api}${endpoints.auth.signIn}`;
 
 export const logIn = async ({ email, password }: ILogInRequest) => {
-  return await axiosClient(false).post(urlApi, { email, password });
+  return await axiosClient.post(urlApi, { email, password });
 };

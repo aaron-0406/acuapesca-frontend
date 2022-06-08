@@ -162,6 +162,7 @@ export const ProcessesTable = ({ changeData, updateData }: IProcessesTableProps)
         message: error.message as string,
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
