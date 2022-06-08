@@ -5,6 +5,7 @@ import Container from "../../../../ui/Container";
 import HeaderPlus from "../../../../ui/Header/HeaderPlus";
 import Icon from "../../../../ui/Icon";
 import { IProceduresForm } from "../types/types";
+import ProceduresModalAdd from "./SectionProcedures/ProceduresModal/ProceduresModalAdd";
 import ProceduresProcessTable from "./SectionProcedures/ProceduresProcessTable";
 import ProceduresProcessTitle from "./SectionProcedures/ProceduresProcessTitle";
 
@@ -42,6 +43,12 @@ export const Procedures = () => {
           $width="70%"
           size="large"
           title="Añadir procedimiento"
+          onClick={onToggleModal}
+        />
+        <ProceduresModalAdd
+          updateData={onUpdateTable}
+          visible={visibleModal}
+          setVisible={onToggleModal}
         />
       </StyledProceduresContainer>
       <Container>
