@@ -66,7 +66,13 @@ export const ProceduresProcessTitle = () => {
         onClick={onBackProcesses}
       />
       <StyledTitleText textAlign="center" level={2} weight="bold">
-        {title ? title : <Skeleton.Input active={true} size="large" />}
+        {loading ? (
+          <Skeleton.Input active={true} size="large" />
+        ) : title ? (
+          title
+        ) : (
+          "-"
+        )}
       </StyledTitleText>
     </StyledTitleContainer>
   );
