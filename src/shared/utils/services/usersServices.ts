@@ -21,6 +21,9 @@ export const createUser = async (user: IUsersForm) => {
 export const updateUser = async (id: number, user: IUsersForm) => {
   return await axiosClient.put(`${urlApi}/${id}`, user);
 };
+export const updateUserStatus = async (id: number, status: boolean) => {
+  return await axiosClient.patch(`${urlApi}/status/${id}`, { status: status });
+};
 
 export const updateUserPhoto = async (photo: string) => {
   return await axiosClient.patch(`${urlApi}`, { photo: photo });

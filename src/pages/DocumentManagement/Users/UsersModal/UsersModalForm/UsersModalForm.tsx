@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import styled from "styled-components";
 import Container from "../../../../../ui/Container";
@@ -9,6 +9,7 @@ import Select from "../../../../../ui/Select";
 import Spacer from "../../../../../ui/Spacer";
 import { IUsersForm } from "../../types/types";
 import { UserCxt } from "../../UsersContext";
+
 
 export const UsersModalForm = () => {
   // const options = [

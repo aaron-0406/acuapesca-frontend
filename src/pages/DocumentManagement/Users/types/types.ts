@@ -22,6 +22,8 @@ export interface UserContext {
   setUsers: Function;
   loading: boolean;
   setLoading: Function;
+  loadingRequest: boolean;
+  setLoadingRequest: Function;
   rangos: { label: string; value: number }[];
   setRangos: Function;
 }

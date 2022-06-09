@@ -7,6 +7,7 @@ export const UsersProvider = ({ children }: { children: JSX.Element }) => {
   const [users, setUsers] = useState<DataTypeUser[]>([]);
   const [rangos, setRangos] = useState<{ label: string; value: number }[]>([{ label: "Seleccione una opción" as string, value: 0 as number }]);
   const [loading, setLoading] = useState<boolean>(true); //Loading submit (create or edit)
+  const [loadingRequest, setLoadingRequest] = useState<boolean>(false); //Loading submit (create or edit)
   const getRangosData = async () => {
     const res = await getRols();
     const { data } = res;
@@ -23,6 +24,8 @@ export const UsersProvider = ({ children }: { children: JSX.Element }) => {
   return (
     <UserCxt.Provider
       value={{
+        loadingRequest,
+        setLoadingRequest,
         loading,
         setLoading,
         users,

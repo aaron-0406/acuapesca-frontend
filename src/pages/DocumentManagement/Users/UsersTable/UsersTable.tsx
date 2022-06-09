@@ -6,14 +6,15 @@ import Text from "../../../../ui/Typography/Text";
 import Button from "../../../../ui/Button";
 import { useContext, useEffect, useState } from "react";
 import { AxiosResponse } from "axios";
-import { getUsers } from "../../../../shared/utils/services/usersServices";
+import { getUsers, updateUserStatus } from "../../../../shared/utils/services/usersServices";
 import { notification, Spin } from "antd";
 import EmptyState from "../../../../ui/EmptyState";
 import UsersModalUpdate from "../UsersModal/UsersModalUpdate";
 import { UserCxt } from "../UsersContext";
+import { Switch } from "antd";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 
 interface DataType {
-  
   key: string;
   id: number;
   code: string;
@@ -87,15 +88,44 @@ export const UsersTable = ({ changeData, setChangeData, updateData }: IProcesses
       key: "action",
       render: (data) => (
         <Container display="flex" justifyContent="space-around">
+          <Switch
+            checked={data.status}
+            loading={loadingRequest}
+            checkedChildren={<CheckOutlined />}
+            unCheckedChildren={<CloseOutlined />}
+            key={data.id}
+            onChange={(e) => changeUserStatus(data.id, e)}
+          />
           <StyledButtonMore onClick={() => onVisibleModalWithID(data.id)} icon={<Icon remixiconClass="ri-more-line" />} />
         </Container>
       ),
     },
   ];
-  const { loading, setLoading, users, setUsers } = useContext(UserCxt);
+  const { loading, setLoading, setLoadingRequest, loadingRequest, users, setUsers } = useContext(UserCxt);
   const [visibleModal, setVisibleModal] = useState<boolean>(false);
   const [idUserSelected, setIdUserSelected] = useState<number>(0);
 
+  const changeUserStatus = async (id: number, value: boolean) => {
+    setLoadingRequest(true);
+    try {
+      const res = await updateUserStatus(id, value);
+      const { data } = res;
+      const { success, error } = data;
+      if (success) {
+        notification["success"]({ message: success });
+        setUsers(
+          users.map((user) => {
+            if (user.id === id) return { ...user, status: value };
+            return user;
+          })
+        );
+      }
+      if (error) notification["warn"]({ message: error });
+    } catch (error: any) {
+      notification["error"]({ message: error.message as string });
+    }
+    setLoadingRequest(false);
+  };
   const onVisibleModalWithID = (id: number) => {
     setIdUserSelected(id);
     onToggleModal();
@@ -206,4 +236,3 @@ const StyledButtonMore = styled(Button)`
 const StyledLoadingContainer = styled(Container)`
   height: calc(100% - 57px);
 `;
-
