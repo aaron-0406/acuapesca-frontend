@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Container from "../../../../../../../ui/Container";
 import InputLabel from "../../../../../../../ui/InputLabel";
 import Input from "../../../../../../../ui/Inputs/Input";
-import TextArea from "../../../../../../../ui/Inputs/TextArea";
 import Spacer from "../../../../../../../ui/Spacer";
 import Switch from "../../../../../../../ui/Switch";
 import { IProceduresForm } from "../../../../types/types";

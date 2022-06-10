@@ -1,4 +1,5 @@
 import { MenuProps } from "antd";
+import jwtDecode from "jwt-decode";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
@@ -14,13 +15,7 @@ import logo from "./../../../shared/assets/images/logo.png";
 type MenuItem = Required<MenuProps>["items"][number];
 
 export const MainLayout = ({ children }: { children: JSX.Element }) => {
-  function getItem(
-    label: React.ReactNode,
-    key: React.Key,
-    icon?: React.ReactNode,
-    children?: MenuItem[],
-    type?: "group"
-  ): MenuItem {
+  function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode, children?: MenuItem[], type?: "group"): MenuItem {
     return {
       key,
       icon,
@@ -52,15 +47,17 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
       </Link>
     ),
   ];
+  const token = localStorage.getItem("auth_token");
+  const user = jwtDecode<any>(`${token}`);
+
+  const changePhoto =(e:any)=>{
+    
+  }
 
   return (
     <Container display="flex" justifyContent="space-between" width="100%">
       <StyledAsideContainer width="280px">
-        <StyledContainerLogo
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
+        <StyledContainerLogo display="flex" alignItems="center" justifyContent="center">
           <img width="140px" alt="Logo" src={logo} />
         </StyledContainerLogo>
 
@@ -70,26 +67,18 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
           <UploadAvatar
             width={190}
             height={190}
-            //avatar={value}
-            onChange={() => {}}
+            avatar={`http://localhost:4000/user_photos/${user.photo}`}
+            onChange={changePhoto}
             hint="Subir imagen"
           />
 
           <Spacer size={25} />
 
-          <Input
-            style={{ textAlign: "center" }}
-            readOnly
-            defaultValue="Pancho Rodriguez"
-          />
+          <Input style={{ textAlign: "center" }} readOnly defaultValue={`${user.name} ${user.lastname}`} />
 
           <Spacer size={14} />
 
-          <Input
-            style={{ textAlign: "center" }}
-            readOnly
-            defaultValue="Administrador"
-          />
+          <Input style={{ textAlign: "center" }} readOnly defaultValue={`${user.rango}`} />
 
           <Spacer size={32} />
 

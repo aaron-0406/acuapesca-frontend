@@ -99,7 +99,7 @@ export const UploadAvatar = React.forwardRef(
           >
             {avatar ? (
               <div>
-                <img className="img-avatar" src={getImageSource(avatar)} />
+                <img className="img-avatar" src={getImageSource(avatar)} alt="avatar" />
 
                 <div className="hover-container">
                   <label htmlFor={"edit-image-input"}>
@@ -108,6 +108,7 @@ export const UploadAvatar = React.forwardRef(
                   {deletable && (
                     <button
                       data-value={avatar}
+                      // eslint-disable-next-line jsx-a11y/aria-role
                       role="delete-image"
                       onClick={(event) => {
                         event.stopPropagation();

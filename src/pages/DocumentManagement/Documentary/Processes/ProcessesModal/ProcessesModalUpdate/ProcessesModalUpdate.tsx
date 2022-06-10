@@ -118,6 +118,7 @@ export const ProcessesModalUpdate = ({
 
   useEffect(() => {
     if (visible) onGetProcessById();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible !== false, onGetProcessById]);
 
   return (
