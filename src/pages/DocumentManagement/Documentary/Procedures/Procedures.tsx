@@ -26,7 +26,7 @@ export const Procedures = () => {
   return (
     <StyledProcessContainer display="flex" width="100%">
       <StyledProceduresContainer
-        width="45%"
+        width="40%"
         display="flex"
         flexDirection="column"
         justifyContent="space-between"

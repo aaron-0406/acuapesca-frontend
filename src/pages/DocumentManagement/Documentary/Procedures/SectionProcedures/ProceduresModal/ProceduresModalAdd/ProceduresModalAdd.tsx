@@ -2,6 +2,7 @@ import { Modal, notification } from "antd";
 import { AxiosResponse } from "axios";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { createProcedure } from "../../../../../../../shared/utils/services/proceduresServices";
 import Button from "../../../../../../../ui/Button";
@@ -22,6 +23,7 @@ export const ProceduresModalAdd = ({
   setVisible,
   updateData,
 }: IProcessesModalCreate) => {
+  const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
 
   const methods = useForm<IProceduresForm>({
@@ -31,7 +33,7 @@ export const ProceduresModalAdd = ({
       title: "",
       status: true,
       code: "",
-      process_id: 0,
+      process_id: Number(id),
     },
   });
 
@@ -54,9 +56,9 @@ export const ProceduresModalAdd = ({
 
       if (result) {
         const { data } = result;
-        const { success, error, process } = data;
+        const { success, error, procedure } = data;
 
-        if (process) {
+        if (procedure) {
           notification["success"]({
             message: success,
           });
