@@ -42,7 +42,7 @@ export const Procedures = () => {
           icon={<Icon size={25} remixiconClass="ri-add-line" />}
           $width="70%"
           size="large"
-          title="Añadir procedimiento"
+          title="Añadir documento"
           onClick={onToggleModal}
         />
         <ProceduresModalAdd
@@ -55,6 +55,14 @@ export const Procedures = () => {
         <HeaderPlus
           title={procedureSelected?.title ? procedureSelected?.title : "--"}
           setVisibleModal={onToggleModal}
+          plusHeader={
+            procedureSelected?.title && (
+              <Button
+                type="secondary"
+                icon={<Icon remixiconClass="ri-more-fill" />}
+              />
+            )
+          }
         />
       </Container>
     </StyledProcessContainer>

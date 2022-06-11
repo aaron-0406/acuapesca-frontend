@@ -130,8 +130,8 @@ export const ProceduresProcessTable = ({
       <Container>
         <EmptyState
           fullScreen
-          title="No existen procedimientos"
-          description="Para añadir un procedimiento, presiona el botón + que esta arriba"
+          title="No existen documentos"
+          description="Para añadir un documento, presiona el botón + que esta abajo"
         />
       </Container>
     );
