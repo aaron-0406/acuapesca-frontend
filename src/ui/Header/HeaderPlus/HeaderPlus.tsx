@@ -8,12 +8,14 @@ interface IHeaderPlusProps {
   title: string;
   setVisibleModal: () => void;
   plusHeader?: React.ReactNode;
+  disabledButton: boolean;
 }
 
 export const HeaderPlus = ({
   title,
   setVisibleModal,
   plusHeader,
+  disabledButton,
 }: IHeaderPlusProps) => {
   return (
     <>
@@ -34,6 +36,7 @@ export const HeaderPlus = ({
           size="large"
           icon={<Icon size={28} remixiconClass="ri-add-line" />}
           onClick={setVisibleModal}
+          disabled={disabledButton}
         />
       </StyledContainer>
     </>

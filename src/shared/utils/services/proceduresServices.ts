@@ -17,6 +17,9 @@ export const createProcedure = async (procedure: IProceduresForm) => {
   return await axiosClient.post(urlApi, procedure);
 };
 
-export const updateProcedure = async (id: number, procedure: IProceduresForm) => {
+export const updateProcedure = async (
+  id: number | undefined,
+  procedure: IProceduresForm
+) => {
   return await axiosClient.put(`${urlApi}/${id}`, procedure);
 };

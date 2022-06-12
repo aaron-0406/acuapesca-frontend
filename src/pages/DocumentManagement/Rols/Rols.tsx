@@ -21,9 +21,21 @@ export const Rols = () => {
   return (
     <RolsProvider>
       <StyledContainer width="100%">
-        <HeaderPlus title="ROLES" setVisibleModal={onToggleModal} />
-        <RolsTable updateData={onUpdateTable} changeData={changeData} setChangeData={setChangeData} />
-        <RolsModalCreate updateData={onUpdateTable} visible={visibleModal} setVisible={onToggleModal} />
+        <HeaderPlus
+          title="ROLES"
+          disabledButton={false}
+          setVisibleModal={onToggleModal}
+        />
+        <RolsTable
+          updateData={onUpdateTable}
+          changeData={changeData}
+          setChangeData={setChangeData}
+        />
+        <RolsModalCreate
+          updateData={onUpdateTable}
+          visible={visibleModal}
+          setVisible={onToggleModal}
+        />
       </StyledContainer>
     </RolsProvider>
   );

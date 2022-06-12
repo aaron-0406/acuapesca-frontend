@@ -6,6 +6,7 @@ import HeaderPlus from "../../../../ui/Header/HeaderPlus";
 import Icon from "../../../../ui/Icon";
 import { IProceduresForm } from "../types/types";
 import ProceduresModalAdd from "./SectionProcedures/ProceduresModal/ProceduresModalAdd";
+import ProceduresModalEdit from "./SectionProcedures/ProceduresModal/ProceduresModalEdit";
 import ProceduresProcessTable from "./SectionProcedures/ProceduresProcessTable";
 import ProceduresProcessTitle from "./SectionProcedures/ProceduresProcessTitle";
 
@@ -14,9 +15,14 @@ export const Procedures = () => {
     useState<IProceduresForm | null>(null);
   const [changeData, setChangeData] = useState(false);
   const [visibleModal, setVisibleModal] = useState(false);
+  const [visibleModalEdit, setVisibleModalEdit] = useState(false);
 
   const onToggleModal = () => {
     setVisibleModal(!visibleModal);
+  };
+
+  const onToggleModalEdit = () => {
+    setVisibleModalEdit(!visibleModalEdit);
   };
 
   const onUpdateTable = () => {
@@ -33,11 +39,13 @@ export const Procedures = () => {
         alignItems="center"
       >
         <ProceduresProcessTitle />
+
         <ProceduresProcessTable
           changeData={changeData}
           updateData={onUpdateTable}
           setProcedureSelected={setProcedureSelected}
         />
+
         <StyledButtonAdd
           icon={<Icon size={25} remixiconClass="ri-add-line" />}
           $width="70%"
@@ -45,24 +53,36 @@ export const Procedures = () => {
           title="Añadir documento"
           onClick={onToggleModal}
         />
+
         <ProceduresModalAdd
           updateData={onUpdateTable}
           visible={visibleModal}
           setVisible={onToggleModal}
         />
       </StyledProceduresContainer>
+
       <Container>
         <HeaderPlus
           title={procedureSelected?.title ? procedureSelected?.title : "--"}
+          disabledButton={!procedureSelected}
           setVisibleModal={onToggleModal}
           plusHeader={
             procedureSelected?.title && (
               <Button
                 type="secondary"
                 icon={<Icon remixiconClass="ri-more-fill" />}
+                onClick={onToggleModalEdit}
               />
             )
           }
+        />
+
+        <ProceduresModalEdit
+          visible={visibleModalEdit}
+          setVisible={onToggleModalEdit}
+          updateData={onUpdateTable}
+          data={procedureSelected}
+          setData={setProcedureSelected}
         />
       </Container>
     </StyledProcessContainer>

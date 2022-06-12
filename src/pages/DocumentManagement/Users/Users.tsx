@@ -19,9 +19,21 @@ export const Users = () => {
   return (
     <UsersProvider>
       <StyledContainer width="100%">
-        <HeaderPlus title="USUARIOS" setVisibleModal={onToggleModal} />
-        <UsersTable updateData={onUpdateTable} changeData={changeData} setChangeData={setChangeData} />
-        <UsersModalCreate updateData={onUpdateTable} visible={visibleModal} setVisible={onToggleModal} />
+        <HeaderPlus
+          title="USUARIOS"
+          disabledButton={false}
+          setVisibleModal={onToggleModal}
+        />
+        <UsersTable
+          updateData={onUpdateTable}
+          changeData={changeData}
+          setChangeData={setChangeData}
+        />
+        <UsersModalCreate
+          updateData={onUpdateTable}
+          visible={visibleModal}
+          setVisible={onToggleModal}
+        />
       </StyledContainer>
     </UsersProvider>
   );
