@@ -5,6 +5,7 @@ import Container from "../../../../ui/Container";
 import HeaderPlus from "../../../../ui/Header/HeaderPlus";
 import Icon from "../../../../ui/Icon";
 import { IProceduresForm } from "../types/types";
+import FileTitle from "./SectionFiles/FilesTitle";
 import ProceduresModalAdd from "./SectionProcedures/ProceduresModal/ProceduresModalAdd";
 import ProceduresModalEdit from "./SectionProcedures/ProceduresModal/ProceduresModalEdit";
 import ProceduresProcessTable from "./SectionProcedures/ProceduresProcessTable";
@@ -32,7 +33,7 @@ export const Procedures = () => {
   return (
     <StyledProcessContainer display="flex" width="100%">
       <StyledProceduresContainer
-        width="40%"
+        width="30%"
         display="flex"
         flexDirection="column"
         justifyContent="space-between"
@@ -61,20 +62,10 @@ export const Procedures = () => {
         />
       </StyledProceduresContainer>
 
-      <Container>
-        <HeaderPlus
-          title={procedureSelected?.title ? procedureSelected?.title : "--"}
-          disabledButton={!procedureSelected}
-          setVisibleModal={onToggleModal}
-          plusHeader={
-            procedureSelected?.title && (
-              <Button
-                type="secondary"
-                icon={<Icon remixiconClass="ri-more-fill" />}
-                onClick={onToggleModalEdit}
-              />
-            )
-          }
+      <Container width="70%">
+        <FileTitle
+          procedure={procedureSelected}
+          onToggleModal={onToggleModalEdit}
         />
 
         <ProceduresModalEdit
