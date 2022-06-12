@@ -29,6 +29,7 @@ export const ProceduresModalEdit = ({
 }: IProcessesModalEdit) => {
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
+  const [change, setChange] = useState<boolean>(false);
 
   const methods = useForm<IProceduresForm>({
     mode: "all",
@@ -66,7 +67,7 @@ export const ProceduresModalEdit = ({
             message: success,
           });
 
-          setVisible();
+          onClose();
           setData(null);
           updateData();
         }
@@ -86,23 +87,28 @@ export const ProceduresModalEdit = ({
     }
   };
 
+  const onClose = () => {
+    setChange(!change);
+    setVisible();
+  };
+
   useEffect(() => {
     setValue("id", data?.id);
     setValue("code", data?.code ? data.code : "");
     setValue("title", data?.title ? data.title : "");
-    setValue("status", data?.status ? data.status : true);
+    setValue("status", data?.status ? data.status : false);
     trigger();
-  }, [data, setValue, trigger]);
+  }, [data, setValue, trigger, change]);
 
   return (
     <StyledModal
       closable={false}
       visible={visible}
-      onCancel={setVisible}
+      onCancel={onClose}
       className="modal-procedures"
       footer={
         <Container display="flex" justifyContent="flex-end">
-          <Button type="secondary" title="Cancelar" onClick={setVisible} />
+          <Button type="secondary" title="Cancelar" onClick={onClose} />
           <Button
             type="primary"
             title="Guardar"
