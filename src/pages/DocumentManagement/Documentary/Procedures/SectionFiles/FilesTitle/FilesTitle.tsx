@@ -8,7 +8,7 @@ interface IFileTitleProps {
   onToggleModal: () => void;
 }
 
-export const FileTitle = ({ procedure, onToggleModal }: IFileTitleProps) => {
+export const FilesTitle = ({ procedure, onToggleModal }: IFileTitleProps) => {
   return (
     <HeaderPlus
       title={procedure?.title ? procedure.title : "--"}

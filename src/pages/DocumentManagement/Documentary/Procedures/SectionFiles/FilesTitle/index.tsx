@@ -1,1 +1,1 @@
-export { FileTitle as default } from "./FileTitle";
+export { FilesTitle as default } from "./FilesTitle";

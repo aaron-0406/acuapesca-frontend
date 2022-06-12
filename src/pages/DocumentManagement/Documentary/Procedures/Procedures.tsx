@@ -2,10 +2,11 @@ import { useState } from "react";
 import styled, { css } from "styled-components";
 import Button from "../../../../ui/Button";
 import Container from "../../../../ui/Container";
-import HeaderPlus from "../../../../ui/Header/HeaderPlus";
+import EmptyState from "../../../../ui/EmptyState";
 import Icon from "../../../../ui/Icon";
 import { IProceduresForm } from "../types/types";
-import FileTitle from "./SectionFiles/FilesTitle";
+import FilesTable from "./SectionFiles/FilesTable";
+import FilesTitle from "./SectionFiles/FilesTitle";
 import ProceduresModalAdd from "./SectionProcedures/ProceduresModal/ProceduresModalAdd";
 import ProceduresModalEdit from "./SectionProcedures/ProceduresModal/ProceduresModalEdit";
 import ProceduresProcessTable from "./SectionProcedures/ProceduresProcessTable";
@@ -14,9 +15,12 @@ import ProceduresProcessTitle from "./SectionProcedures/ProceduresProcessTitle";
 export const Procedures = () => {
   const [procedureSelected, setProcedureSelected] =
     useState<IProceduresForm | null>(null);
-  const [changeData, setChangeData] = useState(false);
-  const [visibleModal, setVisibleModal] = useState(false);
-  const [visibleModalEdit, setVisibleModalEdit] = useState(false);
+
+  const [changeData, setChangeData] = useState<boolean>(false);
+  const [visibleModal, setVisibleModal] = useState<boolean>(false);
+  const [visibleModalEdit, setVisibleModalEdit] = useState<boolean>(false);
+
+  const [changeDataFiles, setChangeDataFiles] = useState<boolean>(false);
 
   const onToggleModal = () => {
     setVisibleModal(!visibleModal);
@@ -28,6 +32,10 @@ export const Procedures = () => {
 
   const onUpdateTable = () => {
     setChangeData(!changeData);
+  };
+
+  const onToggleChangeDataFiles = () => {
+    setChangeDataFiles(!changeDataFiles);
   };
 
   return (
@@ -45,6 +53,7 @@ export const Procedures = () => {
           changeData={changeData}
           updateData={onUpdateTable}
           setProcedureSelected={setProcedureSelected}
+          setChangeDataFiles={onToggleChangeDataFiles}
         />
 
         <StyledButtonAdd
@@ -63,10 +72,22 @@ export const Procedures = () => {
       </StyledProceduresContainer>
 
       <Container width="70%">
-        <FileTitle
+        <FilesTitle
           procedure={procedureSelected}
           onToggleModal={onToggleModalEdit}
         />
+
+        {procedureSelected ? (
+          <FilesTable changeDataSelected={changeDataFiles} />
+        ) : (
+          <Container width="100%">
+            <EmptyState
+              fullScreen
+              title="No existen archivos"
+              description="Para visualizar los archivos, seleccione un documento"
+            />
+          </Container>
+        )}
 
         <ProceduresModalEdit
           visible={visibleModalEdit}

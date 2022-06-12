@@ -25,12 +25,14 @@ interface IProcessesTableProps {
   changeData: boolean;
   updateData: () => void;
   setProcedureSelected: (data: IProceduresForm) => void;
+  setChangeDataFiles: () => void;
 }
 
 export const ProceduresProcessTable = ({
   changeData,
   updateData,
   setProcedureSelected,
+  setChangeDataFiles,
 }: IProcessesTableProps) => {
   const columns: ColumnsType<DataType> = [
     {
@@ -58,12 +60,17 @@ export const ProceduresProcessTable = ({
                 remixiconClass="ri-arrow-right-s-line"
               />
             }
-            onClick={() => onProcedureSelected(data as DataType)}
+            onClick={() => onSelectProcedure(data as DataType)}
           />
         </Container>
       ),
     },
   ];
+
+  const onSelectProcedure = (data: DataType) => {
+    onProcedureSelected(data);
+    setChangeDataFiles();
+  };
 
   const { id } = useParams();
 
