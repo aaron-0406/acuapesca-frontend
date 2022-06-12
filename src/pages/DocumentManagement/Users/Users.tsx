@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { StyledContainer } from "../../../ui/Container/Container.styled";
+import styled from "styled-components";
+import Container from "../../../ui/Container";
 import HeaderPlus from "../../../ui/Header/HeaderPlus";
 import UsersProvider from "./UsersContext";
 import UsersModalCreate from "./UsersModal/UsersModalCreate";
@@ -38,3 +39,7 @@ export const Users = () => {
     </UsersProvider>
   );
 };
+
+const StyledContainer = styled(Container)`
+  height: 100vh;
+`;
