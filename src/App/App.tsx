@@ -6,6 +6,7 @@ import { AutoLoaderProvider } from "../ui/AutoLoader/AutoLoaderProvider";
 import GlobalStyle from "../ui/styles/global/globalStyles";
 
 export const App = () => {
+
   return (
     <StoreProvider>
       <ThemeProvider>

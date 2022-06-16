@@ -1,4 +1,5 @@
 import { useState } from "react";
+// eslint-disable-next-line
 import styled from "styled-components";
 import Container from "../../../../ui/Container";
 import HeaderPlus from "../../../../ui/Header/HeaderPlus";
@@ -34,5 +35,5 @@ export const Processes = () => {
 };
 
 const StyledProcessesContainer = styled(Container)`
-  height: 100vh;
+  height: calc(100% - 57px);
 `;

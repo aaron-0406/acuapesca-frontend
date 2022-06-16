@@ -4,6 +4,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 import paths from "../../../shared/routes/paths";
+import { API } from "../../../shared/utils/constant/api";
+import { getAuthToken } from "../../../shared/utils/storage/auth";
 import Container from "../../Container";
 import Icon from "../../Icon";
 import Input from "../../Inputs/Input";
@@ -46,13 +48,17 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
         <Icon remixiconClass="ri-file-3-fill" />
       </Link>
     ),
+    getItem(
+      "CHAT",
+      "4",
+      <Link to={paths.documentary.chat}>
+        <Icon remixiconClass="ri-message-line" />
+      </Link>
+    ),
   ];
-  const token = localStorage.getItem("auth_token");
+  const token = getAuthToken();
   const user = jwtDecode<any>(`${token}`);
-
-  const changePhoto =(e:any)=>{
-    
-  }
+  const changePhoto = (e: any) => {};
 
   return (
     <Container display="flex" justifyContent="space-between" width="100%">
@@ -64,13 +70,7 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
         <Spacer size={40} />
 
         <Container display="flex" flexDirection="column" alignItems="center">
-          <UploadAvatar
-            width={190}
-            height={190}
-            avatar={`http://localhost:4000/user_photos/${user.photo}`}
-            onChange={changePhoto}
-            hint="Subir imagen"
-          />
+          <UploadAvatar width={190} height={190} avatar={`${API}/user_photos/${user.photo}`} onChange={changePhoto} hint="Subir imagen" />
 
           <Spacer size={25} />
 

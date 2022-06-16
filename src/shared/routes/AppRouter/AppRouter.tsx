@@ -1,4 +1,5 @@
 import { Route } from "react-router-dom";
+import Chats from "../../../pages/DocumentManagement/Chats";
 import Procedures from "../../../pages/DocumentManagement/Documentary/Procedures";
 import Processes from "../../../pages/DocumentManagement/Documentary/Processes";
 import Rols from "../../../pages/DocumentManagement/Rols";
@@ -23,6 +24,7 @@ const AppRouter = () => {
         <Route path={paths.documentary.roles} element={<Rols />} />
         <Route path={paths.documentary.users} element={<Users />} />
         <Route path={paths.documentary.root} element={<Processes />} />
+        <Route path={paths.documentary.chat} element={<Chats />} />
         <Route path={paths.documentary.verProcedimientos()} element={<Procedures />} />
       </Route>
     </AppSwitch>

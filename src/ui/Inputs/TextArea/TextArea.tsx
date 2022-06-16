@@ -24,15 +24,7 @@ export type ITextAreaProps = TextAreaProps &
     inputWrapperClassName?: string;
   };
 
-const FancyTextArea = (
-  props: ITextAreaProps,
-  ref:
-    | ((instance: unknown) => void)
-    | React.RefObject<TextAreaRef>
-    | ForwardedRef<TextAreaRef>
-    | null
-    | undefined
-) => {
+const FancyTextArea = (props: ITextAreaProps, ref: ((instance: unknown) => void) | React.RefObject<TextAreaRef> | ForwardedRef<TextAreaRef> | null | undefined) => {
   const {
     className,
     requirement,
@@ -54,19 +46,8 @@ const FancyTextArea = (
   } = props;
 
   return (
-    <StyledInputWrapper
-      className={inputWrapperClassName}
-      hasDescription={Boolean(description)}
-    >
-      {label && (
-        <InputLabel
-          label={label}
-          labelClassName={labelClassName}
-          requirement={requirement}
-          disabled={disabled}
-          tooltipTitle={tooltipTitle}
-        />
-      )}
+    <StyledInputWrapper className={inputWrapperClassName} hasDescription={Boolean(description)}>
+      {label && <InputLabel label={label} labelClassName={labelClassName} requirement={requirement} disabled={disabled} tooltipTitle={tooltipTitle} />}
       {description && (
         <div className="label-description-wrapper">
           <Text className={"description-text"} level={4}>
@@ -77,11 +58,7 @@ const FancyTextArea = (
       <StyledFieldWrapper className={classnames("input-wrapper", className)}>
         <StyledTextArea ref={ref} {...rest} />
         {!!helperText && (
-          <InputHelper
-            $hasError={hasError}
-            className="input-helper"
-            wrap={wrapHelperText}
-          >
+          <InputHelper $hasError={hasError} className="input-helper" wrap={wrapHelperText}>
             {helperText}
           </InputHelper>
         )}
@@ -105,6 +82,7 @@ const StyledTextArea = styled(AntTextArea)`
       flex-flow: row nowrap;
       justify-content: left;
       align-items: center;
+      height: height;
       background-color: ${theme.colors["$color-neutral-1"]};
       border: 1px solid ${theme.colors["$color-neutral-4"]};
 

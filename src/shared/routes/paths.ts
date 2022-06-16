@@ -30,7 +30,9 @@ export default {
   documentary: {
     root: "/documentaria",
     verProcedimientos: (id = ":id") => `/documentaria/procedimientos/${id}`,
+    verMensajes: (id = ":id") => `/documentaria/chat/${id}`,
     users: "/documentaria/usuarios",
     roles: "/documentaria/roles",
+    chat: "/documentaria/chat",
   },
 };
