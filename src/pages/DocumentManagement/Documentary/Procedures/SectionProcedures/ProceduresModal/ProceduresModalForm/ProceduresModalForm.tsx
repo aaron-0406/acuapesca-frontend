@@ -51,7 +51,13 @@ export const ProceduresModalForm = () => {
           requirement="required"
           disabled={false}
         />
-        <Switch />
+        <Controller
+          name="status"
+          control={control}
+          render={({ field }) => (
+            <Switch onChange={field.onChange} checked={field.value} />
+          )}
+        />
       </Container>
     </StyledFormContainer>
   );

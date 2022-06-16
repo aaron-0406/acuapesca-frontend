@@ -20,11 +20,12 @@ export const Processes = () => {
 
   return (
     <StyledProcessesContainer width="100%">
-      <HeaderPlus title="PROCESOS" setVisibleModal={onToggleModal} />
-      <ProcessesTable
-        updateData={onUpdateTable}
-        changeData={changeData}
+      <HeaderPlus
+        title="PROCESOS"
+        disabledButton={false}
+        setVisibleModal={onToggleModal}
       />
+      <ProcessesTable updateData={onUpdateTable} changeData={changeData} />
       <ProcessesModalCreate
         updateData={onUpdateTable}
         visible={visibleModal}

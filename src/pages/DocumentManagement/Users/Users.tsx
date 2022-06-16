@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { StyledContainer } from "../../../ui/Container/Container.styled";
+import styled from "styled-components";
+import Container from "../../../ui/Container";
 import HeaderPlus from "../../../ui/Header/HeaderPlus";
 import UsersProvider from "./UsersContext";
 import UsersModalCreate from "./UsersModal/UsersModalCreate";
@@ -19,10 +20,26 @@ export const Users = () => {
   return (
     <UsersProvider>
       <StyledContainer width="100%">
-        <HeaderPlus title="USUARIOS" setVisibleModal={onToggleModal} />
-        <UsersTable updateData={onUpdateTable} changeData={changeData} setChangeData={setChangeData} />
-        <UsersModalCreate updateData={onUpdateTable} visible={visibleModal} setVisible={onToggleModal} />
+        <HeaderPlus
+          title="USUARIOS"
+          disabledButton={false}
+          setVisibleModal={onToggleModal}
+        />
+        <UsersTable
+          updateData={onUpdateTable}
+          changeData={changeData}
+          setChangeData={setChangeData}
+        />
+        <UsersModalCreate
+          updateData={onUpdateTable}
+          visible={visibleModal}
+          setVisible={onToggleModal}
+        />
       </StyledContainer>
     </UsersProvider>
   );
 };
+
+const StyledContainer = styled(Container)`
+  height: 100vh;
+`;

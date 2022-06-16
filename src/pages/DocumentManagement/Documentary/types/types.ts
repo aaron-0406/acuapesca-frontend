@@ -1,3 +1,5 @@
+import { IUsersForm } from "../../Users/types/types";
+
 export interface IProcessesForm {
   id?: number;
   name: string;
@@ -11,4 +13,19 @@ export interface IProceduresForm {
   status: boolean;
   code: string;
   process_id: number;
+}
+
+export interface IDocumentForm {
+  id?: number;
+  code: string;
+  version: number;
+  effective_date: string;
+  approval_date: string;
+  title: string;
+  name: string;
+  nro_pages: number;
+  procedure_id: number;
+  file: string;
+  status: boolean;
+  users: IUsersForm[];
 }

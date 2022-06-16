@@ -25,18 +25,20 @@ interface IProcessesTableProps {
   changeData: boolean;
   updateData: () => void;
   setProcedureSelected: (data: IProceduresForm) => void;
+  setChangeDataFiles: () => void;
 }
 
 export const ProceduresProcessTable = ({
   changeData,
   updateData,
   setProcedureSelected,
+  setChangeDataFiles,
 }: IProcessesTableProps) => {
   const columns: ColumnsType<DataType> = [
     {
       title: (
         <Text textAlign="center" level={3} weight="bold">
-          LISTA DE PROCEDIMIENTOS
+          LISTA DE DOCUMENTOS
         </Text>
       ),
       key: "title",
@@ -48,24 +50,27 @@ export const ProceduresProcessTable = ({
           justifyContent="center"
           alignItems="center"
         >
-          <Text textAlign="center" level={2}>
-            {data.title}
-          </Text>
           <Button
             type="link"
-            icon={
+            title={data.title}
+            leadIcon={
               <Icon
                 color="$color-primary-1"
-                size={40}
+                size={30}
                 remixiconClass="ri-arrow-right-s-line"
               />
             }
-            onClick={() => onProcedureSelected(data as DataType)}
+            onClick={() => onSelectProcedure(data as DataType)}
           />
         </Container>
       ),
     },
   ];
+
+  const onSelectProcedure = (data: DataType) => {
+    onProcedureSelected(data);
+    setChangeDataFiles();
+  };
 
   const { id } = useParams();
 
@@ -108,7 +113,7 @@ export const ProceduresProcessTable = ({
         message: error.message as string,
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -132,8 +137,8 @@ export const ProceduresProcessTable = ({
       <Container>
         <EmptyState
           fullScreen
-          title="No existen procedimientos"
-          description="Para añadir un procedimiento, presiona el botón + que esta arriba"
+          title="No existen documentos"
+          description="Para añadir un documento, presiona el botón + que esta abajo"
         />
       </Container>
     );

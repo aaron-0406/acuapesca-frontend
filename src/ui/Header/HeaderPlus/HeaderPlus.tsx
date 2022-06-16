@@ -7,9 +7,16 @@ import Text from "../../Typography/Text";
 interface IHeaderPlusProps {
   title: string;
   setVisibleModal: () => void;
+  plusHeader?: React.ReactNode;
+  disabledButton: boolean;
 }
 
-export const HeaderPlus = ({ title, setVisibleModal }: IHeaderPlusProps) => {
+export const HeaderPlus = ({
+  title,
+  setVisibleModal,
+  plusHeader,
+  disabledButton,
+}: IHeaderPlusProps) => {
   return (
     <>
       <StyledContainer
@@ -18,13 +25,18 @@ export const HeaderPlus = ({ title, setVisibleModal }: IHeaderPlusProps) => {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Text level={5} weight="bold">
-          {title}
-        </Text>
+        <Container display="flex" gap="30px">
+          <Text level={5} weight="bold">
+            {title}
+          </Text>
+          {plusHeader}
+        </Container>
+
         <Button
           size="large"
           icon={<Icon size={28} remixiconClass="ri-add-line" />}
           onClick={setVisibleModal}
+          disabled={disabledButton}
         />
       </StyledContainer>
     </>

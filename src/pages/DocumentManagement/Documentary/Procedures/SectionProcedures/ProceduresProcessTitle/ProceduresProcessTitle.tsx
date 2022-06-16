@@ -65,7 +65,7 @@ export const ProceduresProcessTitle = () => {
         icon={<Icon size={25} remixiconClass="ri-arrow-left-fill" />}
         onClick={onBackProcesses}
       />
-      <StyledTitleText textAlign="center" level={2} weight="bold">
+      <StyledTitleText textAlign="center" level={3} weight="bold">
         {loading ? (
           <Skeleton.Input active={true} size="large" />
         ) : title ? (
