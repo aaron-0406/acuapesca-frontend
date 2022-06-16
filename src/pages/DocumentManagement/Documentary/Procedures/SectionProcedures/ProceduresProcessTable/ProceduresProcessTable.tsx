@@ -47,16 +47,21 @@ export const ProceduresProcessTable = ({
         <Container
           key={data.id}
           display="flex"
-          justifyContent="center"
+          justifyContent="space-between"
           alignItems="center"
         >
           <Button
             type="link"
             title={data.title}
-            leadIcon={
+            onClick={() => onSelectProcedure(data as DataType)}
+          />
+          <Button
+            className="button-arrow"
+            type="link"
+            icon={
               <Icon
                 color="$color-primary-1"
-                size={30}
+                size={35}
                 remixiconClass="ri-arrow-right-s-line"
               />
             }
@@ -179,6 +184,20 @@ const StyledContainer = styled(Container)`
             background-color: ${theme.colors["white"]};
           }
           td {
+            border-bottom: 1px solid ${theme.colors["$color-transparent-1"]} !important;
+            padding: 0 16px;
+            padding-right: 0;
+            div {
+              button {
+                span {
+                  color: black;
+                }
+              }
+              .button-arrow {
+                width: 60px;
+                height: 60px;
+              }
+            }
             border: 1px solid ${theme.colors["$color-neutral-1"]};
           }
         }
