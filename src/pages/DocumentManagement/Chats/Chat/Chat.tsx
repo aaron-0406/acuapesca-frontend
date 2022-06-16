@@ -8,6 +8,7 @@ import EmptyState from "../../../../ui/EmptyState";
 import Icon from "../../../../ui/Icon";
 import Text from "../../../../ui/Typography/Text";
 import { ChatCxt } from "../ChatContext";
+import Message from "../Message";
 import { IMessage } from "../types/tyes";
 
 export const Chat = () => {
@@ -35,6 +36,7 @@ export const Chat = () => {
         id_emisor: user.id,
         id_receptor: parseInt(`${contact.id}`),
         text: input.current.innerHTML,
+        status: 1,
       };
       sendMessage(newMessage);
       if (input.current) input.current.innerHTML = "";
@@ -51,8 +53,7 @@ export const Chat = () => {
           </HeaderChat>
           <BodyChat>
             {contact.messages.map((message, i) => {
-              if (message.id_emisor === user.id) return <RightMesaggeStyled key={i + 2005}>{message.text}</RightMesaggeStyled>;
-              return <LeftMesaggeStyled key={i + 2005}>{message.text}</LeftMesaggeStyled>;
+              return <Message key={i + 200} message={message} />;
             })}
           </BodyChat>
           <FooterChat>
@@ -112,48 +113,6 @@ const BodyChat = styled.div`
   width: 100%;
   gap: 10px;
   overflow-y: scroll;
-`;
-
-const LeftMesaggeStyled = styled.div`
-  ::after {
-    content: " ";
-    position: absolute;
-    top: 0;
-    left: -10px;
-    border-right: 5px solid #202c33;
-    border-top: 5px solid #202c33;
-    border-left: 5px solid transparent;
-    border-bottom: 5px solid transparent;
-  }
-  background: #202c33;
-  color: #fff;
-  position: relative;
-  max-width: 500px;
-  border-radius: 10px;
-  border-top-left-radius: 0px;
-  padding: 10px;
-  align-self: flex-start;
-`;
-
-const RightMesaggeStyled = styled.div`
-  ::after {
-    content: " ";
-    position: absolute;
-    top: 0;
-    right: -10px;
-    border-left: 5px solid #005c4b;
-    border-bottom: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid #005c4b;
-  }
-  background: #005c4b;
-  color: #fff;
-  max-width: 500px;
-  border-radius: 10px;
-  border-top-right-radius: 0px;
-  position: relative;
-  padding: 10px;
-  align-self: flex-end;
 `;
 
 const FooterChat = styled.div`

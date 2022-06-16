@@ -18,5 +18,6 @@ export interface IMessage {
   id_receptor: number;
   id_emisor: number;
   text: string;
+  status: number;
   date: string;
 }
