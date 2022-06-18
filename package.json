@@ -58,6 +58,7 @@
     "@types/axios": "^0.14.0",
     "@types/jwt-decode": "^3.1.0",
     "@types/styled-components": "^5.1.25",
-    "@types/yup": "^0.29.13"
+    "@types/yup": "^0.29.13",
+    "prettier": "^2.7.1"
   }
 }
