@@ -1,22 +1,22 @@
-import Table, { ColumnsType } from "antd/lib/table";
-import Container from "../../../../../../../../ui/Container";
-import Switch from "../../../../../../../../ui/Switch";
-import Text from "../../../../../../../../ui/Typography/Text";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import { AxiosResponse } from "axios";
-import { getUsers } from "../../../../../../../../shared/utils/services/usersServices";
-import { notification, Spin } from "antd";
-import { useEffect, useState } from "react";
-import EmptyState from "../../../../../../../../ui/EmptyState";
-import styled, { css } from "styled-components";
+import Table, { ColumnsType } from 'antd/lib/table'
+import Container from '../../../../../../../../ui/Container'
+import Switch from '../../../../../../../../ui/Switch'
+import Text from '../../../../../../../../ui/Typography/Text'
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import { AxiosResponse } from 'axios'
+import { getUsers } from '../../../../../../../../shared/utils/services/usersServices'
+import { notification, Spin } from 'antd'
+import { useEffect, useState } from 'react'
+import EmptyState from '../../../../../../../../ui/EmptyState'
+import styled, { css } from 'styled-components'
 
 interface DataType {
-  key: string;
-  id: number;
-  code: string;
-  name: string;
-  tag: string;
-  tag_id: number;
+  key: string
+  id: number
+  code: string
+  name: string
+  tag: string
+  tag_id: number
 }
 
 export const FilesTable = () => {
@@ -27,10 +27,10 @@ export const FilesTable = () => {
           ID
         </Text>
       ),
-      dataIndex: "id",
-      key: "id",
-      width: "50px",
-      align: "center",
+      dataIndex: 'id',
+      key: 'id',
+      width: '50px',
+      align: 'center',
       render: (text) => (
         <Text textAlign="center" level={4} weight="bold">
           {text}
@@ -43,10 +43,10 @@ export const FilesTable = () => {
           CARGO
         </Text>
       ),
-      dataIndex: "rango",
-      key: "rango",
-      width: "150px",
-      align: "center",
+      dataIndex: 'rango',
+      key: 'rango',
+      width: '150px',
+      align: 'center',
       render: (text) => (
         <Text textAlign="center" level={4}>
           {text}
@@ -59,9 +59,9 @@ export const FilesTable = () => {
           USUARIO
         </Text>
       ),
-      dataIndex: "fullname",
-      key: "fullname",
-      align: "left",
+      dataIndex: 'fullname',
+      key: 'fullname',
+      align: 'left',
       render: (text) => (
         <Text textAlign="left" level={4}>
           {text}
@@ -74,9 +74,9 @@ export const FilesTable = () => {
           ACCIÓN
         </Text>
       ),
-      width: "100px",
-      align: "center",
-      key: "action",
+      width: '100px',
+      align: 'center',
+      key: 'action',
       render: (data) => (
         <Container display="flex" justifyContent="space-around">
           <Switch
@@ -85,60 +85,62 @@ export const FilesTable = () => {
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
             key={data.id}
-            onChange={(e) => {}}
+            onChange={(e) => {
+              setUsers(
+                users.map((user) => {
+                  if (user.id === data.id) return { ...user, status: !data.status }
+                  return user
+                }),
+              )
+            }}
           />
         </Container>
       ),
     },
-  ];
+  ]
 
-  const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState<DataType[]>([]);
+  const [loading, setLoading] = useState(false)
+  const [users, setUsers] = useState<DataType[]>([])
 
   const loadTableData = async () => {
     try {
-      setLoading(true);
-      const result: AxiosResponse<any, any> = await getUsers();
-      const { data } = result;
-      const { error, users } = data;
+      setLoading(true)
+      const result: AxiosResponse<any, any> = await getUsers()
+      const { data } = result
+      const { error, users } = data
       if (error) {
-        notification["warn"]({
+        notification['warn']({
           message: error,
-        });
+        })
       }
 
       if (users) {
         const newUsers = users.map((rol: DataType) => {
-          return { ...rol, key: rol.id };
-        });
-        setUsers(newUsers);
+          return { ...rol, key: rol.id, status: false }
+        })
+
+        setUsers(newUsers)
       }
 
-      setLoading(false);
+      setLoading(false)
     } catch (error: any) {
-      setLoading(false);
-      notification["error"]({
+      setLoading(false)
+      notification['error']({
         message: error.message as string,
-      });
+      })
     }
-  };
+  }
 
   useEffect(() => {
-    console.log({ xd: "xd" });
-    loadTableData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    loadTableData()
+  }, [])
 
   if (loading) {
     return (
-      <StyledLoadingContainer
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <StyledLoadingContainer display="flex" justifyContent="center" alignItems="center">
         <Spin size="large" />
       </StyledLoadingContainer>
-    );
+    )
   }
 
   if (!users.length) {
@@ -150,7 +152,7 @@ export const FilesTable = () => {
           description="Para agregar un rol, presiona el botón + que esta arriba"
         />
       </Container>
-    );
+    )
   }
 
   return (
@@ -164,8 +166,8 @@ export const FilesTable = () => {
         size="large"
       />
     </StyledContainer>
-  );
-};
+  )
+}
 
 const StyledContainer = styled(Container)`
   height: calc(100vh - 670px);
@@ -177,7 +179,7 @@ const StyledContainer = styled(Container)`
         tr {
           .ant-table-cell {
             padding: 7px 10px;
-            background-color: ${theme.colors["$color-transparent-1"]};
+            background-color: ${theme.colors['$color-transparent-1']};
           }
         }
       }
@@ -185,23 +187,23 @@ const StyledContainer = styled(Container)`
       .ant-table-tbody {
         tr {
           .ant-table-cell {
-            background-color: ${theme.colors["$color-transparent-4"]};
+            background-color: ${theme.colors['$color-transparent-4']};
           }
           td {
             padding: 5px 10px;
-            border: 1px solid ${theme.colors["$color-neutral-1"]};
+            border: 1px solid ${theme.colors['$color-neutral-1']};
           }
         }
         tr:hover {
           .ant-table-cell {
-            background-color: ${theme.colors["$color-transparent-3"]};
+            background-color: ${theme.colors['$color-transparent-3']};
           }
         }
       }
     }
   `}
-`;
+`
 
 const StyledLoadingContainer = styled(Container)`
   height: calc(100% - 57px);
-`;
+`
