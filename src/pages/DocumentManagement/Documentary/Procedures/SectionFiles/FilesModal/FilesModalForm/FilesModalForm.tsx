@@ -1,17 +1,15 @@
 import { DatePicker } from "antd";
-import Dragger from "antd/lib/upload/Dragger";
 import { Controller, useFormContext } from "react-hook-form";
 import styled from "styled-components";
 import Container from "../../../../../../../ui/Container";
-import Icon from "../../../../../../../ui/Icon";
 import InputLabel from "../../../../../../../ui/InputLabel";
 import Input from "../../../../../../../ui/Inputs/Input";
-import Select from "../../../../../../../ui/Select";
 import Spacer from "../../../../../../../ui/Spacer";
 import Switch from "../../../../../../../ui/Switch";
 import { IDocumentForm } from "../../../../types/types";
 import FilesCheckableTag from "./FilesCheckableTag";
 import FilesTable from "./FilesTable";
+import FilesUpload from "./FilesUpload";
 
 export const FilesModalForm = () => {
   const {
@@ -133,20 +131,7 @@ export const FilesModalForm = () => {
           width="100%"
           justifyContent="space-between"
         >
-          <InputLabel
-            label="Archivo:"
-            requirement="required"
-            disabled={false}
-          />
-
-          <Dragger maxCount={1} height={130}>
-            <p className="ant-upload-drag-icon">
-              <Icon size={30} remixiconClass="ri-upload-2-fill" />
-            </p>
-            <p className="ant-upload-text">
-              Haga clic o arrastre el archivo a esta área para cargarlo
-            </p>
-          </Dragger>
+          <FilesUpload />
         </Container>
 
         <Spacer size={30} />
