@@ -39,7 +39,9 @@ export const FilesModalAdd = ({
     reset();
   };
 
-  const onSave = () => {};
+  const onSave = () => {
+    console.log({ file: watch("file") });
+  };
 
   return (
     <StyledModal

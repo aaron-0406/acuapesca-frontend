@@ -1,4 +1,4 @@
-import { IUsersForm } from "../../Users/types/types";
+import { RcFile } from "antd/lib/upload";
 
 export interface IProcessesForm {
   id?: number;
@@ -25,7 +25,7 @@ export interface IDocumentForm {
   name: string;
   nro_pages: number;
   procedure_id: number;
-  file: string;
+  file: RcFile;
   status: boolean;
-  users: IUsersForm[];
+  permisos: number[];
 }
