@@ -17,4 +17,24 @@ export const socketsRoutes = {
   changeChannel: {
     emit: "client:changeChat",
   },
+  view: {
+    emit: "client:viewMessage",
+    on: "server:viewMessage",
+  },
+  received: {
+    emit: "server:receivedMessage",
+    on: "client:receivedMessage",
+  },
+  typing: {
+    emit: "client:typing",
+    on: "server:typing",
+  },
+  newUserConnected: {
+    emit: "client:sendUsers",
+    on: "server:sendUsers",
+  },
+  userDisconnected: {
+    emit: "client:disconnectUser",
+    on: "server:disconnectUser",
+  },
 };

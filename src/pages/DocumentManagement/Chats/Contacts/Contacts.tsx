@@ -5,11 +5,12 @@ import { IContact } from "../types/tyes";
 import Contact from "./Contact";
 
 export const Contacts = () => {
-  const { contacts } = useContext(ChatCxt);
+  const { contacts, contactTyping } = useContext(ChatCxt);
+
   return (
     <StyledWrapper>
-      {contacts.map((contacto: IContact) => {
-        return <Contact key={contacto.id} contact={contacto}></Contact>;
+      {contacts.map((contacto: IContact, i) => {
+        return <Contact key={contacto.id} contactTypingState={contactTyping[i]} contactProp={contacto}></Contact>;
       })}
     </StyledWrapper>
   );

@@ -3,6 +3,7 @@ export interface IContact {
   fullname: string;
   photo: string;
   messages: IMessage[];
+  typing?: boolean;
 }
 
 export interface ChatContext {
@@ -11,6 +12,19 @@ export interface ChatContext {
   contact: IContact;
   setContact: Function;
   sendMessage: Function;
+  typing: Function;
+  contactTyping: IContactStatus[];
+  setContactTyping: Function;
+  typingState: boolean;
+  setTypingState: Function;
+  onlineState: boolean;
+  setOnlineState: Function;
+}
+
+export interface IContactStatus {
+  id: number;
+  typing: boolean;
+  online: boolean;
 }
 
 export interface IMessage {
