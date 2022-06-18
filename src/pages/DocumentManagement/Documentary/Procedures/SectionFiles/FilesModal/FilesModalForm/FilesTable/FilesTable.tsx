@@ -10,17 +10,24 @@ import { useEffect, useState } from 'react'
 import EmptyState from '../../../../../../../../ui/EmptyState'
 import styled, { css } from 'styled-components'
 
-interface DataType {
+export interface DataTypeFiles {
   key: string
   id: number
   code: string
+  id_rango: number
+  status: boolean
   name: string
   tag: string
   tag_id: number
 }
 
-export const FilesTable = () => {
-  const columns: ColumnsType<DataType> = [
+interface IFilesTableProps {
+  users: DataTypeFiles[]
+  setUsers: (users: DataTypeFiles[]) => void
+}
+
+export const FilesTable = ({ users, setUsers }: IFilesTableProps) => {
+  const columns: ColumnsType<DataTypeFiles> = [
     {
       title: (
         <Text textAlign="center" level={4} weight="bold">
@@ -81,11 +88,10 @@ export const FilesTable = () => {
         <Container display="flex" justifyContent="space-around">
           <Switch
             checked={data.status}
-            //loading={loadingRequest}
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
             key={data.id}
-            onChange={(e) => {
+            onChange={() => {
               setUsers(
                 users.map((user) => {
                   if (user.id === data.id) return { ...user, status: !data.status }
@@ -100,7 +106,6 @@ export const FilesTable = () => {
   ]
 
   const [loading, setLoading] = useState(false)
-  const [users, setUsers] = useState<DataType[]>([])
 
   const loadTableData = async () => {
     try {
@@ -115,7 +120,7 @@ export const FilesTable = () => {
       }
 
       if (users) {
-        const newUsers = users.map((rol: DataType) => {
+        const newUsers = users.map((rol: DataTypeFiles) => {
           return { ...rol, key: rol.id, status: false }
         })
 

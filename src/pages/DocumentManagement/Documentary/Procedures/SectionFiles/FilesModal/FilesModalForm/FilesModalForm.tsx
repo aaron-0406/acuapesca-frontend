@@ -1,21 +1,37 @@
-import { DatePicker } from "antd";
-import { Controller, useFormContext } from "react-hook-form";
-import styled from "styled-components";
-import Container from "../../../../../../../ui/Container";
-import InputLabel from "../../../../../../../ui/InputLabel";
-import Input from "../../../../../../../ui/Inputs/Input";
-import Spacer from "../../../../../../../ui/Spacer";
-import Switch from "../../../../../../../ui/Switch";
-import { IDocumentForm } from "../../../../types/types";
-import FilesCheckableTag from "./FilesCheckableTag";
-import FilesTable from "./FilesTable";
-import FilesUpload from "./FilesUpload";
+import { useState } from 'react'
+import { DatePicker } from 'antd'
+import { Controller, useFormContext } from 'react-hook-form'
+import styled from 'styled-components'
+import Container from '../../../../../../../ui/Container'
+import InputLabel from '../../../../../../../ui/InputLabel'
+import Input from '../../../../../../../ui/Inputs/Input'
+import Spacer from '../../../../../../../ui/Spacer'
+import Switch from '../../../../../../../ui/Switch'
+import { IDocumentForm } from '../../../../types/types'
+import FilesCheckableTag from './FilesCheckableTag'
+import FilesTable from './FilesTable'
+import FilesUpload from './FilesUpload'
+import { DataTypeFiles } from './FilesTable/FilesTable'
+import { IRolsForm } from '../../../../../Rols/types/types'
 
 export const FilesModalForm = () => {
+  const [users, setUsers] = useState<DataTypeFiles[]>([])
+
+  const onCheckAllSelectedTags = (tag: IRolsForm, checked: boolean) => {
+    setUsers(
+      users.map((user) => {
+        if (tag.id === user.id_rango) {
+          return { ...user, status: checked }
+        }
+        return user
+      }),
+    )
+  }
+
   const {
     control,
     formState: { errors },
-  } = useFormContext<IDocumentForm>();
+  } = useFormContext<IDocumentForm>()
 
   return (
     <StyledFormContainer display="flex" width="100%" gap="30px">
@@ -65,23 +81,14 @@ export const FilesModalForm = () => {
           )}
         />
         <Spacer size={30} />
-        <Container
-          display="flex"
-          flexDirection="column"
-          width="100%"
-          justifyContent="space-between"
-        >
-          <InputLabel
-            label="Fecha de vigencia:"
-            requirement="required"
-            disabled={false}
-          />
+        <Container display="flex" flexDirection="column" width="100%" justifyContent="space-between">
+          <InputLabel label="Fecha de vigencia:" requirement="required" disabled={false} />
           <Controller
             name="effective_date"
             control={control}
             render={({ field }) => (
               <DatePicker
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 placeholder="Seleccione la fecha de vigencia"
                 onChange={field.onChange}
               />
@@ -90,17 +97,13 @@ export const FilesModalForm = () => {
 
           <Spacer size={30} />
 
-          <InputLabel
-            label="Fecha de aprobación:"
-            requirement="required"
-            disabled={false}
-          />
+          <InputLabel label="Fecha de aprobación:" requirement="required" disabled={false} />
           <Controller
             name="approval_date"
             control={control}
             render={({ field }) => (
               <DatePicker
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 placeholder="Seleccione la fecha de aprobación"
                 onChange={field.onChange}
               />
@@ -109,49 +112,34 @@ export const FilesModalForm = () => {
         </Container>
         <Spacer size={30} />
         <Container display="flex" width="100%" justifyContent="space-between">
-          <InputLabel
-            label="Disponibilidad"
-            requirement="required"
-            disabled={false}
-          />
+          <InputLabel label="Disponibilidad" requirement="required" disabled={false} />
           <Controller
             name="status"
             control={control}
-            render={({ field }) => (
-              <Switch onChange={field.onChange} checked={field.value} />
-            )}
+            render={({ field }) => <Switch onChange={field.onChange} checked={field.value} />}
           />
         </Container>
       </Container>
 
       <Container width="50%">
-        <Container
-          display="flex"
-          flexDirection="column"
-          width="100%"
-          justifyContent="space-between"
-        >
+        <Container display="flex" flexDirection="column" width="100%" justifyContent="space-between">
           <FilesUpload />
         </Container>
 
         <Spacer size={30} />
 
         <Container width="100%">
-          <InputLabel
-            label="Alcance de usuarios:"
-            requirement="required"
-            disabled={false}
-          />
+          <InputLabel label="Alcance de usuarios:" requirement="required" disabled={false} />
 
-          <FilesCheckableTag />
+          <FilesCheckableTag checkAllSelectedTags={onCheckAllSelectedTags} />
 
-          <FilesTable />
+          <FilesTable users={users} setUsers={setUsers} />
         </Container>
       </Container>
     </StyledFormContainer>
-  );
-};
+  )
+}
 
 const StyledFormContainer = styled(Container)`
   padding: 24px 35px;
-`;
+`
