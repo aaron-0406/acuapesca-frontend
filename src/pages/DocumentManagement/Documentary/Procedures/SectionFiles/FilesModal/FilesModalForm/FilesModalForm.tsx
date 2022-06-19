@@ -14,8 +14,16 @@ import FilesUpload from './FilesUpload'
 import { DataTypeFiles } from './FilesTable/FilesTable'
 import { IRolsForm } from '../../../../../Rols/types/types'
 
-export const FilesModalForm = () => {
-  const [users, setUsers] = useState<DataTypeFiles[]>([])
+interface IFilesModalForm {
+  users: DataTypeFiles[]
+  setUsers: React.Dispatch<React.SetStateAction<DataTypeFiles[]>>
+}
+
+export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext<IDocumentForm>()
 
   const onCheckAllSelectedTags = (tag: IRolsForm, checked: boolean) => {
     setUsers(
@@ -27,11 +35,6 @@ export const FilesModalForm = () => {
       }),
     )
   }
-
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext<IDocumentForm>()
 
   return (
     <StyledFormContainer display="flex" width="100%" gap="30px">
@@ -75,8 +78,8 @@ export const FilesModalForm = () => {
               requirement="required"
               placeholder="Ingrese la versión del documento"
               label="Versión:"
-              hasError={!!errors.title}
-              helperText={errors.title?.message}
+              hasError={!!errors.version}
+              helperText={errors.version?.message}
             />
           )}
         />
