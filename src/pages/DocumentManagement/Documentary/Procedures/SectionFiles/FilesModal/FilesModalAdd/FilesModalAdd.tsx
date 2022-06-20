@@ -11,6 +11,7 @@ import FilesModalForm from '../FilesModalForm'
 import { AxiosResponse } from 'axios'
 import { createDocument } from '../../../../../../../shared/utils/services/documentsServices'
 import { DataTypeFiles } from '../FilesModalForm/FilesTable/FilesTable'
+import moment from 'moment'
 
 interface IFilesModalCreate {
   visible: boolean
@@ -68,41 +69,37 @@ export const FilesModalAdd = ({ visible, setVisible, procedureId }: IFilesModalC
 
       setLoading(true)
 
-      console.log(getValues())
-
       const data = new FormData()
       data.append('title', getValues('title'))
       data.append('version', getValues('version').toString())
       data.append('code', getValues('code'))
-      data.append('effective_date', getValues('effective_date'))
-      data.append('approval_date', getValues('approval_date'))
+      data.append('effective_date', moment(getValues('effective_date')).format('YYYY[/]MM[/]DD'))
+      data.append('approval_date', moment(getValues('approval_date')).format('YYYY[/]MM[/]DD'))
       data.append('name', getValues('name'))
       data.append('nro_pages', getValues('nro_pages').toString())
       data.append('procedure_id', getValues('procedure_id').toString())
       data.append('status', getValues('status').toString())
       data.append('file', getValues('file'))
-      data.append('permisos', getValues('permisos').toString())
+      data.append('permisos', `[${getValues('permisos').toString()}]`)
 
       const result: AxiosResponse<any, any> = await createDocument(data)
 
       if (result) {
         const { data } = result
-        console.log({ data: data })
-        /* const { success, error, process } = data
+        const { success, error, document } = data
 
-        if (process) {
+        if (document) {
           notification['success']({
             message: success,
           })
           onClose()
-          //updateData();
         }
 
         if (error) {
           notification['warn']({
             message: error,
           })
-        } */
+        }
       }
       setLoading(false)
     } catch (error: any) {
