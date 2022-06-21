@@ -1,42 +1,41 @@
-import { useState } from "react";
-import styled, { css } from "styled-components";
-import Button from "../../../../ui/Button";
-import Container from "../../../../ui/Container";
-import EmptyState from "../../../../ui/EmptyState";
-import Icon from "../../../../ui/Icon";
-import { IProceduresForm } from "../types/types";
-import FilesTable from "./SectionFiles/FilesTable";
-import FilesTitle from "./SectionFiles/FilesTitle";
-import ProceduresModalAdd from "./SectionProcedures/ProceduresModal/ProceduresModalAdd";
-import ProceduresModalEdit from "./SectionProcedures/ProceduresModal/ProceduresModalEdit";
-import ProceduresProcessTable from "./SectionProcedures/ProceduresProcessTable";
-import ProceduresProcessTitle from "./SectionProcedures/ProceduresProcessTitle";
+import { useState } from 'react'
+import styled, { css } from 'styled-components'
+import Button from '../../../../ui/Button'
+import Container from '../../../../ui/Container'
+import EmptyState from '../../../../ui/EmptyState'
+import Icon from '../../../../ui/Icon'
+import { IProceduresForm } from '../types/types'
+import FilesTable from './SectionFiles/FilesTable'
+import FilesTitle from './SectionFiles/FilesTitle'
+import ProceduresModalAdd from './SectionProcedures/ProceduresModal/ProceduresModalAdd'
+import ProceduresModalEdit from './SectionProcedures/ProceduresModal/ProceduresModalEdit'
+import ProceduresProcessTable from './SectionProcedures/ProceduresProcessTable'
+import ProceduresProcessTitle from './SectionProcedures/ProceduresProcessTitle'
 
 export const Procedures = () => {
-  const [procedureSelected, setProcedureSelected] =
-    useState<IProceduresForm | null>(null);
+  const [procedureSelected, setProcedureSelected] = useState<IProceduresForm | null>(null)
 
-  const [changeData, setChangeData] = useState<boolean>(false);
-  const [visibleModal, setVisibleModal] = useState<boolean>(false);
-  const [visibleModalEdit, setVisibleModalEdit] = useState<boolean>(false);
+  const [changeData, setChangeData] = useState<boolean>(false)
+  const [visibleModal, setVisibleModal] = useState<boolean>(false)
+  const [visibleModalEdit, setVisibleModalEdit] = useState<boolean>(false)
 
-  const [changeDataFiles, setChangeDataFiles] = useState<boolean>(false);
+  const [changeDataFiles, setChangeDataFiles] = useState<boolean>(false)
 
   const onToggleModal = () => {
-    setVisibleModal(!visibleModal);
-  };
+    setVisibleModal(!visibleModal)
+  }
 
   const onToggleModalEdit = () => {
-    setVisibleModalEdit(!visibleModalEdit);
-  };
+    setVisibleModalEdit(!visibleModalEdit)
+  }
 
   const onUpdateTable = () => {
-    setChangeData(!changeData);
-  };
+    setChangeData(!changeData)
+  }
 
   const onToggleChangeDataFiles = () => {
-    setChangeDataFiles(!changeDataFiles);
-  };
+    setChangeDataFiles(!changeDataFiles)
+  }
 
   return (
     <StyledProcessContainer display="flex" width="100%">
@@ -64,21 +63,17 @@ export const Procedures = () => {
           onClick={onToggleModal}
         />
 
-        <ProceduresModalAdd
-          updateData={onUpdateTable}
-          visible={visibleModal}
-          setVisible={onToggleModal}
-        />
+        <ProceduresModalAdd updateData={onUpdateTable} visible={visibleModal} setVisible={onToggleModal} />
       </StyledProceduresContainer>
 
       <Container width="70%">
-        <FilesTitle
-          procedure={procedureSelected}
-          onToggleModal={onToggleModalEdit}
-        />
+        <FilesTitle procedure={procedureSelected} onToggleModal={onToggleModalEdit} />
 
         {procedureSelected ? (
-          <FilesTable changeDataSelected={changeDataFiles} />
+          <FilesTable
+            procedureSelectedUUID={procedureSelected.id ? procedureSelected.id : 0}
+            changeDataSelected={changeDataFiles}
+          />
         ) : (
           <Container width="100%">
             <EmptyState
@@ -98,20 +93,20 @@ export const Procedures = () => {
         />
       </Container>
     </StyledProcessContainer>
-  );
-};
+  )
+}
 
 const StyledProcessContainer = styled(Container)`
   height: 100vh;
-`;
+`
 
 const StyledButtonAdd = styled(Button)`
   margin-bottom: 25px;
-`;
+`
 
 const StyledProceduresContainer = styled(Container)`
   ${({ theme }) => css`
-    background-color: ${theme.colors["$color-transparent-4"]};
-    border-right: 6px solid ${theme.colors["white"]};
+    background-color: ${theme.colors['$color-transparent-4']};
+    border-right: 6px solid ${theme.colors['white']};
   `}
-`;
+`

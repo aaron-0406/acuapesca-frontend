@@ -33,7 +33,6 @@ export const FilesModalAdd = ({ visible, setVisible, procedureId }: IFilesModalC
       effective_date: '',
       approval_date: '',
       title: '',
-      name: 'PDF',
       nro_pages: 0,
       status: false,
       procedure_id: 0,
@@ -75,7 +74,6 @@ export const FilesModalAdd = ({ visible, setVisible, procedureId }: IFilesModalC
       data.append('code', getValues('code'))
       data.append('effective_date', moment(getValues('effective_date')).format('YYYY[/]MM[/]DD'))
       data.append('approval_date', moment(getValues('approval_date')).format('YYYY[/]MM[/]DD'))
-      data.append('name', getValues('name'))
       data.append('nro_pages', getValues('nro_pages').toString())
       data.append('procedure_id', getValues('procedure_id').toString())
       data.append('status', getValues('status').toString())
