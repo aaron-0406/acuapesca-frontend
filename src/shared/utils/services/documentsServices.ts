@@ -9,8 +9,8 @@ export const getDocuments = async (id: number) => {
   return await axiosClient.get(`${urlApi}/${id}`)
 }
 
-export const getDocumentByID = async (id: number) => {
-  return await axiosClient.get(`${urlApi}/single${id}`)
+export const getDocumentByCode = async (code: string, procedureId: number) => {
+  return await axiosClient.get(`${urlApi}/single/${code}/${procedureId}`)
 }
 
 export const createDocument = async (document: FormData) => {
