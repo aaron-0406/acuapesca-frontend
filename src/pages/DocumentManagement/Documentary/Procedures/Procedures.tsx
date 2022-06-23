@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import styled, { css } from 'styled-components'
+import { FilesProvider } from '../../../../shared/contexts/FilesProvider'
 import Button from '../../../../ui/Button'
 import Container from '../../../../ui/Container'
 import EmptyState from '../../../../ui/EmptyState'
@@ -67,30 +68,32 @@ export const Procedures = () => {
       </StyledProceduresContainer>
 
       <Container width="70%">
-        <FilesTitle procedure={procedureSelected} onToggleModal={onToggleModalEdit} />
+        <FilesProvider>
+          <FilesTitle procedure={procedureSelected} onToggleModal={onToggleModalEdit} />
 
-        {procedureSelected ? (
-          <FilesTable
-            procedureSelectedUUID={procedureSelected.id ? procedureSelected.id : 0}
-            changeDataSelected={changeDataFiles}
-          />
-        ) : (
-          <Container width="100%">
-            <EmptyState
-              fullScreen
-              title="No existen archivos"
-              description="Para visualizar los archivos, seleccione un documento"
+          {procedureSelected ? (
+            <FilesTable
+              procedureSelectedUUID={procedureSelected.id ? procedureSelected.id : 0}
+              changeDataSelected={changeDataFiles}
             />
-          </Container>
-        )}
+          ) : (
+            <Container width="100%">
+              <EmptyState
+                fullScreen
+                title="No existen archivos"
+                description="Para visualizar los archivos, seleccione un documento"
+              />
+            </Container>
+          )}
 
-        <ProceduresModalEdit
-          visible={visibleModalEdit}
-          setVisible={onToggleModalEdit}
-          updateData={onUpdateTable}
-          data={procedureSelected}
-          setData={setProcedureSelected}
-        />
+          <ProceduresModalEdit
+            visible={visibleModalEdit}
+            setVisible={onToggleModalEdit}
+            updateData={onUpdateTable}
+            data={procedureSelected}
+            setData={setProcedureSelected}
+          />
+        </FilesProvider>
       </Container>
     </StyledProcessContainer>
   )
