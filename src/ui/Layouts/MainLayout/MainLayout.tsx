@@ -1,11 +1,12 @@
 import { MenuProps } from 'antd'
 import jwtDecode from 'jwt-decode'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 import paths from '../../../shared/routes/paths'
 import { API } from '../../../shared/utils/constant/api'
 import { getAuthToken } from '../../../shared/utils/storage/auth'
+import Button from '../../Button'
 import Container from '../../Container'
 import Icon from '../../Icon'
 import Input from '../../Inputs/Input'
@@ -13,6 +14,9 @@ import Menu from '../../Menu'
 import Spacer from '../../Spacer'
 import UploadAvatar from '../../UploadAvatar'
 import logo from './../../../shared/assets/images/logo.png'
+import storage from '../../../shared/utils/storage'
+import { useGeneralContext } from '../../../shared/contexts/StoreProvider'
+import { ActionTypes } from '../../../pages/Login/actions'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -62,9 +66,18 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
       </Link>,
     ),
   ]
+  const { dispatch } = useGeneralContext()
+  const navigate = useNavigate()
   const token = getAuthToken()
   const user = jwtDecode<any>(`${token}`)
   const changePhoto = (e: any) => {}
+
+  const logOut = () => {
+    storage.remove('auth_token')
+    storage.remove('app_state')
+    dispatch({ type: ActionTypes.Logout })
+    navigate('/login')
+  }
 
   return (
     <Container display="flex" justifyContent="space-between" width="100%">
@@ -95,6 +108,15 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
           <Spacer size={32} />
 
           <Menu onClick={() => {}} width={218} mode="inline" items={items} />
+
+          <Spacer size={32} />
+
+          <Button
+            onClick={logOut}
+            $width="80%"
+            title="Cerrar Sesión"
+            icon={<Icon remixiconClass="ri-door-open-line" />}
+          />
 
           <Spacer size={32} />
         </Container>
