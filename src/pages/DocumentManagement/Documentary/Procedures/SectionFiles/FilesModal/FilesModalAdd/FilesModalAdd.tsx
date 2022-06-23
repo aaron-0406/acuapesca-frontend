@@ -12,17 +12,19 @@ import { AxiosResponse } from 'axios'
 import { createDocument } from '../../../../../../../shared/utils/services/documentsServices'
 import { DataTypeFiles } from '../FilesModalForm/FilesTable/FilesTable'
 import moment from 'moment'
+import { useFilesContext } from '../../../../../../../shared/contexts/FilesProvider'
 
 interface IFilesModalCreate {
   visible: boolean
   setVisible: () => void
-  updateData?: () => void
   procedureId: number | undefined
 }
 
 export const FilesModalAdd = ({ visible, setVisible, procedureId }: IFilesModalCreate) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [users, setUsers] = useState<DataTypeFiles[]>([])
+
+  const { setFiles } = useFilesContext()
 
   const methods = useForm<IDocumentForm>({
     mode: 'all',
@@ -86,7 +88,31 @@ export const FilesModalAdd = ({ visible, setVisible, procedureId }: IFilesModalC
         const { data } = result
         const { success, error, document } = data
 
-        if (document) {
+        if (document && success) {
+          setFiles((prev) => {
+            let find = false
+
+            const updateFiles = prev.map((file) => {
+              if (file.code === document.code) {
+                find = true
+                return { ...file, docs: [...file.docs, document] }
+              }
+
+              return file
+            })
+
+            if (find) return updateFiles
+
+            return [
+              ...prev,
+              {
+                key: document.code,
+                code: document.code,
+                docs: [document],
+              },
+            ]
+          })
+
           notification['success']({
             message: success,
           })

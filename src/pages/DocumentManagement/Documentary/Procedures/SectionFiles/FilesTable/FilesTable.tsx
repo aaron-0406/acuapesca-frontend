@@ -4,6 +4,7 @@ import { AxiosResponse } from 'axios'
 import moment from 'moment'
 import { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
+import { useFilesContext } from '../../../../../../shared/contexts/FilesProvider'
 import { getDocuments } from '../../../../../../shared/utils/services/documentsServices'
 import Button from '../../../../../../ui/Button'
 import Container from '../../../../../../ui/Container'
@@ -22,9 +23,10 @@ type Docs = {
   status: boolean
   title: string
   version: number
+  permisos?: Array<number>
 }
 
-interface DataType {
+export interface DocsDataType {
   key: string
   code: string
   docs: Docs[]
@@ -36,7 +38,7 @@ interface IFilesTableProps {
 }
 
 export const FilesTable = ({ changeDataSelected, procedureSelectedUUID }: IFilesTableProps) => {
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<DocsDataType> = [
     {
       title: (
         <Text textAlign="center" level={3} weight="bold">
@@ -115,47 +117,46 @@ export const FilesTable = ({ changeDataSelected, procedureSelectedUUID }: IFiles
   ]
 
   const [loading, setLoading] = useState<boolean>(false)
-  const [files, setFiles] = useState<DataType[]>([])
+  const { files, setFiles } = useFilesContext()
 
-  const loadTableData = useCallback(async (procedureUUID: number) => {
-    try {
-      setLoading(true)
-      const result: AxiosResponse<any, any> = await getDocuments(procedureUUID)
+  const loadTableData = useCallback(
+    async (procedureUUID: number) => {
+      try {
+        setLoading(true)
+        const result: AxiosResponse<any, any> = await getDocuments(procedureUUID)
 
-      if (result) {
-        const { data } = result
-        const { error, documents, success } = data
+        if (result) {
+          const { data } = result
+          const { error, documents } = data
 
-        if (documents) {
-          const newDocuments = documents.map((document: any) => {
-            return { ...document, key: document.code }
-          })
-          setFiles(newDocuments)
+          if (documents) {
+            const newDocuments = documents.map((document: any) => {
+              return { ...document, key: document.code }
+            })
+            setFiles(newDocuments)
+          }
 
-          notification['success']({
-            message: success,
-          })
+          if (error) {
+            notification['warn']({
+              message: error,
+            })
+          }
         }
 
-        if (error) {
-          notification['warn']({
-            message: error,
-          })
-        }
+        setLoading(false)
+      } catch (error: any) {
+        setLoading(false)
+        notification['error']({
+          message: error.message as string,
+        })
       }
-
-      setLoading(false)
-    } catch (error: any) {
-      setLoading(false)
-      notification['error']({
-        message: error.message as string,
-      })
-    }
-  }, [])
+    },
+    [setFiles],
+  )
 
   useEffect(() => {
     loadTableData(procedureSelectedUUID)
-  }, [changeDataSelected, loadTableData])
+  }, [changeDataSelected, loadTableData, procedureSelectedUUID])
 
   if (loading) {
     return (
