@@ -6,14 +6,19 @@ import Container from '../../../../ui/Container'
 import HeaderPlus from '../../../../ui/Header/HeaderPlus'
 import Icon from '../../../../ui/Icon'
 import ProcessesModalCreate from './ProcessesModal/ProcessesModalCreate'
+import ProcessesModalViewPhoto from './ProcessesModal/ProcessesModalViewPhoto'
 import ProcessesTable from './ProcessesTable'
 
 export const Processes = () => {
   const [visibleModal, setVisibleModal] = useState(false)
+  const [visibleModalView, setVisibleModalView] = useState(false)
   const [changeData, setChangeData] = useState(false)
 
   const onToggleModal = () => {
     setVisibleModal(!visibleModal)
+  }
+  const onToggleModalView = () => {
+    setVisibleModalView(!visibleModalView)
   }
 
   const onUpdateTable = () => {
@@ -26,9 +31,10 @@ export const Processes = () => {
         title="PROCESOS"
         disabledButton={false}
         setVisibleModal={onToggleModal}
-        plusHeader={<Button type="secondary" icon={<Icon remixiconClass="ri-more-fill" />} onClick={onToggleModal} />}
+        plusHeader={<Button type="secondary" icon={<Icon remixiconClass="ri-image-line" />} onClick={onToggleModalView} />}
       />
       <ProcessesTable updateData={onUpdateTable} changeData={changeData} />
+      <ProcessesModalViewPhoto visible={visibleModalView} setVisible={onToggleModalView} />
       <ProcessesModalCreate updateData={onUpdateTable} visible={visibleModal} setVisible={onToggleModal} />
     </StyledProcessesContainer>
   )
