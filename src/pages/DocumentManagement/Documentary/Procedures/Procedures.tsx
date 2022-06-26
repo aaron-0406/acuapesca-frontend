@@ -6,6 +6,7 @@ import Container from '../../../../ui/Container'
 import EmptyState from '../../../../ui/EmptyState'
 import Icon from '../../../../ui/Icon'
 import { IProceduresForm } from '../types/types'
+import FilesModalEdit from './SectionFiles/FilesModal/FilesModalEdit'
 import FilesTable from './SectionFiles/FilesTable'
 import FilesTitle from './SectionFiles/FilesTitle'
 import ProceduresModalAdd from './SectionProcedures/ProceduresModal/ProceduresModalAdd'
@@ -15,12 +16,14 @@ import ProceduresProcessTitle from './SectionProcedures/ProceduresProcessTitle'
 
 export const Procedures = () => {
   const [procedureSelected, setProcedureSelected] = useState<IProceduresForm | null>(null)
+  const [fileCodeSelected, setFileCodeSelected] = useState<string>('')
 
   const [changeData, setChangeData] = useState<boolean>(false)
+  const [changeDataFiles, setChangeDataFiles] = useState<boolean>(false)
+
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
   const [visibleModalEdit, setVisibleModalEdit] = useState<boolean>(false)
-
-  const [changeDataFiles, setChangeDataFiles] = useState<boolean>(false)
+  const [visibleModalEditFile, setVisibleModalEditFile] = useState<boolean>(false)
 
   const onToggleModal = () => {
     setVisibleModal(!visibleModal)
@@ -28,6 +31,10 @@ export const Procedures = () => {
 
   const onToggleModalEdit = () => {
     setVisibleModalEdit(!visibleModalEdit)
+  }
+
+  const onToggleModalEditFile = () => {
+    setVisibleModalEditFile(!visibleModalEditFile)
   }
 
   const onUpdateTable = () => {
@@ -75,6 +82,7 @@ export const Procedures = () => {
             <FilesTable
               procedureSelectedUUID={procedureSelected.id ? procedureSelected.id : 0}
               changeDataSelected={changeDataFiles}
+              setFileCodeSelected={setFileCodeSelected}
             />
           ) : (
             <Container width="100%">
@@ -85,6 +93,13 @@ export const Procedures = () => {
               />
             </Container>
           )}
+
+          <FilesModalEdit
+            visible={visibleModalEditFile}
+            setVisible={onToggleModalEditFile}
+            procedureId={procedureSelected?.id}
+            procedureCode={fileCodeSelected}
+          />
 
           <ProceduresModalEdit
             visible={visibleModalEdit}
