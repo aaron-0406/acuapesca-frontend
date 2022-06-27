@@ -12,7 +12,7 @@ import FilesModalForm from '../FilesModalForm'
 import { DataTypeFiles } from '../FilesModalForm/FilesTable/FilesTable'
 import { AxiosResponse } from 'axios'
 import { getDocumentByCode } from '../../../../../../../shared/utils/services/documentsServices'
-import moment from 'moment'
+import Icon from '../../../../../../../ui/Icon'
 
 interface IFilesModalEdit {
   visible: boolean
@@ -24,6 +24,8 @@ interface IFilesModalEdit {
 export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode }: IFilesModalEdit) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [users, setUsers] = useState<DataTypeFiles[]>([])
+
+  const [filesModal, setFilesModal] = useState<IDocumentForm[]>([])
 
   const { files, setFiles } = useFilesContext()
 
@@ -61,7 +63,7 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
           return { ...user, status: true }
         }
 
-        return user
+        return { ...user, status: false }
       })
 
       return newUsers
@@ -80,18 +82,8 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
         const { error, document } = data
 
         if (document) {
-          setValue('id', document[0].id)
-          setValue('code', document[0].code)
-          setValue('title', document[0].title)
-          setValue('version', document[0].version)
-          setValue('effective_date', document[0].effective_date)
-          setValue('approval_date', document[0].approval_date)
-          setValue('title', document[0].title)
-          setValue('nro_pages', document[0].nro_pages)
-          setValue('procedure_id', document[0].procedure_id)
-          setValue('file', document[0].file)
-          setValue('status', document[0].status)
-          setValue('permisos', document[0].permisos)
+          setFilesModal(document)
+          reset(document[0])
 
           if (users) {
             onSetAllSelectedUsers(document[0] ? document[0].permisos : [])
@@ -114,6 +106,41 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
     }
   }, [])
 
+  const [fileNumber, setFileNumber] = useState(1)
+
+  const onChangeFileNext = () => {
+    const totalFiles = filesModal.length + 1
+    if (fileNumber <= totalFiles && fileNumber < 3) {
+      if (fileNumber < 2) {
+        reset(filesModal[fileNumber])
+        onSetAllSelectedUsers(filesModal[fileNumber].permisos)
+      }
+
+      if (fileNumber === 2) {
+        reset({ code: filesModal[0].code })
+
+        onSetAllSelectedUsers([])
+      }
+
+      setFileNumber((prev) => {
+        return prev + 1
+      })
+    }
+  }
+
+  const onChangeFilePrevious = () => {
+    if (fileNumber > 1) {
+      if (fileNumber < 4) {
+        reset(filesModal[fileNumber - 2])
+        onSetAllSelectedUsers(filesModal[fileNumber - 2].permisos)
+      }
+
+      setFileNumber((prev) => {
+        return prev - 1
+      })
+    }
+  }
+
   useEffect(() => {
     loadDataFiles(procedureCode, procedureId)
   }, [procedureId])
@@ -133,12 +160,17 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
       destroyOnClose
     >
       <Container>
-        <StyledTitleContainer>
+        <StyledTitleContainer display="flex" justifyContent="space-between">
           <Text level={5}>Editar archivo</Text>
+          <Container display="flex" gap="15px">
+            <Button icon={<Icon remixiconClass="ri-arrow-left-s-line" />} onClick={onChangeFilePrevious} />
+            <Button type="secondary" title={`${fileNumber}`} />
+            <Button icon={<Icon remixiconClass="ri-arrow-right-s-line" />} onClick={onChangeFileNext} />
+          </Container>
         </StyledTitleContainer>
 
         <FormProvider {...methods}>
-          <FilesModalForm users={users} setUsers={setUsers} />
+          <FilesModalForm users={users} setUsers={setUsers} editing />
         </FormProvider>
       </Container>
     </StyledModal>

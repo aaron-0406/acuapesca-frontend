@@ -18,9 +18,10 @@ import moment from 'moment'
 interface IFilesModalForm {
   users: DataTypeFiles[]
   setUsers: React.Dispatch<React.SetStateAction<DataTypeFiles[]>>
+  editing?: boolean
 }
 
-export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
+export const FilesModalForm = ({ users, setUsers, editing = false }: IFilesModalForm) => {
   const {
     control,
     getValues,
@@ -48,6 +49,7 @@ export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
             <Input
               {...field}
               requirement="required"
+              disabled={editing}
               placeholder="Ingrese el código del documento"
               label="Código:"
               hasError={!!errors.code}
@@ -94,7 +96,7 @@ export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
             render={({ field }) => (
               <DatePicker
                 style={{ width: '100%' }}
-                defaultValue={moment(field.value).isValid() ? moment(field.value) : undefined}
+                value={field.value ? moment(field.value) : undefined}
                 format="DD/MM/YYYY"
                 placeholder="Seleccione la fecha de vigencia"
                 onChange={field.onChange}
@@ -111,7 +113,7 @@ export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
             render={({ field }) => (
               <DatePicker
                 style={{ width: '100%' }}
-                defaultValue={moment(field.value).isValid() ? moment(field.value) : undefined}
+                value={field.value ? moment(field.value) : undefined}
                 format="DD/MM/YYYY"
                 placeholder="Seleccione la fecha de aprobación"
                 onChange={field.onChange}
