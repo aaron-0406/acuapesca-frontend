@@ -24,7 +24,7 @@ export interface IDocumentForm {
   title: string
   nro_pages: number
   procedure_id: number
-  file: RcFile
+  file: RcFile | string
   status: boolean
   permisos: number[]
 }

@@ -13,6 +13,7 @@ import FilesTable from './FilesTable'
 import FilesUpload from './FilesUpload'
 import { DataTypeFiles } from './FilesTable/FilesTable'
 import { IRolsForm } from '../../../../../Rols/types/types'
+import moment from 'moment'
 
 interface IFilesModalForm {
   users: DataTypeFiles[]
@@ -22,6 +23,7 @@ interface IFilesModalForm {
 export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
   const {
     control,
+    getValues,
     formState: { errors },
   } = useFormContext<IDocumentForm>()
 
@@ -92,6 +94,8 @@ export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
             render={({ field }) => (
               <DatePicker
                 style={{ width: '100%' }}
+                defaultValue={moment(field.value).isValid() ? moment(field.value) : undefined}
+                format="DD/MM/YYYY"
                 placeholder="Seleccione la fecha de vigencia"
                 onChange={field.onChange}
               />
@@ -107,6 +111,8 @@ export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
             render={({ field }) => (
               <DatePicker
                 style={{ width: '100%' }}
+                defaultValue={moment(field.value).isValid() ? moment(field.value) : undefined}
+                format="DD/MM/YYYY"
                 placeholder="Seleccione la fecha de aprobación"
                 onChange={field.onChange}
               />
@@ -126,7 +132,7 @@ export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
 
       <Container width="50%">
         <Container display="flex" flexDirection="column" width="100%" justifyContent="space-between">
-          <FilesUpload />
+          {getValues('file') ? 'Hola' : <FilesUpload />}
         </Container>
 
         <Spacer size={30} />

@@ -33,7 +33,8 @@ export const Procedures = () => {
     setVisibleModalEdit(!visibleModalEdit)
   }
 
-  const onToggleModalEditFile = () => {
+  const onToggleModalEditFile = (fileCode: string) => {
+    setFileCodeSelected(fileCode)
     setVisibleModalEditFile(!visibleModalEditFile)
   }
 
@@ -46,43 +47,43 @@ export const Procedures = () => {
   }
 
   return (
-    <StyledProcessContainer display="flex" width="100%">
-      <StyledProceduresContainer
-        width="30%"
-        display="flex"
-        flexDirection="column"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <ProceduresProcessTitle />
+    <FilesProvider>
+      <StyledProcessContainer display="flex" width="100%">
+        <StyledProceduresContainer
+          width="30%"
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <ProceduresProcessTitle />
 
-        <ProceduresProcessTable
-          changeData={changeData}
-          updateData={onUpdateTable}
-          setProcedureSelected={setProcedureSelected}
-          setChangeDataFiles={onToggleChangeDataFiles}
-        />
+          <ProceduresProcessTable
+            changeData={changeData}
+            updateData={onUpdateTable}
+            setProcedureSelected={setProcedureSelected}
+            setChangeDataFiles={onToggleChangeDataFiles}
+          />
 
-        <StyledButtonAdd
-          icon={<Icon size={25} remixiconClass="ri-add-line" />}
-          $width="70%"
-          size="large"
-          title="Añadir documento"
-          onClick={onToggleModal}
-        />
+          <StyledButtonAdd
+            icon={<Icon size={25} remixiconClass="ri-add-line" />}
+            $width="70%"
+            size="large"
+            title="Añadir documento"
+            onClick={onToggleModal}
+          />
 
-        <ProceduresModalAdd updateData={onUpdateTable} visible={visibleModal} setVisible={onToggleModal} />
-      </StyledProceduresContainer>
+          <ProceduresModalAdd updateData={onUpdateTable} visible={visibleModal} setVisible={onToggleModal} />
+        </StyledProceduresContainer>
 
-      <Container width="70%">
-        <FilesProvider>
+        <Container width="70%">
           <FilesTitle procedure={procedureSelected} onToggleModal={onToggleModalEdit} />
 
           {procedureSelected ? (
             <FilesTable
               procedureSelectedUUID={procedureSelected.id ? procedureSelected.id : 0}
               changeDataSelected={changeDataFiles}
-              setFileCodeSelected={setFileCodeSelected}
+              onToggleFiles={onToggleModalEditFile}
             />
           ) : (
             <Container width="100%">
@@ -94,12 +95,14 @@ export const Procedures = () => {
             </Container>
           )}
 
-          <FilesModalEdit
-            visible={visibleModalEditFile}
-            setVisible={onToggleModalEditFile}
-            procedureId={procedureSelected?.id}
-            procedureCode={fileCodeSelected}
-          />
+          {visibleModalEditFile && (
+            <FilesModalEdit
+              visible={visibleModalEditFile}
+              setVisible={onToggleModalEditFile}
+              procedureId={procedureSelected?.id}
+              procedureCode={fileCodeSelected}
+            />
+          )}
 
           <ProceduresModalEdit
             visible={visibleModalEdit}
@@ -108,9 +111,9 @@ export const Procedures = () => {
             data={procedureSelected}
             setData={setProcedureSelected}
           />
-        </FilesProvider>
-      </Container>
-    </StyledProcessContainer>
+        </Container>
+      </StyledProcessContainer>
+    </FilesProvider>
   )
 }
 

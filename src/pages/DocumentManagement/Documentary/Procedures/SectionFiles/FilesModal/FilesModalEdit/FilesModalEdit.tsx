@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
 import { Modal, notification } from 'antd'
+import { useCallback, useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import styled, { css } from 'styled-components'
 import { useFilesContext } from '../../../../../../../shared/contexts/FilesProvider'
@@ -12,10 +12,11 @@ import FilesModalForm from '../FilesModalForm'
 import { DataTypeFiles } from '../FilesModalForm/FilesTable/FilesTable'
 import { AxiosResponse } from 'axios'
 import { getDocumentByCode } from '../../../../../../../shared/utils/services/documentsServices'
+import moment from 'moment'
 
 interface IFilesModalEdit {
   visible: boolean
-  setVisible: () => void
+  setVisible: (fileCode: string) => void
   procedureId: number | undefined
   procedureCode: string
 }
@@ -40,17 +41,31 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
   } = methods
 
   const onClose = () => {
-    setVisible()
+    setVisible('')
     reset()
   }
 
   const onGetAllIdsUsers = () => {
-    const id: number[] = []
+    const idsUsers: number[] = []
     users.forEach((user) => {
-      if (user.status === true) return id.push(user.id)
+      if (user.status === true) return idsUsers.push(user.id)
     })
 
-    setValue('permisos', id)
+    setValue('permisos', idsUsers)
+  }
+
+  const onSetAllSelectedUsers = (ids: number[]) => {
+    setUsers((prev) => {
+      const newUsers = prev.map((user) => {
+        if (ids.find((idUser) => idUser === user.id)) {
+          return { ...user, status: true }
+        }
+
+        return user
+      })
+
+      return newUsers
+    })
   }
 
   const onEdit = () => {}
@@ -62,21 +77,32 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
 
       if (result) {
         const { data } = result
-        console.log('🚀 ~ file: FilesModalEdit.tsx ~ line 65 ~ loadDataFiles ~ data', data)
-        /* const { error, documents } = data
+        const { error, document } = data
 
-        if (documents) {
-          const newDocuments = documents.map((document: any) => {
-            return { ...document, key: document.code }
-          })
-          setFiles(newDocuments)
+        if (document) {
+          setValue('id', document[0].id)
+          setValue('code', document[0].code)
+          setValue('title', document[0].title)
+          setValue('version', document[0].version)
+          setValue('effective_date', document[0].effective_date)
+          setValue('approval_date', document[0].approval_date)
+          setValue('title', document[0].title)
+          setValue('nro_pages', document[0].nro_pages)
+          setValue('procedure_id', document[0].procedure_id)
+          setValue('file', document[0].file)
+          setValue('status', document[0].status)
+          setValue('permisos', document[0].permisos)
+
+          if (users) {
+            onSetAllSelectedUsers(document[0] ? document[0].permisos : [])
+          }
         }
 
         if (error) {
           notification['warn']({
             message: error,
           })
-        } */
+        }
       }
 
       setLoading(false)
