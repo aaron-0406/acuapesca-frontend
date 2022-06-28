@@ -43,7 +43,6 @@ export const FilesModalAdd = ({ visible, setVisible, procedureId }: IFilesModalC
 
   const {
     reset,
-    handleSubmit,
     getValues,
     formState: { isValid },
     setValue,
@@ -142,8 +141,8 @@ export const FilesModalAdd = ({ visible, setVisible, procedureId }: IFilesModalC
       className="modal-files"
       footer={
         <Container display="flex" justifyContent="flex-end">
-          <Button type="secondary" title="Cancelar" onClick={onClose} />
-          <Button type="primary" title="Guardar" disabled={!isValid} onClick={handleSubmit(onSave)} loading={loading} />
+          <Button type="secondary" title="Cancelar" onClick={onClose} disabled={loading} />
+          <Button type="primary" title="Guardar" disabled={!isValid} onClick={onSave} loading={loading} />
         </Container>
       }
       destroyOnClose

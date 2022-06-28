@@ -134,7 +134,7 @@ export const FilesModalForm = ({ users, setUsers, editing = false }: IFilesModal
 
       <Container width="50%">
         <Container display="flex" flexDirection="column" width="100%" justifyContent="space-between">
-          {getValues('file') ? 'Hola' : <FilesUpload />}
+          <FilesUpload />
         </Container>
 
         <Spacer size={30} />

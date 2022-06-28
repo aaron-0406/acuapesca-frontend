@@ -2,7 +2,6 @@ import { Modal, notification } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import styled, { css } from 'styled-components'
-import { useFilesContext } from '../../../../../../../shared/contexts/FilesProvider'
 import Button from '../../../../../../../ui/Button'
 import Container from '../../../../../../../ui/Container'
 import Text from '../../../../../../../ui/Typography/Text'
@@ -25,9 +24,10 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
   const [loading, setLoading] = useState<boolean>(false)
   const [users, setUsers] = useState<DataTypeFiles[]>([])
 
+  const [fileNumber, setFileNumber] = useState<number>(1)
   const [filesModal, setFilesModal] = useState<IDocumentForm[]>([])
 
-  const { files, setFiles } = useFilesContext()
+  const [isAdd, setIsAdd] = useState<boolean>(false)
 
   const methods = useForm<IDocumentForm>({
     mode: 'all',
@@ -36,8 +36,6 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
 
   const {
     reset,
-    handleSubmit,
-    getValues,
     formState: { isValid },
     setValue,
   } = methods
@@ -70,7 +68,13 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
     })
   }
 
-  const onEdit = () => {}
+  const onEdit = () => {
+    console.log('edit')
+  }
+
+  const onAdd = () => {
+    console.log('add')
+  }
 
   const loadDataFiles = useCallback(async (procedureCode: string, procedureId: number | undefined) => {
     try {
@@ -106,23 +110,31 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
     }
   }, [])
 
-  const [fileNumber, setFileNumber] = useState(1)
-
   const onChangeFileNext = () => {
     const totalFiles = filesModal.length + 1
     if (fileNumber <= totalFiles && fileNumber < 3) {
-      if (fileNumber < 2) {
+      if (fileNumber < 2 && totalFiles > 2) {
         reset(filesModal[fileNumber])
         onSetAllSelectedUsers(filesModal[fileNumber].permisos)
       }
 
-      if (fileNumber === 2) {
-        reset({ code: filesModal[0].code })
-
+      if (totalFiles === 2 && fileNumber < 2) {
+        reset({ code: filesModal[0].code, file: undefined })
         onSetAllSelectedUsers([])
+        setIsAdd(true)
+      }
+
+      if (fileNumber === 2 && totalFiles > 2) {
+        reset({ code: filesModal[0].code })
+        onSetAllSelectedUsers([])
+        setIsAdd(true)
       }
 
       setFileNumber((prev) => {
+        if (totalFiles === 2 && fileNumber > 1 && fileNumber < 3) {
+          return prev
+        }
+
         return prev + 1
       })
     }
@@ -136,6 +148,7 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
       }
 
       setFileNumber((prev) => {
+        setIsAdd(false)
         return prev - 1
       })
     }
@@ -153,8 +166,14 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
       className="modal-files"
       footer={
         <Container display="flex" justifyContent="flex-end">
-          <Button type="secondary" title="Cancelar" onClick={onClose} />
-          <Button type="primary" title="Guardar" disabled={!isValid} onClick={handleSubmit(onEdit)} loading={loading} />
+          <Button type="secondary" title="Cancelar" disabled={loading} onClick={onClose} />
+          <Button
+            type="primary"
+            title="Guardar"
+            disabled={!isValid}
+            onClick={isAdd ? onAdd : onEdit}
+            loading={loading}
+          />
         </Container>
       }
       destroyOnClose

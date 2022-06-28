@@ -1,21 +1,38 @@
-import { message, Spin, Upload, UploadProps } from 'antd'
-import { UploadChangeParam } from 'antd/lib/upload'
-import { UploadFile } from 'antd/lib/upload/interface'
+import { useState } from 'react'
+import { message, Upload } from 'antd'
 import { Controller, useFormContext } from 'react-hook-form'
+import Button from '../../../../../../../../ui/Button'
 import Container from '../../../../../../../../ui/Container'
 import Icon from '../../../../../../../../ui/Icon'
 import InputLabel from '../../../../../../../../ui/InputLabel'
-import Text from '../../../../../../../../ui/Typography/Text'
+import Spacer from '../../../../../../../../ui/Spacer'
 import { IDocumentForm } from '../../../../../types/types'
+import FilesDocViewer from '../FilesDocViewer'
 
 const { Dragger } = Upload
 
 export const FilesUpload = () => {
+  const [visible, setVisible] = useState<boolean>(false)
+
   const { control, getValues } = useFormContext<IDocumentForm>()
+
+  const onCloseModal = () => {
+    setVisible(false)
+  }
+
+  const onDisplayModal = () => {
+    setVisible(true)
+  }
 
   return (
     <>
-      <InputLabel label="Archivo:" requirement="required" disabled={false} />
+      <Container display="flex" justifyContent="space-between">
+        <InputLabel label="Archivo:" requirement="required" disabled={false} />
+        {typeof getValues('file') === 'string' && (
+          <Button type="secondary" title="Ver Archivo" onClick={onDisplayModal} />
+        )}
+      </Container>
+      <Spacer size={8} />
       <Controller
         name="file"
         control={control}
@@ -27,8 +44,8 @@ export const FilesUpload = () => {
             customRequest={() => null}
             maxCount={1}
             height={130}
-            showUploadList={false}
             onChange={(info) => {
+              info.file.status = undefined
               const { name } = info.file
 
               if (name.length > 54) {
@@ -42,17 +59,14 @@ export const FilesUpload = () => {
               <Icon size={30} remixiconClass="ri-upload-2-fill" />
             </p>
 
-            {getValues('file') ? (
-              <Container className="ant-typography-ellipsis">
-                <Text textAlign="center" level={3} ellipsis>
-                  {getValues('file.name')}
-                </Text>
-              </Container>
-            ) : (
-              <p className="ant-upload-text">Haga clic o arrastre el archivo a esta área para cargarlo</p>
-            )}
+            <p className="ant-upload-text">Haga clic o arrastre el archivo a esta área para cargarlo</p>
           </Dragger>
         )}
+      />
+      <FilesDocViewer
+        visible={visible}
+        onClose={onCloseModal}
+        fileName={typeof getValues('file') === 'string' ? getValues('file').toString() : ''}
       />
     </>
   )
