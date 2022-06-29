@@ -76,7 +76,7 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
     storage.remove('auth_token')
     storage.remove('app_state')
     dispatch({ type: ActionTypes.Logout })
-    navigate('/login')
+    navigate(paths.guest.login)
   }
 
   return (

@@ -71,15 +71,15 @@ export const FilesModalAdd = ({ visible, setVisible, procedureId }: IFilesModalC
 
       const data = new FormData()
       data.append('title', getValues('title'))
-      data.append('version', getValues('version').toString())
+      data.append('version', `${getValues('version')}`)
       data.append('code', getValues('code'))
       data.append('effective_date', moment(getValues('effective_date')).format('YYYY[/]MM[/]DD'))
       data.append('approval_date', moment(getValues('approval_date')).format('YYYY[/]MM[/]DD'))
-      data.append('nro_pages', getValues('nro_pages').toString())
-      data.append('procedure_id', getValues('procedure_id').toString())
-      data.append('status', getValues('status').toString())
+      data.append('nro_pages', `${getValues('nro_pages')}`)
+      data.append('procedure_id', `${getValues('procedure_id')}`)
+      data.append('status', `${getValues('status')}`)
       data.append('file', getValues('file'))
-      data.append('permisos', `[${getValues('permisos').toString()}]`)
+      data.append('permisos', `[${getValues('permisos')}]`)
 
       const result: AxiosResponse<any, any> = await createDocument(data)
 

@@ -8,7 +8,7 @@ const FilesModalSchema = yup.object().shape({
   effective_date: yup.date().required(),
   approval_date: yup.date().required(),
   name: yup.string(),
-  nro_pages: yup.string(),
+  nro_pages: yup.number(),
   file: yup.mixed().required(),
 })
 

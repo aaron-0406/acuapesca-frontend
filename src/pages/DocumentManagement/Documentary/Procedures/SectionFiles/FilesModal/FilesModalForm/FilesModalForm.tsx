@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { DatePicker } from 'antd'
 import { Controller, useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
@@ -24,7 +23,6 @@ interface IFilesModalForm {
 export const FilesModalForm = ({ users, setUsers, editing = false }: IFilesModalForm) => {
   const {
     control,
-    getValues,
     formState: { errors },
   } = useFormContext<IDocumentForm>()
 
@@ -57,7 +55,7 @@ export const FilesModalForm = ({ users, setUsers, editing = false }: IFilesModal
             />
           )}
         />
-        <Spacer size={30} />
+        <Spacer size={25} />
         <Controller
           name="title"
           control={control}
@@ -72,7 +70,7 @@ export const FilesModalForm = ({ users, setUsers, editing = false }: IFilesModal
             />
           )}
         />
-        <Spacer size={30} />
+        <Spacer size={25} />
         <Controller
           name="version"
           control={control}
@@ -87,7 +85,7 @@ export const FilesModalForm = ({ users, setUsers, editing = false }: IFilesModal
             />
           )}
         />
-        <Spacer size={30} />
+        <Spacer size={25} />
         <Container display="flex" flexDirection="column" width="100%" justifyContent="space-between">
           <InputLabel label="Fecha de vigencia:" requirement="required" disabled={false} />
           <Controller
@@ -104,7 +102,7 @@ export const FilesModalForm = ({ users, setUsers, editing = false }: IFilesModal
             )}
           />
 
-          <Spacer size={30} />
+          <Spacer size={25} />
 
           <InputLabel label="Fecha de aprobación:" requirement="required" disabled={false} />
           <Controller
@@ -121,7 +119,7 @@ export const FilesModalForm = ({ users, setUsers, editing = false }: IFilesModal
             )}
           />
         </Container>
-        <Spacer size={30} />
+        <Spacer size={25} />
         <Container display="flex" width="100%" justifyContent="space-between">
           <InputLabel label="Disponibilidad" requirement="required" disabled={false} />
           <Controller
@@ -130,6 +128,23 @@ export const FilesModalForm = ({ users, setUsers, editing = false }: IFilesModal
             render={({ field }) => <Switch onChange={field.onChange} checked={field.value} />}
           />
         </Container>
+
+        <Spacer size={25} />
+
+        <Controller
+          name="nro_pages"
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              requirement="required"
+              placeholder="Ingrese la cantidad de páginas del documento"
+              label="Número de páginas:"
+              hasError={!!errors.nro_pages}
+              helperText={errors.nro_pages?.message}
+            />
+          )}
+        />
       </Container>
 
       <Container width="50%">

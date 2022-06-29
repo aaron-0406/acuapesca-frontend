@@ -40,7 +40,7 @@ export const FilesUpload = () => {
           <Dragger
             name="file"
             multiple={false}
-            accept=".pdf, .doc, .docx, .jpg, .jpeg, .png, .xlsx, .xls, .csv"
+            accept=".pdf, .jpg, .jpeg, .png"
             customRequest={() => null}
             maxCount={1}
             height={130}
