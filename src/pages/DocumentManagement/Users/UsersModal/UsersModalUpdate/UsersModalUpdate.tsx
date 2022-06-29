@@ -12,13 +12,13 @@ import { IUsersForm } from "../../types/types";
 import { UsersModalResolverEdit } from "../UsersModal.yup";
 import UsersModalForm from "../UsersModalForm";
 
-interface IProcessesModalUpdate {
+interface IUsersModalUpdate {
   visible: boolean;
   setVisible: () => void;
   updateData: () => void;
   idUser: number;
 }
-export const UsersModalUpdate = ({ visible, setVisible, updateData, idUser }: IProcessesModalUpdate) => {
+export const UsersModalUpdate = ({ visible, setVisible, updateData, idUser }: IUsersModalUpdate) => {
   const { users, setUsers } = useContext(UserCxt);
 
   const [loading, setLoading] = useState<boolean>(false);
