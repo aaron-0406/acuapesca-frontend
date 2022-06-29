@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { DatePicker } from 'antd'
 import { Controller, useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
@@ -13,13 +12,15 @@ import FilesTable from './FilesTable'
 import FilesUpload from './FilesUpload'
 import { DataTypeFiles } from './FilesTable/FilesTable'
 import { IRolsForm } from '../../../../../Rols/types/types'
+import moment from 'moment'
 
 interface IFilesModalForm {
   users: DataTypeFiles[]
   setUsers: React.Dispatch<React.SetStateAction<DataTypeFiles[]>>
+  editing?: boolean
 }
 
-export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
+export const FilesModalForm = ({ users, setUsers, editing = false }: IFilesModalForm) => {
   const {
     control,
     formState: { errors },
@@ -46,6 +47,7 @@ export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
             <Input
               {...field}
               requirement="required"
+              disabled={editing}
               placeholder="Ingrese el código del documento"
               label="Código:"
               hasError={!!errors.code}
@@ -53,7 +55,7 @@ export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
             />
           )}
         />
-        <Spacer size={30} />
+        <Spacer size={25} />
         <Controller
           name="title"
           control={control}
@@ -68,7 +70,7 @@ export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
             />
           )}
         />
-        <Spacer size={30} />
+        <Spacer size={25} />
         <Controller
           name="version"
           control={control}
@@ -83,7 +85,7 @@ export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
             />
           )}
         />
-        <Spacer size={30} />
+        <Spacer size={25} />
         <Container display="flex" flexDirection="column" width="100%" justifyContent="space-between">
           <InputLabel label="Fecha de vigencia:" requirement="required" disabled={false} />
           <Controller
@@ -92,13 +94,15 @@ export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
             render={({ field }) => (
               <DatePicker
                 style={{ width: '100%' }}
+                value={field.value ? moment(field.value) : undefined}
+                format="DD/MM/YYYY"
                 placeholder="Seleccione la fecha de vigencia"
                 onChange={field.onChange}
               />
             )}
           />
 
-          <Spacer size={30} />
+          <Spacer size={25} />
 
           <InputLabel label="Fecha de aprobación:" requirement="required" disabled={false} />
           <Controller
@@ -107,13 +111,15 @@ export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
             render={({ field }) => (
               <DatePicker
                 style={{ width: '100%' }}
+                value={field.value ? moment(field.value) : undefined}
+                format="DD/MM/YYYY"
                 placeholder="Seleccione la fecha de aprobación"
                 onChange={field.onChange}
               />
             )}
           />
         </Container>
-        <Spacer size={30} />
+        <Spacer size={25} />
         <Container display="flex" width="100%" justifyContent="space-between">
           <InputLabel label="Disponibilidad" requirement="required" disabled={false} />
           <Controller
@@ -122,6 +128,23 @@ export const FilesModalForm = ({ users, setUsers }: IFilesModalForm) => {
             render={({ field }) => <Switch onChange={field.onChange} checked={field.value} />}
           />
         </Container>
+
+        <Spacer size={25} />
+
+        <Controller
+          name="nro_pages"
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              requirement="required"
+              placeholder="Ingrese la cantidad de páginas del documento"
+              label="Número de páginas:"
+              hasError={!!errors.nro_pages}
+              helperText={errors.nro_pages?.message}
+            />
+          )}
+        />
       </Container>
 
       <Container width="50%">

@@ -8,7 +8,7 @@ interface FilesProviderProps {
 
 const FilesContext = React.createContext<FilesProviderProps | null>(null)
 
-export const FilesProvider = ({ children }: { children: JSX.Element[] }) => {
+export const FilesProvider = ({ children }: { children: JSX.Element }) => {
   const [files, setFiles] = useState<DocsDataType[]>([])
 
   const value: FilesProviderProps = {

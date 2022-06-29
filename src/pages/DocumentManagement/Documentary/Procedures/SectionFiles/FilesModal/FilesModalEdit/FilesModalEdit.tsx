@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
 import { Modal, notification } from 'antd'
+import { useCallback, useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import styled, { css } from 'styled-components'
-import { useFilesContext } from '../../../../../../../shared/contexts/FilesProvider'
 import Button from '../../../../../../../ui/Button'
 import Container from '../../../../../../../ui/Container'
 import Text from '../../../../../../../ui/Typography/Text'
@@ -11,11 +10,17 @@ import { FilesModalResolver } from '../FilesModal.yup'
 import FilesModalForm from '../FilesModalForm'
 import { DataTypeFiles } from '../FilesModalForm/FilesTable/FilesTable'
 import { AxiosResponse } from 'axios'
-import { getDocumentByCode } from '../../../../../../../shared/utils/services/documentsServices'
+import {
+  createDocument,
+  getDocumentByCode,
+  updateDocument,
+} from '../../../../../../../shared/utils/services/documentsServices'
+import Icon from '../../../../../../../ui/Icon'
+import moment from 'moment'
 
 interface IFilesModalEdit {
   visible: boolean
-  setVisible: () => void
+  setVisible: (fileCode: string) => void
   procedureId: number | undefined
   procedureCode: string
 }
@@ -24,36 +29,147 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
   const [loading, setLoading] = useState<boolean>(false)
   const [users, setUsers] = useState<DataTypeFiles[]>([])
 
-  const { files, setFiles } = useFilesContext()
+  const [fileNumber, setFileNumber] = useState<number>(1)
+  const [filesModal, setFilesModal] = useState<IDocumentForm[]>([])
+
+  const [isAdd, setIsAdd] = useState<boolean>(false)
 
   const methods = useForm<IDocumentForm>({
     mode: 'all',
     resolver: FilesModalResolver,
+    defaultValues: {
+      version: 0,
+      effective_date: '',
+      approval_date: '',
+      title: '',
+      nro_pages: 0,
+      status: false,
+      procedure_id: 0,
+    },
   })
 
   const {
     reset,
-    handleSubmit,
-    getValues,
     formState: { isValid },
     setValue,
+    getValues,
   } = methods
 
   const onClose = () => {
-    setVisible()
+    setVisible('')
     reset()
   }
 
   const onGetAllIdsUsers = () => {
-    const id: number[] = []
+    const idsUsers: number[] = []
     users.forEach((user) => {
-      if (user.status === true) return id.push(user.id)
+      if (user.status === true) return idsUsers.push(user.id)
     })
 
-    setValue('permisos', id)
+    setValue('permisos', idsUsers)
   }
 
-  const onEdit = () => {}
+  const onSetAllSelectedUsers = (ids: number[]) => {
+    setUsers((prev) => {
+      const newUsers = prev.map((user) => {
+        if (ids.find((idUser) => idUser === user.id)) {
+          return { ...user, status: true }
+        }
+
+        return { ...user, status: false }
+      })
+
+      return newUsers
+    })
+  }
+
+  const getFormData = () => {
+    const data = new FormData()
+    data.append('title', getValues('title'))
+    data.append('version', `${getValues('version')}`)
+    data.append('code', getValues('code'))
+    data.append('effective_date', moment(getValues('effective_date')).format('YYYY[/]MM[/]DD'))
+    data.append('approval_date', moment(getValues('approval_date')).format('YYYY[/]MM[/]DD'))
+    data.append('nro_pages', `${getValues('nro_pages')}`)
+    data.append('procedure_id', `${getValues('procedure_id')}`)
+    data.append('status', `${getValues('status')}`)
+    data.append('file', getValues('file'))
+    data.append('permisos', `[${getValues('permisos')}]`)
+
+    return data
+  }
+
+  const onEdit = async () => {
+    try {
+      setValue('procedure_id', procedureId ? procedureId : 0)
+      onGetAllIdsUsers()
+
+      setLoading(true)
+
+      const fileID = getValues('id')
+
+      const result: AxiosResponse<any, any> = await updateDocument(fileID ? fileID : 0, getFormData())
+
+      if (result) {
+        const { data } = result
+        const { success, error, document } = data
+
+        if (document && success) {
+          notification['success']({
+            message: success,
+          })
+          onClose()
+        }
+
+        if (error) {
+          notification['warn']({
+            message: error,
+          })
+        }
+      }
+      setLoading(false)
+    } catch (error: any) {
+      setLoading(false)
+      notification['error']({
+        message: error.message as string,
+      })
+    }
+  }
+
+  const onAdd = async () => {
+    try {
+      setValue('procedure_id', procedureId ? procedureId : 0)
+      onGetAllIdsUsers()
+
+      setLoading(true)
+
+      const result: AxiosResponse<any, any> = await createDocument(getFormData())
+
+      if (result) {
+        const { data } = result
+        const { success, error, document } = data
+
+        if (document && success) {
+          notification['success']({
+            message: success,
+          })
+          onClose()
+        }
+
+        if (error) {
+          notification['warn']({
+            message: error,
+          })
+        }
+      }
+      setLoading(false)
+    } catch (error: any) {
+      setLoading(false)
+      notification['error']({
+        message: error.message as string,
+      })
+    }
+  }
 
   const loadDataFiles = useCallback(async (procedureCode: string, procedureId: number | undefined) => {
     try {
@@ -62,21 +178,22 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
 
       if (result) {
         const { data } = result
-        console.log('🚀 ~ file: FilesModalEdit.tsx ~ line 65 ~ loadDataFiles ~ data', data)
-        /* const { error, documents } = data
+        const { error, document } = data
 
-        if (documents) {
-          const newDocuments = documents.map((document: any) => {
-            return { ...document, key: document.code }
-          })
-          setFiles(newDocuments)
+        if (document) {
+          setFilesModal(document)
+          reset(document[0])
+
+          if (users) {
+            onSetAllSelectedUsers(document[0] ? document[0].permisos : [])
+          }
         }
 
         if (error) {
           notification['warn']({
             message: error,
           })
-        } */
+        }
       }
 
       setLoading(false)
@@ -87,6 +204,50 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
       })
     }
   }, [])
+
+  const onChangeFileNext = () => {
+    const totalFiles = filesModal.length + 1
+    if (fileNumber <= totalFiles && fileNumber < 3) {
+      if (fileNumber < 2 && totalFiles > 2) {
+        reset(filesModal[fileNumber])
+        onSetAllSelectedUsers(filesModal[fileNumber].permisos)
+      }
+
+      if (totalFiles === 2 && fileNumber < 2) {
+        reset({ code: filesModal[0].code, file: undefined })
+        onSetAllSelectedUsers([])
+        setIsAdd(true)
+      }
+
+      if (fileNumber === 2 && totalFiles > 2) {
+        reset({ code: filesModal[0].code })
+        onSetAllSelectedUsers([])
+        setIsAdd(true)
+      }
+
+      setFileNumber((prev) => {
+        if (totalFiles === 2 && fileNumber > 1 && fileNumber < 3) {
+          return prev
+        }
+
+        return prev + 1
+      })
+    }
+  }
+
+  const onChangeFilePrevious = () => {
+    if (fileNumber > 1) {
+      if (fileNumber < 4) {
+        reset(filesModal[fileNumber - 2])
+        onSetAllSelectedUsers(filesModal[fileNumber - 2].permisos)
+      }
+
+      setFileNumber((prev) => {
+        setIsAdd(false)
+        return prev - 1
+      })
+    }
+  }
 
   useEffect(() => {
     loadDataFiles(procedureCode, procedureId)
@@ -100,19 +261,30 @@ export const FilesModalEdit = ({ visible, setVisible, procedureId, procedureCode
       className="modal-files"
       footer={
         <Container display="flex" justifyContent="flex-end">
-          <Button type="secondary" title="Cancelar" onClick={onClose} />
-          <Button type="primary" title="Guardar" disabled={!isValid} onClick={handleSubmit(onEdit)} loading={loading} />
+          <Button type="secondary" title="Cancelar" disabled={loading} onClick={onClose} />
+          <Button
+            type="primary"
+            title="Guardar"
+            disabled={!isValid}
+            onClick={isAdd ? onAdd : onEdit}
+            loading={loading}
+          />
         </Container>
       }
       destroyOnClose
     >
       <Container>
-        <StyledTitleContainer>
+        <StyledTitleContainer display="flex" justifyContent="space-between">
           <Text level={5}>Editar archivo</Text>
+          <Container display="flex" gap="15px">
+            <Button icon={<Icon remixiconClass="ri-arrow-left-s-line" />} onClick={onChangeFilePrevious} />
+            <Button type="secondary" title={`${fileNumber}`} />
+            <Button icon={<Icon remixiconClass="ri-arrow-right-s-line" />} onClick={onChangeFileNext} />
+          </Container>
         </StyledTitleContainer>
 
         <FormProvider {...methods}>
-          <FilesModalForm users={users} setUsers={setUsers} />
+          <FilesModalForm users={users} setUsers={setUsers} editing />
         </FormProvider>
       </Container>
     </StyledModal>

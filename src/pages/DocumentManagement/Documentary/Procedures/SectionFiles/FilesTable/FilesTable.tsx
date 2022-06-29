@@ -35,10 +35,10 @@ export interface DocsDataType {
 interface IFilesTableProps {
   changeDataSelected: boolean
   procedureSelectedUUID: number
-  setFileCodeSelected: React.Dispatch<React.SetStateAction<string>>
+  onToggleFiles: (fileCode: string) => void
 }
 
-export const FilesTable = ({ changeDataSelected, procedureSelectedUUID, setFileCodeSelected }: IFilesTableProps) => {
+export const FilesTable = ({ changeDataSelected, procedureSelectedUUID, onToggleFiles }: IFilesTableProps) => {
   const columns: ColumnsType<DocsDataType> = [
     {
       title: (
@@ -95,7 +95,7 @@ export const FilesTable = ({ changeDataSelected, procedureSelectedUUID, setFileC
       width: '200px',
       render: (data) => (
         <Text textAlign="center" weight="bold" level={3}>
-          {moment(data.docs[0].effective_date).format('YYYY[/]MM[/]DD')}
+          {moment(data.docs[0].effective_date).format('DD[/]MM[/]YYYY')}
         </Text>
       ),
     },
@@ -113,7 +113,7 @@ export const FilesTable = ({ changeDataSelected, procedureSelectedUUID, setFileC
           <Button onClick={() => {}} icon={<Icon remixiconClass="ri-download-2-fill" />} />
           <StyledButtonMore
             onClick={() => {
-              setFileCodeSelected(data.code)
+              onToggleFiles(data.code)
             }}
             icon={<Icon remixiconClass="ri-more-line" />}
           />

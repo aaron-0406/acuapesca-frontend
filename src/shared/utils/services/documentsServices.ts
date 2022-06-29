@@ -17,6 +17,6 @@ export const createDocument = async (document: FormData) => {
   return await axiosClient.post(urlApi, document, { headers: { 'Content-Type': 'multipart/form-data' } })
 }
 
-export const updateDocument = async (id: number | undefined, procedure: IDocumentForm) => {
-  return await axiosClient.put(`${urlApi}/${id}`, procedure)
+export const updateDocument = async (id: number, document: FormData) => {
+  return await axiosClient.put(`${urlApi}/${id}`, document, { headers: { 'Content-Type': 'multipart/form-data' } })
 }

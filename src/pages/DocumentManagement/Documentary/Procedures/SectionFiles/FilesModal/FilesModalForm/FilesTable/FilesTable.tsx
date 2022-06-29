@@ -9,6 +9,8 @@ import { notification, Spin } from 'antd'
 import { useEffect, useState } from 'react'
 import EmptyState from '../../../../../../../../ui/EmptyState'
 import styled, { css } from 'styled-components'
+import { IDocumentForm } from '../../../../../types/types'
+import { useFormContext } from 'react-hook-form'
 
 export interface DataTypeFiles {
   key: string
@@ -23,10 +25,12 @@ export interface DataTypeFiles {
 
 interface IFilesTableProps {
   users: DataTypeFiles[]
-  setUsers: (users: DataTypeFiles[]) => void
+  setUsers: React.Dispatch<React.SetStateAction<DataTypeFiles[]>>
 }
 
 export const FilesTable = ({ users, setUsers }: IFilesTableProps) => {
+  const { getValues } = useFormContext<IDocumentForm>()
+
   const columns: ColumnsType<DataTypeFiles> = [
     {
       title: (
@@ -125,6 +129,20 @@ export const FilesTable = ({ users, setUsers }: IFilesTableProps) => {
         })
 
         setUsers(newUsers)
+
+        if (getValues('permisos')) {
+          setUsers(() => {
+            const users = newUsers.map((user: DataTypeFiles) => {
+              if (getValues('permisos').find((idUser) => idUser === user.id)) {
+                return { ...user, status: true }
+              }
+
+              return user
+            })
+
+            return users
+          })
+        }
       }
 
       setLoading(false)
