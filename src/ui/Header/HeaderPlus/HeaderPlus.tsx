@@ -7,7 +7,7 @@ import Text from '../../Typography/Text'
 
 interface IHeaderPlusProps {
   title: string
-  setVisibleModal: () => void
+  setVisibleModal?: () => void
   plusHeader?: React.ReactNode
   disabledButton: boolean
 }
