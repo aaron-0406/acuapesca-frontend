@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { FilesProvider } from '../../../../shared/contexts/FilesProvider'
+import { useGeneralContext } from '../../../../shared/contexts/StoreProvider'
 import Button from '../../../../ui/Button'
 import Container from '../../../../ui/Container'
 import EmptyState from '../../../../ui/EmptyState'
@@ -24,6 +25,14 @@ export const Procedures = () => {
   const [visibleModal, setVisibleModal] = useState<boolean>(false)
   const [visibleModalEdit, setVisibleModalEdit] = useState<boolean>(false)
   const [visibleModalEditFile, setVisibleModalEditFile] = useState<boolean>(false)
+
+  const {
+    state: {
+      auth: {
+        admin: { tag },
+      },
+    },
+  } = useGeneralContext()
 
   const onToggleModal = () => {
     setVisibleModal(!visibleModal)
@@ -65,13 +74,17 @@ export const Procedures = () => {
             setChangeDataFiles={onToggleChangeDataFiles}
           />
 
-          <StyledButtonAdd
-            icon={<Icon size={25} remixiconClass="ri-add-line" />}
-            $width="70%"
-            size="large"
-            title="Añadir documento"
-            onClick={onToggleModal}
-          />
+          {tag === 'Editor' ? (
+            <StyledButtonAdd
+              icon={<Icon size={25} remixiconClass="ri-add-line" />}
+              $width="70%"
+              size="large"
+              title="Añadir documento"
+              onClick={onToggleModal}
+            />
+          ) : (
+            <div></div>
+          )}
 
           <ProceduresModalAdd updateData={onUpdateTable} visible={visibleModal} setVisible={onToggleModal} />
         </StyledProceduresContainer>

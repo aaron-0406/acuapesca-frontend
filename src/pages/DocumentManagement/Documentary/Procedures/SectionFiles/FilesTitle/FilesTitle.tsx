@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useGeneralContext } from '../../../../../../shared/contexts/StoreProvider'
 import Button from '../../../../../../ui/Button'
 import HeaderPlus from '../../../../../../ui/Header/HeaderPlus'
 import Icon from '../../../../../../ui/Icon'
@@ -11,6 +12,14 @@ interface IFileTitleProps {
 }
 
 export const FilesTitle = ({ procedure, onToggleModal }: IFileTitleProps) => {
+  const {
+    state: {
+      auth: {
+        admin: { tag },
+      },
+    },
+  } = useGeneralContext()
+
   const [visibleModalFiles, setvisibleModalFiles] = useState<boolean>(false)
 
   const onToggleModalFiles = () => {
@@ -24,9 +33,10 @@ export const FilesTitle = ({ procedure, onToggleModal }: IFileTitleProps) => {
         disabledButton={!procedure}
         setVisibleModal={onToggleModalFiles}
         plusHeader={
-          procedure?.title && (
+          procedure?.title &&
+          (tag === 'Editor' ? (
             <Button type="secondary" icon={<Icon remixiconClass="ri-more-fill" />} onClick={onToggleModal} />
-          )
+          ) : null)
         }
       />
       <FilesModalAdd procedureId={procedure?.id} visible={visibleModalFiles} setVisible={onToggleModalFiles} />
