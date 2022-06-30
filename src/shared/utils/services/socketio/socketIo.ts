@@ -1,40 +1,44 @@
-import { io, Socket } from "socket.io-client";
-import { API } from "../../constant/api";
-import { getAuthToken } from "../../storage/auth";
+import { io, Socket } from 'socket.io-client'
+import { API } from '../../constant/api'
 
-const auth_token = getAuthToken();
-export const socket: Socket = io(API, {
-  auth: {
-    token: auth_token,
-  },
-  extraHeaders: { Authorization: `Bearer ${auth_token}` },
-});
+export let socket: Socket
+export const connectSocket = (token: string) => {
+  socket = io(API, {
+    auth: {
+      token: token,
+    },
+    extraHeaders: { Authorization: `Bearer ${token}` },
+  })
+}
+export const disconnectSocket = () => {
+  socket.close()
+}
 export const socketsRoutes = {
   sendMessage: {
-    emit: "client:sendMessage",
-    on: "server:sendMessage",
+    emit: 'client:sendMessage',
+    on: 'server:sendMessage',
   },
   changeChannel: {
-    emit: "client:changeChat",
+    emit: 'client:changeChat',
   },
   view: {
-    emit: "client:viewMessage",
-    on: "server:viewMessage",
+    emit: 'client:viewMessage',
+    on: 'server:viewMessage',
   },
   received: {
-    emit: "server:receivedMessage",
-    on: "client:receivedMessage",
+    emit: 'server:receivedMessage',
+    on: 'client:receivedMessage',
   },
   typing: {
-    emit: "client:typing",
-    on: "server:typing",
+    emit: 'client:typing',
+    on: 'server:typing',
   },
   newUserConnected: {
-    emit: "client:sendUsers",
-    on: "server:sendUsers",
+    emit: 'client:sendUsers',
+    on: 'server:sendUsers',
   },
   userDisconnected: {
-    emit: "client:disconnectUser",
-    on: "server:disconnectUser",
+    emit: 'client:disconnectUser',
+    on: 'server:disconnectUser',
   },
-};
+}
