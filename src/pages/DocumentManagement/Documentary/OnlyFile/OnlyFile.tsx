@@ -8,7 +8,6 @@ import paths from '../../../../shared/routes/paths'
 import { API } from '../../../../shared/utils/constant/api'
 import { getDocumentByID } from '../../../../shared/utils/services/documentsServices'
 import Button from '../../../../ui/Button'
-import Container from '../../../../ui/Container'
 import HeaderPlus from '../../../../ui/Header/HeaderPlus'
 import Icon from '../../../../ui/Icon'
 
@@ -50,7 +49,7 @@ export const OnlyFile = () => {
         })
       }
     },
-    [setdocs],
+    [setdocs, id],
   )
 
   useEffect(() => {
