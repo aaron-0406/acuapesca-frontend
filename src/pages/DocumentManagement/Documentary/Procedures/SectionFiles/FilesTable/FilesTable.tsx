@@ -5,6 +5,7 @@ import moment from 'moment'
 import { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { useFilesContext } from '../../../../../../shared/contexts/FilesProvider'
+import { useGeneralContext } from '../../../../../../shared/contexts/StoreProvider'
 import { getDocuments } from '../../../../../../shared/utils/services/documentsServices'
 import Button from '../../../../../../ui/Button'
 import Container from '../../../../../../ui/Container'
@@ -39,6 +40,14 @@ interface IFilesTableProps {
 }
 
 export const FilesTable = ({ changeDataSelected, procedureSelectedUUID, onToggleFiles }: IFilesTableProps) => {
+  const {
+    state: {
+      auth: {
+        admin: { tag },
+      },
+    },
+  } = useGeneralContext()
+
   const columns: ColumnsType<DocsDataType> = [
     {
       title: (
@@ -110,13 +119,15 @@ export const FilesTable = ({ changeDataSelected, procedureSelectedUUID, onToggle
       key: 'action',
       render: (data) => (
         <Container display="flex" justifyContent="space-around">
-          <Button onClick={() => {}} icon={<Icon remixiconClass="ri-download-2-fill" />} />
-          <StyledButtonMore
-            onClick={() => {
-              onToggleFiles(data.code)
-            }}
-            icon={<Icon remixiconClass="ri-more-line" />}
-          />
+          <Button onClick={() => {}} icon={<Icon remixiconClass="ri-arrow-right-fill" />} />
+          {tag === 'Editor' ? (
+            <StyledButtonMore
+              onClick={() => {
+                onToggleFiles(data.code)
+              }}
+              icon={<Icon remixiconClass="ri-more-line" />}
+            />
+          ) : null}
         </Container>
       ),
     },

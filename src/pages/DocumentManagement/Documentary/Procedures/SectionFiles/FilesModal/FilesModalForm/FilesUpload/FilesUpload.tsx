@@ -20,6 +20,8 @@ export const FilesUpload = () => {
     setVisible(false)
   }
 
+  const typeFile: string = getValues('file') as string
+
   const onDisplayModal = () => {
     setVisible(true)
   }
@@ -28,9 +30,14 @@ export const FilesUpload = () => {
     <>
       <Container display="flex" justifyContent="space-between">
         <InputLabel label="Archivo:" requirement="required" disabled={false} />
-        {typeof getValues('file') === 'string' && (
-          <Button type="secondary" title="Ver Archivo" onClick={onDisplayModal} />
-        )}
+
+        {typeof getValues('file') === 'string' &&
+          (typeFile.endsWith('.pdf') ||
+          typeFile.endsWith('.jpg') ||
+          typeFile.endsWith('.jpeg') ||
+          typeFile.endsWith('.png') ? (
+            <Button type="secondary" title="Ver Archivo" onClick={onDisplayModal} />
+          ) : null)}
       </Container>
       <Spacer size={8} />
       <Controller
@@ -40,7 +47,7 @@ export const FilesUpload = () => {
           <Dragger
             name="file"
             multiple={false}
-            accept=".pdf, .jpg, .jpeg, .png"
+            accept=".pdf, .jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .csv"
             customRequest={() => null}
             maxCount={1}
             height={130}
