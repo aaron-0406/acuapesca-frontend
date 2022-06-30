@@ -8,6 +8,7 @@ import InputLabel from '../../../../../../../../ui/InputLabel'
 import Spacer from '../../../../../../../../ui/Spacer'
 import { IDocumentForm } from '../../../../../types/types'
 import FilesDocViewer from '../FilesDocViewer'
+import { API } from '../../../../../../../../shared/utils/constant/api'
 
 const { Dragger } = Upload
 
@@ -37,7 +38,11 @@ export const FilesUpload = () => {
           typeFile.endsWith('.jpeg') ||
           typeFile.endsWith('.png') ? (
             <Button type="secondary" title="Ver Archivo" onClick={onDisplayModal} />
-          ) : null)}
+          ) : (
+            <a rel="noreferrer" target="_blank" href={`${API}/docs/${typeFile}`}>
+              <Button title="Descargar archivo" icon={<Icon remixiconClass="ri-download-cloud-fill" />} />
+            </a>
+          ))}
       </Container>
       <Spacer size={8} />
       <Controller
