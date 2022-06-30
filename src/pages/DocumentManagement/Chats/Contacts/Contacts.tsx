@@ -1,28 +1,28 @@
-import { useContext } from "react";
-import styled, { css } from "styled-components";
-import { ChatCxt } from "../ChatContext";
-import { IContact } from "../types/tyes";
-import Contact from "./Contact";
+import { useContext } from 'react'
+import styled, { css } from 'styled-components'
+import { ChatCxt } from '../ChatContext'
+import { IContact } from '../types/tyes'
+import Contact from './Contact'
 
 export const Contacts = () => {
-  const { contacts, contactTyping } = useContext(ChatCxt);
+  const { contacts, contactTyping } = useContext(ChatCxt)
 
   return (
     <StyledWrapper>
       {contacts.map((contacto: IContact, i) => {
-        return <Contact key={contacto.id} contactTypingState={contactTyping[i]} contactProp={contacto}></Contact>;
+        return <Contact key={contacto.id} contactTypingState={contactTyping[i]} contactProp={contacto}></Contact>
       })}
     </StyledWrapper>
-  );
-};
+  )
+}
 
 const StyledWrapper = styled.div`
   ${({ theme }) =>
     css`
-      background-color: ${theme.colors["$color-transparent-3"]};
+      background-color: ${theme.colors['$color-transparent-3']};
       &::-webkit-scrollbar-thumb {
         -webkit-appearance: none;
-        background-color: ${theme.colors["$color-primary-2"]};
+        background-color: ${theme.colors['$color-primary-2']};
         width: 5px;
         height: 5px;
       }
@@ -35,4 +35,5 @@ const StyledWrapper = styled.div`
   flex-direction: column;
   height: calc(100vh - 49px);
   overflow-y: scroll;
-`;
+  overflow-x: hidden;
+`

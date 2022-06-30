@@ -17,6 +17,7 @@ export const ChatProvider = ({ children }: { children: JSX.Element }) => {
   const [contacts, setContacts] = useState<IContact[]>([])
   const [contact, setContact] = useState<IContact>({ fullname: '', photo: '', messages: [] })
   const [typingState, setTypingState] = useState<boolean>(false)
+  const [typingStateMe, setTypingStateMe] = useState<boolean>(false)
   const [onlineState, setOnlineState] = useState<boolean>(false)
   const [contactTyping, setContactTyping] = useState<IContactStatus[]>([])
   const token = getAuthToken()
@@ -44,13 +45,9 @@ export const ChatProvider = ({ children }: { children: JSX.Element }) => {
   }
 
   useEffect(() => {
-    console.log('conectando')
-    console.log(socket)
     if (socket?.connected) return
     connectSocket(auth_token)
     return () => {
-      console.log('chauxd')
-      console.log(socket)
       disconnectSocket()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,6 +109,26 @@ export const ChatProvider = ({ children }: { children: JSX.Element }) => {
         return { ...item, online: false }
       }),
     )
+    setContacts(
+      users.map((item: IContact) => {
+        if (ids.includes(parseInt(`${item.id}`))) {
+          const newMessages = item.messages.map((itemMessage: IMessage) => {
+            if (itemMessage.status === 1) return { ...itemMessage, status: 2 }
+            return itemMessage
+          })
+          item.messages = newMessages
+          return item
+        }
+        return item
+      }),
+    )
+    if (ids.includes(parseInt(`${contact.id}`))) {
+      const newMessages = contact.messages.map((itemMessage: IMessage) => {
+        if (itemMessage.status === 1) return { ...itemMessage, status: 2 }
+        return itemMessage
+      })
+      setContact({ ...contact, messages: newMessages })
+    }
   }
 
   const userDisconnected = (body: any) => {
@@ -193,7 +210,12 @@ export const ChatProvider = ({ children }: { children: JSX.Element }) => {
 
   const typing = () => {
     if (!socket) return
+    if (typingStateMe) return
+    setTypingStateMe(true)
     socket.emit(socketsRoutes.typing.emit, contact)
+    setTimeout(() => {
+      setTypingStateMe(false)
+    }, 3000)
   }
 
   return (
