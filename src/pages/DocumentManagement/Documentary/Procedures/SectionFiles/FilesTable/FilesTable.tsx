@@ -3,9 +3,11 @@ import Table, { ColumnsType } from 'antd/lib/table'
 import { AxiosResponse } from 'axios'
 import moment from 'moment'
 import { useCallback, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 import { useFilesContext } from '../../../../../../shared/contexts/FilesProvider'
 import { useGeneralContext } from '../../../../../../shared/contexts/StoreProvider'
+import paths from '../../../../../../shared/routes/paths'
 import { getDocuments } from '../../../../../../shared/utils/services/documentsServices'
 import Button from '../../../../../../ui/Button'
 import Container from '../../../../../../ui/Container'
@@ -40,6 +42,8 @@ interface IFilesTableProps {
 }
 
 export const FilesTable = ({ changeDataSelected, procedureSelectedUUID, onToggleFiles }: IFilesTableProps) => {
+  const navigate = useNavigate()
+
   const {
     state: {
       auth: {
@@ -119,7 +123,12 @@ export const FilesTable = ({ changeDataSelected, procedureSelectedUUID, onToggle
       key: 'action',
       render: (data) => (
         <Container display="flex" justifyContent="space-around">
-          <Button onClick={() => {}} icon={<Icon remixiconClass="ri-arrow-right-fill" />} />
+          <Button
+            onClick={() => {
+              navigate(paths.documentary.verSoloArchivo(`${data.docs[0].id ? data.docs[0].id : '0'}`))
+            }}
+            icon={<Icon remixiconClass="ri-arrow-right-fill" />}
+          />
           {tag === 'Editor' ? (
             <StyledButtonMore
               onClick={() => {

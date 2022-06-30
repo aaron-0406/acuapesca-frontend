@@ -13,6 +13,10 @@ export const getDocumentByCode = async (code: string, procedureId: number) => {
   return await axiosClient.get(`${urlApi}/single/${code}/${procedureId}`)
 }
 
+export const getDocumentByID = async (id: string) => {
+  return await axiosClient.get(`${urlApi}/only/${id}`)
+}
+
 export const createDocument = async (document: FormData) => {
   return await axiosClient.post(urlApi, document, { headers: { 'Content-Type': 'multipart/form-data' } })
 }
