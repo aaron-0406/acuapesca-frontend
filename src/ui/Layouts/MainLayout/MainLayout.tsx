@@ -21,6 +21,15 @@ import { ActionTypes } from '../../../pages/Login/actions'
 type MenuItem = Required<MenuProps>['items'][number]
 
 export const MainLayout = ({ children }: { children: JSX.Element }) => {
+  const {
+    dispatch,
+    state: {
+      auth: {
+        admin: { tag },
+      },
+    },
+  } = useGeneralContext()
+
   function getItem(
     label: React.ReactNode,
     key: React.Key,
@@ -37,20 +46,24 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
     } as MenuItem
   }
   const items: MenuProps['items'] = [
-    getItem(
-      'ROLES',
-      '1',
-      <Link to={paths.documentary.roles}>
-        <Icon remixiconClass="ri-shield-keyhole-fill" />
-      </Link>,
-    ),
-    getItem(
-      'USUARIOS',
-      '2',
-      <Link to={paths.documentary.users}>
-        <Icon remixiconClass="ri-user-3-fill" />
-      </Link>,
-    ),
+    tag === 'Editor'
+      ? getItem(
+          'ROLES',
+          '1',
+          <Link to={paths.documentary.roles}>
+            <Icon remixiconClass="ri-shield-keyhole-fill" />
+          </Link>,
+        )
+      : null,
+    tag === 'Editor'
+      ? getItem(
+          'USUARIOS',
+          '2',
+          <Link to={paths.documentary.users}>
+            <Icon remixiconClass="ri-user-3-fill" />
+          </Link>,
+        )
+      : null,
     getItem(
       'DOCUMENTOS',
       '3',
@@ -66,7 +79,7 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
       </Link>,
     ),
   ]
-  const { dispatch } = useGeneralContext()
+
   const navigate = useNavigate()
   const token = getAuthToken()
   const user = jwtDecode<any>(`${token}`)
