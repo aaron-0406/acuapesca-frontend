@@ -1,5 +1,5 @@
 import DocViewer, { DocViewerRenderers, IDocument } from '@cyntler/react-doc-viewer'
-import { notification } from 'antd'
+import { notification, Spin } from 'antd'
 import { AxiosResponse } from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -16,6 +16,7 @@ export const OnlyFile = () => {
   const [loading, setLoading] = useState(false)
   const [idProcess, setIdProcess] = useState('')
   const [docs, setdocs] = useState<IDocument[]>([])
+  console.log('🚀 ~ file: OnlyFile.tsx ~ line 19 ~ OnlyFile ~ docs', docs[0]?.fileName)
 
   const { id } = useParams()
   const navigate = useNavigate()
@@ -55,7 +56,15 @@ export const OnlyFile = () => {
 
   useEffect(() => {
     loadFileData(id)
-  }, [loadFileData])
+  }, [loadFileData, id])
+
+  if (loading) {
+    return (
+      <StyledContainerLoading display="flex" width="100%" justifyContent="center" alignItems="center">
+        <Spin size="large" />
+      </StyledContainerLoading>
+    )
+  }
 
   return (
     <StyledContainer>
@@ -76,7 +85,18 @@ export const OnlyFile = () => {
         }
         disabledButton={false}
       />
-      <DocViewer pluginRenderers={DocViewerRenderers} documents={docs} />
+      {docs[0]?.uri.endsWith('.pdf') ||
+      docs[0]?.uri.endsWith('.jpg') ||
+      docs[0]?.uri.endsWith('.jpeg') ||
+      docs[0]?.uri.endsWith('.png') ? (
+        <DocViewer pluginRenderers={DocViewerRenderers} documents={docs} />
+      ) : (
+        <StyledContainerButton width="100%" display="flex" justifyContent="center" alignItems="center">
+          <a rel="noreferrer" target="_blank" href={docs[0]?.uri}>
+            <Button title="Descargar archivo" size="large" icon={<Icon remixiconClass="ri-download-cloud-fill" />} />
+          </a>
+        </StyledContainerButton>
+      )}
     </StyledContainer>
   )
 }
@@ -85,4 +105,12 @@ const StyledContainer = styled.div`
   width: 100%;
   height: 100vh;
   overflow-y: scroll;
+`
+
+const StyledContainerButton = styled(Container)`
+  height: calc(100vh - 49px);
+`
+
+const StyledContainerLoading = styled(Container)`
+  height: 100vh !important;
 `
