@@ -1,63 +1,74 @@
-import { IMessage } from "../types/tyes";
-import { getAuthToken } from "../../../../shared/utils/storage/auth";
-import jwtDecode from "jwt-decode";
-import styled, { css } from "styled-components";
-import { useEffect, useRef } from "react";
-import moment from "moment";
-import Container from "../../../../ui/Container";
-import Icon from "../../../../ui/Icon";
+import { IMessage } from '../types/tyes'
+import { getAuthToken } from '../../../../shared/utils/storage/auth'
+import jwtDecode from 'jwt-decode'
+import styled, { css } from 'styled-components'
+import { useEffect, useRef } from 'react'
+import moment from 'moment'
+import Container from '../../../../ui/Container'
+import Icon from '../../../../ui/Icon'
 interface Props {
-  message: IMessage;
+  message: IMessage
 }
 export const Message = ({ message }: Props) => {
-  const token = getAuthToken();
-  const user = jwtDecode<any>(`${token}`);
-  const messageRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (messageRef.current) messageRef.current.innerHTML = message.text.replace("\n", "</br>");
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const token = getAuthToken()
+  const user = jwtDecode<any>(`${token}`)
 
-  let MessageItem = LeftMesaggeStyled;
-  let justify = "flex-start";
-  let icono = 0;
+  let MessageItem = LeftMesaggeStyled
+  let justify = 'flex-start'
+  let icono = 0
   if (message.id_emisor === user.id) {
-    icono = message.status;
-    MessageItem = RightMesaggeStyled;
-    justify = "flex-end";
+    icono = message.status
+    MessageItem = RightMesaggeStyled
+    justify = 'flex-end'
   }
 
   return (
     <Container display="flex" width="100%" justifyContent={justify}>
       <MessageItem>
-        <StyledTextArea className={message.id_emisor === user.id ? "right" : "left"} ref={messageRef}></StyledTextArea>
+        <StyledTextArea className={message.id_emisor === user.id ? 'right' : 'left'}>{message.text}</StyledTextArea>
         <TimeWrapper>
-          <div>{moment(message.date).format("LT")}</div>
-          {icono === 1 && <Icon remixiconClass="ri-check-line" alignSelf={"flex-end"} verticalAlign={"flex-end"} size={12}></Icon>}
-          {icono === 2 && <Icon remixiconClass="ri-check-double-line" alignSelf={"flex-end"} verticalAlign={"flex-end"} size={12}></Icon>}
-          {icono === 3 && <Icon color="cyan5" remixiconClass="ri-check-double-line" alignSelf={"flex-end"} verticalAlign={"flex-end"} size={12}></Icon>}
+          <div>{moment(message.date).format('LT')}</div>
+          {icono === 1 && (
+            <Icon remixiconClass="ri-check-line" alignSelf={'flex-end'} verticalAlign={'flex-end'} size={12}></Icon>
+          )}
+          {icono === 2 && (
+            <Icon
+              remixiconClass="ri-check-double-line"
+              alignSelf={'flex-end'}
+              verticalAlign={'flex-end'}
+              size={12}
+            ></Icon>
+          )}
+          {icono === 3 && (
+            <Icon
+              color="cyan5"
+              remixiconClass="ri-check-double-line"
+              alignSelf={'flex-end'}
+              verticalAlign={'flex-end'}
+              size={12}
+            ></Icon>
+          )}
         </TimeWrapper>
       </MessageItem>
     </Container>
-  );
-};
+  )
+}
 const StyledTextArea = styled.div`
   color: #fff;
   overflow-wrap: break-word;
   max-width: 400px;
   margin-bottom: 4px;
   ${(props) =>
-    props.className === "right" &&
+    props.className === 'right' &&
     css`
       margin-right: 70px;
     `}
   ${(props) =>
-    props.className === "left" &&
+    props.className === 'left' &&
     css`
       margin-right: 60px;
     `}
-`;
+`
 const TimeWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -68,11 +79,11 @@ const TimeWrapper = styled.div`
   right: 10px;
   gap: 4px;
   /* transform: translate(5px, 9px); */
-`;
+`
 
 const LeftMesaggeStyled = styled.div`
   ::after {
-    content: " ";
+    content: ' ';
     position: absolute;
     top: 0;
     left: -10px;
@@ -94,11 +105,11 @@ const LeftMesaggeStyled = styled.div`
   flex-direction: row;
   gap: 25px;
   position: relative;
-`;
+`
 
 const RightMesaggeStyled = styled.div`
   ::after {
-    content: " ";
+    content: ' ';
     position: absolute;
     top: 0;
     right: -10px;
@@ -120,4 +131,4 @@ const RightMesaggeStyled = styled.div`
   flex-direction: row;
   gap: 25px;
   position: relative;
-`;
+`

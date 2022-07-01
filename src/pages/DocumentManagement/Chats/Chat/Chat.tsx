@@ -1,9 +1,11 @@
+import { Spin } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
 import jwtDecode from 'jwt-decode'
 import moment from 'moment'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { API } from '../../../../shared/utils/constant/api'
+import { getMessagesByPage } from '../../../../shared/utils/services/chatsServices'
 import { getAuthToken } from '../../../../shared/utils/storage/auth'
 import Container from '../../../../ui/Container'
 import EmptyState from '../../../../ui/EmptyState'
@@ -11,23 +13,47 @@ import Icon from '../../../../ui/Icon'
 import Text from '../../../../ui/Typography/Text'
 import { ChatCxt } from '../ChatContext'
 import Message from '../Message'
-import { IMessage } from '../types/tyes'
+import { IContact, IMessage } from '../types/tyes'
 
 export const Chat = () => {
   const [message, setMessage] = useState<string>('')
-  const { contact, sendMessage, typing, typingState, onlineState } = useContext(ChatCxt)
+  const [loadingMessagesPage, setLoadingMessagesPage] = useState(false)
+  const [isThereMoreMessages, setIsThereMoreMessages] = useState(true)
+  const [trigger, setTrigger] = useState(0)
+  const POSITION_SCROLL = 887
+  const { contact, sendMessage, contacts, setContacts, typing, typingState, onlineState, setContact } =
+    useContext(ChatCxt)
   const token = getAuthToken()
+
   const user = jwtDecode<any>(`${token}`)
   const bodyChatRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (bodyChatRef.current) bodyChatRef.current.scrollTop = bodyChatRef.current.scrollHeight
-  }, [contact])
+    if (bodyChatRef.current) {
+      bodyChatRef.current.scrollTop = bodyChatRef.current.scrollHeight
+      setTrigger(trigger + 1)
+    }
+    return () => {
+      setIsThereMoreMessages(true)
+      setTrigger(0)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contact.id])
+
+  useEffect(() => {
+    if (trigger === 0) return
+    if (bodyChatRef.current) {
+      bodyChatRef.current.scrollTop = POSITION_SCROLL
+      setTrigger(trigger + 1)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contact.messages])
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value)
     typing()
   }
+
   const handleTyping = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (!e.shiftKey && e.code === 'Enter') handleSubmit()
   }
@@ -43,6 +69,26 @@ export const Chat = () => {
     }
     setMessage('')
     sendMessage(newMessage)
+  }
+
+  const handleScroll = async () => {
+    if (!bodyChatRef.current) return
+    if (bodyChatRef.current.scrollTop === 0 && !loadingMessagesPage && isThereMoreMessages) {
+      setLoadingMessagesPage(true)
+      const res = await getMessagesByPage(parseInt(`${contact.id}`), parseInt(`${contact.messages[0].id}`))
+      setLoadingMessagesPage(false)
+      const { data } = res
+      if (data.messages.length === 0) return setIsThereMoreMessages(false)
+      const oldMessages = contact.messages
+      const newMessages = data.messages.concat(oldMessages)
+      setContact({ ...contact, messages: newMessages })
+      setContacts(
+        contacts.map((contactItem: IContact) => {
+          if (contactItem.id === contact.id) return { ...contactItem, messages: newMessages }
+          return contactItem
+        }),
+      )
+    }
   }
 
   const getFancyDate = (date: string): string => {
@@ -79,7 +125,12 @@ export const Chat = () => {
               </StyledCTyping>
             </Container>
           </HeaderChat>
-          <BodyChat ref={bodyChatRef}>
+          <BodyChat onScroll={handleScroll} ref={bodyChatRef}>
+            {loadingMessagesPage && (
+              <StyledLoadingContainer display="flex" justifyContent="center" alignItems="center">
+                <Spin size="large" />
+              </StyledLoadingContainer>
+            )}
             {contact.messages.map((message, i) => {
               if (i === 0) {
                 return (
@@ -235,4 +286,8 @@ const StyledWrapperIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`
+
+const StyledLoadingContainer = styled(Container)`
+  height: calc(100% - 57px);
 `
