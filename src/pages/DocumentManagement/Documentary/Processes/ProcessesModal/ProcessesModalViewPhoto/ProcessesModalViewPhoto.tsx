@@ -37,7 +37,6 @@ export const ProcessesModalViewPhoto = ({ visible, setVisible }: IProcessesModal
         }
         if (error) notification['warn']({ message: error })
       }
-      console.log(inputFile.files)
     }
     inputFile.click()
   }

@@ -1,11 +1,11 @@
-import { MenuProps } from 'antd'
+import { MenuProps, notification } from 'antd'
 import jwtDecode from 'jwt-decode'
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 import paths from '../../../shared/routes/paths'
 import { API } from '../../../shared/utils/constant/api'
-import { getAuthToken } from '../../../shared/utils/storage/auth'
+import { getAuthToken, setAuthentication } from '../../../shared/utils/storage/auth'
 import Button from '../../Button'
 import Container from '../../Container'
 import Icon from '../../Icon'
@@ -17,16 +17,21 @@ import logo from './../../../shared/assets/images/logo.png'
 import storage from '../../../shared/utils/storage'
 import { useGeneralContext } from '../../../shared/contexts/StoreProvider'
 import { ActionTypes } from '../../../pages/Login/actions'
+import { RcFile } from 'antd/lib/upload'
+import { updateUserPhoto } from '../../../shared/utils/services/usersServices'
+import { Controller, useForm } from 'react-hook-form'
 
 type MenuItem = Required<MenuProps>['items'][number]
+
+export interface IMainLayoutForm {
+  logo: RcFile | string | undefined
+}
 
 export const MainLayout = ({ children }: { children: JSX.Element }) => {
   const {
     dispatch,
     state: {
-      auth: {
-        admin: { tag },
-      },
+      auth: { admin },
     },
   } = useGeneralContext()
 
@@ -46,7 +51,7 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
     } as MenuItem
   }
   const items: MenuProps['items'] = [
-    tag === 'Editor'
+    admin.tag === 'Editor'
       ? getItem(
           'ROLES',
           '1',
@@ -55,7 +60,7 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
           </Link>,
         )
       : null,
-    tag === 'Editor'
+    admin.tag === 'Editor'
       ? getItem(
           'USUARIOS',
           '2',
@@ -83,7 +88,32 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
   const navigate = useNavigate()
   const token = getAuthToken()
   const user = jwtDecode<any>(`${token}`)
-  const changePhoto = (e: any) => {}
+
+  const { setValue, control } = useForm<IMainLayoutForm>({
+    defaultValues: { logo: `${API}/user_photos/${user.photo}` },
+  })
+
+  const changePhoto = async (file?: RcFile) => {
+    if (file) {
+      try {
+        const formData = new FormData()
+        formData.set('photo', file)
+        const { data } = await updateUserPhoto(formData)
+        const { error, success, photo, token } = data
+        if (success) {
+          setAuthentication(token)
+          dispatch({ type: ActionTypes.Login, payload: { admin: { ...admin, photo: photo } } })
+          setValue('logo', `${API}/user_photos/${photo}`)
+          notification['success']({ message: success })
+        }
+        if (error) notification['warn']({ message: error })
+      } catch (error: any) {
+        notification['error']({
+          message: error.message as string,
+        })
+      }
+    }
+  }
 
   const logOut = () => {
     storage.remove('auth_token')
@@ -102,12 +132,12 @@ export const MainLayout = ({ children }: { children: JSX.Element }) => {
         <Spacer size={40} />
 
         <Container width="100%" display="flex" flexDirection="column" alignItems="center">
-          <UploadAvatar
-            width={190}
-            height={190}
-            avatar={`${API}/user_photos/${user.photo}`}
-            onChange={changePhoto}
-            hint="Subir imagen"
+          <Controller
+            name="logo"
+            control={control}
+            render={({ field }) => (
+              <UploadAvatar width={190} height={190} avatar={field.value} onChange={changePhoto} hint="Subir imagen" />
+            )}
           />
 
           <Spacer size={25} />
