@@ -1,8 +1,9 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import { API } from "../constant/api";
 import { getAuthToken } from "../storage/auth";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = API;
 
 const request = axios.create({ baseURL: API_URL });
 

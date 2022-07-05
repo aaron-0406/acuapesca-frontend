@@ -1,7 +1,8 @@
 import queryString from "query-string";
 import { RcFile } from "antd/lib/upload";
+import { API } from "../constant/api";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = API;
 
 const requestErrorHandler = (error: unknown) => {
   // TODO: If we want to handle a generic error
