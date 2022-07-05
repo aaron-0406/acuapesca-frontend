@@ -9,6 +9,7 @@ import { useFilesContext } from '../../../../../../shared/contexts/FilesProvider
 import { useGeneralContext } from '../../../../../../shared/contexts/StoreProvider'
 import paths from '../../../../../../shared/routes/paths'
 import { getDocuments } from '../../../../../../shared/utils/services/documentsServices'
+import { createLogService } from '../../../../../../shared/utils/services/logServices'
 import Button from '../../../../../../ui/Button'
 import Container from '../../../../../../ui/Container'
 import EmptyState from '../../../../../../ui/EmptyState'
@@ -43,6 +44,27 @@ interface IFilesTableProps {
 
 export const FilesTable = ({ changeDataSelected, procedureSelectedUUID, onToggleFiles }: IFilesTableProps) => {
   const navigate = useNavigate()
+
+  const createLog = async (id: string) => {
+    try {
+      const result: AxiosResponse<any, any> = await createLogService(id)
+
+      if (result) {
+        const { data } = result
+        const { error } = data
+
+        if (error) {
+          notification['warn']({
+            message: error,
+          })
+        }
+      }
+    } catch (error: any) {
+      notification['error']({
+        message: error.message as string,
+      })
+    }
+  }
 
   const {
     state: {
@@ -125,6 +147,7 @@ export const FilesTable = ({ changeDataSelected, procedureSelectedUUID, onToggle
         <Container display="flex" justifyContent="space-around">
           <Button
             onClick={() => {
+              createLog(data.docs[0].id)
               navigate(paths.documentary.verSoloArchivo(`${data.docs[0].id ? data.docs[0].id : '0'}`))
             }}
             icon={<Icon remixiconClass="ri-arrow-right-fill" />}
