@@ -58,12 +58,6 @@ export const FilesUpload = () => {
             height={130}
             onChange={(info) => {
               info.file.status = undefined
-              const { name } = info.file
-
-              if (name.length > 54) {
-                return message.error(`${name} el nombre del archivo debe ser menor a 54 caracteres`)
-              }
-
               field.onChange(info.file.originFileObj)
             }}
           >

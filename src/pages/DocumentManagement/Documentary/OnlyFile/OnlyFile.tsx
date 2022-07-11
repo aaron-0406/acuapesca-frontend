@@ -72,15 +72,10 @@ export const OnlyFile = () => {
         title=""
         plusHeader={
           <Button
-            icon={
-              <Icon
-                size={28}
-                remixiconClass="ri-arrow-left-fill"
-                onClick={() => {
-                  navigate(paths.documentary.verProcedimientos(idProcess))
-                }}
-              />
-            }
+            icon={<Icon size={28} remixiconClass="ri-arrow-left-fill" />}
+            onClick={() => {
+              navigate(paths.documentary.verProcedimientos(idProcess))
+            }}
           />
         }
         disabledButton={false}
@@ -89,7 +84,7 @@ export const OnlyFile = () => {
       docs[0]?.uri.endsWith('.jpg') ||
       docs[0]?.uri.endsWith('.jpeg') ||
       docs[0]?.uri.endsWith('.png') ? (
-        <DocViewer pluginRenderers={DocViewerRenderers} documents={docs} />
+        <DocViewer className="doc-viewer" pluginRenderers={DocViewerRenderers} documents={docs} />
       ) : (
         <StyledContainerButton width="100%" display="flex" justifyContent="center" alignItems="center">
           <a rel="noreferrer" target="_blank" href={docs[0]?.uri}>
@@ -105,6 +100,18 @@ const StyledContainer = styled.div`
   width: 100%;
   height: 100vh;
   overflow-y: scroll;
+
+  .doc-viewer {
+    div {
+      div {
+        div {
+          a {
+            display: none;
+          }
+        }
+      }
+    }
+  }
 `
 
 const StyledContainerButton = styled(Container)`

@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react'
+import DocViewer, { DocViewerRenderers, IDocument } from '@cyntler/react-doc-viewer'
 import { notification } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
-import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { useGeneralContext } from '../../../../../../shared/contexts/StoreProvider'
 import { API } from '../../../../../../shared/utils/constant/api'
@@ -14,14 +15,19 @@ interface IProcessesModalViewPhoto {
 }
 export const ProcessesModalViewPhoto = ({ visible, setVisible }: IProcessesModalViewPhoto) => {
   const [photo, setPhoto] = useState<string>('')
+  const { state } = useGeneralContext()
+
+  const docs: IDocument[] = [{ uri: `${API}/process_photo/${photo}` }]
+
   const onClose = () => {
     setVisible()
   }
+
   const onGetPhotoProcess = async () => {
     const { data } = await getPhotoProcess()
     setPhoto(data.photo)
   }
-  const { state } = useGeneralContext()
+
   const changePhoto = () => {
     const inputFile = document.createElement('input')
     inputFile.type = 'file'
@@ -40,6 +46,7 @@ export const ProcessesModalViewPhoto = ({ visible, setVisible }: IProcessesModal
     }
     inputFile.click()
   }
+
   useEffect(() => {
     if (visible) onGetPhotoProcess()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,7 +54,7 @@ export const ProcessesModalViewPhoto = ({ visible, setVisible }: IProcessesModal
 
   return (
     <StyledModal
-      width={'90%'}
+      width="90%"
       closable={false}
       visible={visible}
       onCancel={onClose}
@@ -66,7 +73,9 @@ export const ProcessesModalViewPhoto = ({ visible, setVisible }: IProcessesModal
         <StyledTitleContainer>
           <Text level={5}>Foto del Proceso</Text>
         </StyledTitleContainer>
-        <StyledImg src={`${API}/process_photo/${photo}`} alt="" />
+        <Container width="100%">
+          <DocViewer className="doc-viewer" pluginRenderers={DocViewerRenderers} documents={docs} />
+        </Container>
       </Container>
     </StyledModal>
   )
@@ -78,6 +87,18 @@ const StyledModal = styled(Modal)`
         padding: 0;
       }
     }
+
+    .doc-viewer {
+      div {
+        div {
+          div {
+            a {
+              display: none;
+            }
+          }
+        }
+      }
+    }
   }
 `
 const StyledTitleContainer = styled(Container)`
@@ -86,8 +107,4 @@ const StyledTitleContainer = styled(Container)`
   ${({ theme }) => css`
     background-color: ${theme.colors['$color-transparent-1']};
   `}
-`
-const StyledImg = styled.img`
-  width: 80%;
-  margin-top: 20px;
 `
